@@ -1,0 +1,246 @@
+1
+00:00:01,730 --> 00:00:10,190
+now let's move to just a final brief discussion
+about performance at this point it should
+
+2
+00:00:10,190 --> 00:00:17,890
+be clear that input and output and the handling
+of input and output with the different
+
+3
+00:00:17,890 --> 00:00:22,220
+devices you have in your computer has a major
+impact in system performance
+
+4
+00:00:22,220 --> 00:00:33,620
+we have seen this now in several examples
+but it places an overhead on the CPU that
+
+5
+00:00:33,620 --> 00:00:41,710
+has to run several type of instructions
+and sense for example if that are interrupts
+
+6
+00:00:41,710 --> 00:00:51,519
+it requires proper scheduling of processes
+we have discussed context switches and
+
+7
+00:00:51,519 --> 00:00:56,870
+you know that when you have an interrupt
+because of some input or some output
+
+8
+00:00:56,870 --> 00:01:00,820
+there will be a context switch you need to
+save registers log all the registers and all these
+
+9
+00:01:00,820 --> 00:01:07,470
+things are ways to spend CPU cycles
+not really running processes but switching
+
+10
+00:01:07,470 --> 00:01:14,740
+between them if you want to think about a very
+extreme example of
+
+11
+00:01:14,740 --> 00:01:22,270
+how you can achieve significantly different
+performance by the way you implement something
+
+12
+00:01:22,270 --> 00:01:29,180
+you can think about remote login so if you
+were to do something very naive that would
+
+13
+00:01:29,180 --> 00:01:35,780
+be to transmit each character you type in
+your keyboard when you're trying to do a remote login
+
+14
+00:01:35,780 --> 00:01:39,250
+one by one
+
+15
+00:01:39,250 --> 00:01:45,570
+and wait until you get the ack from the server
+you're trying to connect before typing the
+
+16
+00:01:45,570 --> 00:01:51,290
+following character you can basically go through
+this image and see all the steps all the interrupts
+
+17
+00:01:51,290 --> 00:01:57,550
+context switches access to device drivers you
+will do and you would realize that this would really
+
+18
+00:01:57,550 --> 00:01:59,380
+perform poorly
+
+19
+00:01:59,380 --> 00:02:05,480
+what you probably would like to do is to wait
+until everything has been written the username
+
+20
+00:02:05,480 --> 00:02:11,989
+or the password and then send that as a single thing
+to reduce the number of times you go through
+
+21
+00:02:11,989 --> 00:02:17,480
+all these costly operation this is a simple
+example but at this point it's not really
+
+22
+00:02:17,480 --> 00:02:18,549
+about the example
+
+23
+00:02:18,549 --> 00:02:25,140
+it's about going through this image have a look yourself
+and thinking oh right now this thing is what
+
+24
+00:02:25,140 --> 00:02:28,000
+we discussed here this thing is what
+we have discussed in the other lecturer and see
+
+25
+00:02:28,000 --> 00:02:35,590
+that it is a pretty long and pretty complicated
+series of steps that are going to be performed
+
+26
+00:02:35,590 --> 00:02:38,610
+just for something like an action like typing
+a
+
+27
+00:02:38,610 --> 00:02:46,969
+character so if you want to improve performance
+then you need to reduce as much as possible
+
+28
+00:02:46,969 --> 00:02:51,280
+the number of context switches think for
+example at having different interrupt lines
+
+29
+00:02:51,280 --> 00:02:58,620
+or maskable and nonmaskable interrupts you need to reduce
+the number of times you copy data move
+
+30
+00:02:58,620 --> 00:03:00,379
+data around if it's not needed
+
+31
+00:03:00,379 --> 00:03:05,840
+think about the copy-on-write mechanism you
+need to reduce the frequency of interrupts
+
+32
+00:03:05,840 --> 00:03:12,040
+so for example you use a buffer and you write to
+disk only when you have enough data you
+
+33
+00:03:12,040 --> 00:03:17,190
+don't do that for each individual block for
+example because that would result in more
+
+34
+00:03:17,190 --> 00:03:21,700
+interrupts that need to be handled by the
+hardware and the operating
+
+35
+00:03:21,700 --> 00:03:30,010
+system you can use hardware support like
+direct memory access and then you also can
+
+36
+00:03:30,010 --> 00:03:35,519
+achieve a better performance by basically
+balancing the use of CPU memory and so on
+
+37
+00:03:35,519 --> 00:03:40,659
+so that you maximize throughput and you don't
+create bottlenecks in specific components
+
+38
+00:03:40,659 --> 00:03:47,860
+now as always here there is a tradeoff if
+you try to achieve performance with algorithms
+
+39
+00:03:47,860 --> 00:03:55,360
+or solution that stay at the application level
+so high in the hierarchy that's good for flexibility
+
+40
+00:03:55,360 --> 00:04:01,280
+but in terms of real performance the benefit
+might be small
+
+41
+00:04:01,280 --> 00:04:07,549
+if you remember now I said from the beginning
+it's always cooperation between operating
+
+42
+00:04:07,549 --> 00:04:14,909
+system and hardware if many things have support
+from the hardware itself it's because at the
+
+43
+00:04:14,909 --> 00:04:19,320
+end of the day if you want to achieve really
+good performance you need to implement your
+
+44
+00:04:19,320 --> 00:04:23,640
+stuff at lower levels basically going at the
+hardware level
+
+45
+00:04:23,640 --> 00:04:28,850
+the problem with that of course is that it
+takes more time to reach that level because
+
+46
+00:04:28,850 --> 00:04:37,600
+there are higher development costs for that
+you need to increase the abstraction level
+
+47
+00:04:37,600 --> 00:04:44,100
+if you find out that something is wrong that
+has a significant cost to be fixed
+
+48
+00:04:44,100 --> 00:04:51,450
+but over time you probably want to push your
+algorithms to lower levels once you see that they
+
+49
+00:04:51,450 --> 00:04:58,310
+actually work and they are well accepted or
+used a lot by many operating systems so that
+
+50
+00:04:58,310 --> 00:05:02,670
+once you reach the hardware level you get 
+the best performance you can get
+

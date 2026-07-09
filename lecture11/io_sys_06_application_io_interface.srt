@@ -1,0 +1,425 @@
+1
+00:00:00,880 --> 00:00:06,830
+we can now move to the application input output
+interface so we're going to talk about drivers
+
+2
+00:00:06,830 --> 00:00:16,980
+now this part of the lecture it's basically
+a discussion about why it is challenging for
+
+3
+00:00:16,980 --> 00:00:24,000
+the operating system to interact to keep track
+of the different or interact with the different
+
+4
+00:00:24,000 --> 00:00:30,279
+devices despite the fact that eventually we
+need drivers to communicate
+
+5
+00:00:30,279 --> 00:00:37,710
+with each specific device so as I mentioned
+in the beginning of this lecture but also of
+
+6
+00:00:37,710 --> 00:00:45,410
+this cause the operating system needs to abstract
+away the specific detailed differences
+
+7
+00:00:45,410 --> 00:00:50,940
+between each type of device and just generalize
+them
+
+8
+00:00:50,940 --> 00:00:56,750
+so there is a keyboard there is a mouse
+there is a disk and so on as you can imagine
+
+9
+00:00:56,750 --> 00:01:02,360
+the reason why you want to do this is that
+you cannot maintain an operating system in
+
+10
+00:01:02,360 --> 00:01:08,429
+which you have dedicated code that is specific
+to interact with specific type of
+
+11
+00:01:08,429 --> 00:01:10,610
+disks of specific keyboards
+
+12
+00:01:10,610 --> 00:01:17,990
+and so on you need to decouple a bit the
+abstraction of a certain type of device
+
+13
+00:01:17,990 --> 00:01:24,409
+with the actual implementation and the actual
+device you are going to use and this is what
+
+14
+00:01:24,409 --> 00:01:27,310
+you do by using basically drivers
+
+15
+00:01:27,310 --> 00:01:34,060
+you create a separation layer between what
+the operating system sees as a keyboard and
+
+16
+00:01:34,060 --> 00:01:38,909
+what you are actually using as a keyboard
+and the way you communicate with your actual
+
+17
+00:01:38,909 --> 00:01:48,039
+device the point I'm trying to make here is
+that even in such a case finding what are
+
+18
+00:01:48,039 --> 00:01:51,369
+the dimensions along which you can categorize
+the different types
+
+19
+00:01:51,369 --> 00:01:59,889
+of hardware it's not a trivial task so
+this is how it looks like this is what I just
+
+20
+00:01:59,889 --> 00:02:05,200
+said so you have the kernel you have the
+portion of it the subsystem that is about
+
+21
+00:02:05,200 --> 00:02:07,079
+managing input output
+
+22
+00:02:07,079 --> 00:02:15,530
+and eventually at the lower level you will
+have drivers from the operating system perspective
+
+23
+00:02:15,530 --> 00:02:20,500
+these are abstractions of the specific type
+of device you are trying to communicate with
+
+24
+00:02:20,500 --> 00:02:28,500
+so you can have one for the mouse one for the keyboard
+then you have the ones for the
+
+25
+00:02:28,500 --> 00:02:36,190
+SCSI drivers and then you have the actual specific
+driver that is the one that will take care
+
+26
+00:02:36,190 --> 00:02:45,260
+of the communication with the physical hardware
+you install on your machine so why is it challenging
+
+27
+00:02:45,260 --> 00:02:48,370
+still to characterize the different types
+of devices you have?
+
+28
+00:02:48,370 --> 00:02:55,540
+well you can look here at some aspects you could
+use to classify them and you can see that
+
+29
+00:02:55,540 --> 00:03:01,400
+each one of them has different properties
+along these dimensions so you can take into
+
+30
+00:03:01,400 --> 00:03:08,840
+account the mode in which they transfer data
+if it's individual characters or if it's blocks
+
+31
+00:03:08,840 --> 00:03:16,320
+the access method if it's sequential only
+or if it can be random the schedule with which
+
+32
+00:03:16,320 --> 00:03:23,620
+you can manage transfers so whether you can
+have basically synchronous or asynchronous
+
+33
+00:03:23,620 --> 00:03:28,400
+communication you have devices that can be
+shared and devices that cannot be
+
+34
+00:03:28,400 --> 00:03:29,400
+shared
+
+35
+00:03:29,400 --> 00:03:35,301
+they are dedicated it can only be used by
+one process at the time or one task at the time they can
+
+36
+00:03:35,301 --> 00:03:43,850
+perform one task at a time of course they have different
+speeds and you have different latency seek
+
+37
+00:03:43,850 --> 00:03:50,150
+time for example if you are using a rotating
+disc or an SSD and you can also classify
+
+38
+00:03:50,150 --> 00:03:52,650
+them based on the direction of the input output
+
+39
+00:03:52,650 --> 00:04:02,360
+so whether they are only input only output or if they
+can do both things so this is just what
+
+40
+00:04:02,360 --> 00:04:11,040
+I just said this is pretty simple to follow
+I think so let's just have a look at some
+
+41
+00:04:11,040 --> 00:04:19,180
+types of devices along with these dimensions
+we can use to classify them so we have devices
+
+42
+00:04:19,180 --> 00:04:22,160
+that communicate using blocks
+
+43
+00:04:22,160 --> 00:04:29,280
+so block devices we discussed this
+when we were talking about file systems so
+
+44
+00:04:29,280 --> 00:04:34,250
+when you communicate with the disk you basically
+exchange blocks and then you have other devices
+
+45
+00:04:34,250 --> 00:04:39,470
+like the keyboard or the mouse in which you
+actually have exchanges that are of smaller
+
+46
+00:04:39,470 --> 00:04:40,470
+sizes
+
+47
+00:04:40,470 --> 00:04:45,210
+they are of individual characters so you can
+imagine that the operating system needs to
+
+48
+00:04:45,210 --> 00:04:50,221
+provide different APIs you can
+have read write and seek for a block device
+
+49
+00:04:50,221 --> 00:04:57,530
+and you would probably have a get and put
+that are for sequential ordered interaction
+
+50
+00:04:57,530 --> 00:05:00,250
+with character devices
+
+51
+00:05:00,250 --> 00:05:06,290
+when you want to share data with a disk
+or when you are reading data from the keyboard
+
+52
+00:05:06,290 --> 00:05:12,720
+you can imagine that this is completely different
+from actually communicating data or getting
+
+53
+00:05:12,720 --> 00:05:19,050
+data through the network here you cannot really
+have a random access because you can only get
+
+54
+00:05:19,050 --> 00:05:20,050
+the next
+
+55
+00:05:20,050 --> 00:05:29,610
+portion of bytes that you are retrieving to
+the network or the next portion of bytes through
+
+56
+00:05:29,610 --> 00:05:34,680
+the network so in that case the operating
+system needs a different interface for network
+
+57
+00:05:34,680 --> 00:05:41,730
+devices that it uses for disks for example
+so you can have read and write API for example
+
+58
+00:05:41,730 --> 00:05:44,450
+then you have completely different types of
+devices that are clocks
+
+59
+00:05:44,450 --> 00:05:54,360
+and timers so you will probably need to define
+APIs that they can use either to keep track
+
+60
+00:05:54,360 --> 00:06:02,090
+of the elapsed time or basically the current
+time but also to set triggers when a certain
+
+61
+00:06:02,090 --> 00:06:10,340
+amount of time expires and we discussed
+this when we were discussing
+
+62
+00:06:10,340 --> 00:06:18,800
+scheduling you want the operating system
+to wake up periodically to take scheduling
+
+63
+00:06:18,800 --> 00:06:22,270
+decisions independently of the processes you
+are running and whether they are going back
+
+64
+00:06:22,270 --> 00:06:30,610
+into ready or waiting state and to do
+you use specific pieces of hardware that are
+
+65
+00:06:30,610 --> 00:06:35,699
+the clocks of the computers basically
+
+66
+00:06:35,699 --> 00:06:41,000
+then another thing you can think about when
+you are designing an operating system and
+
+67
+00:06:41,000 --> 00:06:46,220
+you are designing the way in which you can
+communicate with for example block devices
+
+68
+00:06:46,220 --> 00:06:53,691
+is the type of communication you have so you
+can have blocking or nonblocking, blocking
+
+69
+00:06:53,691 --> 00:06:59,670
+basically means that you can create APIs that
+will suspend the execution of
+
+70
+00:06:59,670 --> 00:07:04,500
+the process as soon as that process is trying
+for example to write something to disk or read something
+
+71
+00:07:04,500 --> 00:07:17,340
+from the disk or some other device it's
+easier to go for a blocking API because
+
+72
+00:07:17,340 --> 00:07:23,370
+it's easier to maintain code and also write applications
+that are blocking you don't have the problem
+
+73
+00:07:23,370 --> 00:07:28,320
+of defining code that can keep executing despite
+the
+
+74
+00:07:28,320 --> 00:07:32,800
+fact that it needs some information that needs
+to be notified when that information is available
+
+75
+00:07:32,800 --> 00:07:37,020
+for example when a certain amount of data
+has been written disk or it's available
+
+76
+00:07:37,020 --> 00:07:46,950
+from the disk you can create nonblocking
+versions of the APIs and the operating system
+
+77
+00:07:46,950 --> 00:07:55,470
+level by having multithreaded executions in
+which you transfer the data from
+
+78
+00:07:55,470 --> 00:08:01,220
+the thread that is requesting let's say to
+write something to a different thread and
+
+79
+00:08:01,220 --> 00:08:07,080
+then you allow this second thread to block
+so the operating system can of course APIs
+
+80
+00:08:07,080 --> 00:08:14,850
+that are nonblocking by maintaining internally
+its own
+
+81
+00:08:14,850 --> 00:08:19,680
+extra threads and managing the transfer
+to disks with these threads rather than the
+
+82
+00:08:19,680 --> 00:08:26,440
+specific threads that are executing on
+let's say the user processes then
+
+83
+00:08:26,440 --> 00:08:31,400
+of course aside from blocking and nonblocking
+you can also have true asynchronous APIs
+
+84
+00:08:31,400 --> 00:08:42,070
+so in that case if the hardware supports asynchronous
+input and output then you can make more performant
+
+85
+00:08:42,070 --> 00:08:48,070
+operating system that is also more complicated
+of course to define and to develop that will
+
+86
+00:08:48,070 --> 00:08:56,740
+use signals and share the signals with the threads
+of the user's processes whenever a synchronous
+
+87
+00:08:56,740 --> 00:09:01,180
+input output request has been handled by
+the hardware
+

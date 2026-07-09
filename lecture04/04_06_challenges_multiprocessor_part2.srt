@@ -1,0 +1,492 @@
+1
+00:00:01,829 --> 00:00:06,770
+this now is the third challenge/complication
+that stems
+
+2
+00:00:06,770 --> 00:00:11,610
+from multicore/multiprocessor architectures
+and it's the
+
+3
+00:00:11,610 --> 00:00:21,029
+one about where to place the operating system
+let's say we have four CPUs plus some memory
+
+4
+00:00:21,029 --> 00:00:25,780
+that is shared
+by all the CPUs
+
+5
+00:00:25,780 --> 00:00:30,230
+where do we place the data the text the functions
+of the
+
+6
+00:00:30,230 --> 00:00:38,910
+operating system and who runs
+who executes
+
+7
+00:00:38,910 --> 00:00:43,260
+these functions
+so the operating system basically well we
+
+8
+00:00:43,260 --> 00:00:44,370
+can go in different
+ways here
+
+9
+00:00:44,370 --> 00:00:48,960
+something we could do might look strange but
+there might
+
+10
+00:00:48,960 --> 00:00:53,409
+be cases in which this actually makes sense
+is to say well
+
+11
+00:00:53,409 --> 00:01:00,180
+we take the memory a portion of it
+we use it for keeping the code of the operating
+
+12
+00:01:00,180 --> 00:01:04,330
+system
+and then we partition the rest into disjoint
+
+13
+00:01:04,330 --> 00:01:09,470
+chunks
+in this case 4 because we have 4 CPUs and
+
+14
+00:01:09,470 --> 00:01:14,970
+we run one operating
+system for CPU we have available
+
+15
+00:01:14,970 --> 00:01:23,000
+so basically it's like running n computers
+but within
+
+16
+00:01:23,000 --> 00:01:34,640
+the same computer where n is the number of CPUs here
+the operating systems are not sharing anything
+
+17
+00:01:34,640 --> 00:01:36,710
+well they
+are sharing the portion of code but this
+
+18
+00:01:36,710 --> 00:01:38,420
+is something you
+just read you don't modify
+
+19
+00:01:38,420 --> 00:01:42,650
+but then the data each operating system has
+its own portion
+
+20
+00:01:42,650 --> 00:01:49,420
+of the memory so it's perfectly fine
+the problem with this which is the general
+
+21
+00:01:49,420 --> 00:01:54,080
+problem you have
+with things that are simple is that most of
+
+22
+00:01:54,080 --> 00:01:56,070
+the time they
+might be inefficient
+
+23
+00:01:56,070 --> 00:01:59,390
+so if one operating system has a lot to do
+and the rest has
+
+24
+00:01:59,390 --> 00:02:03,890
+nothing to do well that's basically it since each
+operating
+
+25
+00:02:03,890 --> 00:02:07,180
+system has its own data the one that has a lot
+to do cannot
+
+26
+00:02:07,180 --> 00:02:11,700
+really get help from the other CPUs
+so it's not really that efficient
+
+27
+00:02:11,700 --> 00:02:17,630
+but there is a more serious problem that is
+the one of consistency
+
+28
+00:02:17,630 --> 00:02:20,760
+data in this case can become inconsistent
+especially with
+
+29
+00:02:20,760 --> 00:02:24,260
+buffers if one of the operating system reads
+a file from
+
+30
+00:02:24,260 --> 00:02:28,959
+the disc and keeps it in memory because it's
+going to do
+
+31
+00:02:28,959 --> 00:02:32,400
+something with it and then another operating
+system that
+
+32
+00:02:32,400 --> 00:02:35,500
+is a different one and it's not talking with
+the first one
+
+33
+00:02:35,500 --> 00:02:40,390
+also reads the same file and then writes it
+back changing
+
+34
+00:02:40,390 --> 00:02:43,900
+it now the first operating system has no idea
+that the
+
+35
+00:02:43,900 --> 00:02:47,770
+file has changed
+so there are inconsistent copies of the same
+
+36
+00:02:47,770 --> 00:02:51,380
+information
+because here there is no sharing no communication
+
+37
+00:02:51,380 --> 00:02:53,530
+between
+the different operating systems
+
+38
+00:02:53,530 --> 00:02:56,480
+so you see it's potentially dangerous if they
+are operating
+
+39
+00:02:56,480 --> 00:03:04,450
+on the same resources
+for instance the discs as I just mentioned well we
+
+40
+00:03:04,450 --> 00:03:09,830
+can do something
+else we could say okay we don't run n operating
+
+41
+00:03:09,830 --> 00:03:10,870
+systems
+in parallel
+
+42
+00:03:10,870 --> 00:03:15,709
+we just run one and we actually take one CPU
+and we dedicate
+
+43
+00:03:15,709 --> 00:03:25,190
+it to the operating system
+so this is the master this CPU only executes
+
+44
+00:03:25,190 --> 00:03:28,750
+code that belongs
+to the operating system and all the other
+
+45
+00:03:28,750 --> 00:03:32,260
+CPUs can run the
+code that belongs to the processes of the user
+
+46
+00:03:32,260 --> 00:03:36,030
+and various processes
+that are running at the operating system
+
+47
+00:03:36,030 --> 00:03:38,770
+we don't need to share memory between different
+operating
+
+48
+00:03:38,770 --> 00:03:41,520
+systems there is a single operating system
+everything needs
+
+49
+00:03:41,520 --> 00:03:47,920
+to go through the master CPU
+so now we are solving the problem with data
+
+50
+00:03:47,920 --> 00:03:50,920
+and consistency
+because since everything needs to go through
+
+51
+00:03:50,920 --> 00:03:54,959
+the same entity
+the same core which is the one that runs the
+
+52
+00:03:54,959 --> 00:03:57,620
+OS (not CPU!) everything
+will be consistent
+
+53
+00:03:57,620 --> 00:04:01,910
+the problem here is again okay you solve a
+problem but
+
+54
+00:04:01,910 --> 00:04:05,480
+you're still trying to do something simple
+and this also has a price
+
+55
+00:04:05,480 --> 00:04:08,180
+and the price here is that it's very easy
+to bottleneck
+
+56
+00:04:08,180 --> 00:04:12,290
+such a system you will not really scale
+the system to
+
+57
+00:04:12,290 --> 00:04:18,559
+a lot of cores because you only have one master
+and when that one it's saturated
+
+58
+00:04:18,559 --> 00:04:24,940
+all the slave cores have nothing to do
+if all of the slave cores want to do some
+
+59
+00:04:24,940 --> 00:04:28,020
+kind of input
+output and they need to talk with the operating
+
+60
+00:04:28,020 --> 00:04:31,639
+system then
+they can only go as fast as the master core
+
+61
+00:04:31,639 --> 00:04:36,080
+is able to handle
+all the requests
+
+62
+00:04:36,080 --> 00:04:39,080
+so what you can do which is what you do in
+practice in your
+
+63
+00:04:39,080 --> 00:04:41,689
+operating system is that you don't really
+say well there
+
+64
+00:04:41,689 --> 00:04:45,319
+is one CPU that is the one that runs the operating
+system on one
+
+65
+00:04:45,319 --> 00:04:52,669
+core and the rest are slaves
+any core can at any time run either code that
+
+66
+00:04:52,669 --> 00:04:54,819
+belongs to
+the operating system or code that belongs
+
+67
+00:04:54,819 --> 00:04:57,580
+to an user process
+
+68
+00:04:57,580 --> 00:05:02,240
+and they share memory
+now if you do something like this you might
+
+69
+00:05:02,240 --> 00:05:05,069
+end up having
+the same problem with consistency we had in
+
+70
+00:05:05,069 --> 00:05:09,629
+the beginning
+if they operate on the same data without coordination
+
+71
+00:05:09,629 --> 00:05:11,669
+you
+can end up with inconsistent data
+
+72
+00:05:11,669 --> 00:05:15,050
+now it's even worse because this inconsistent
+data might
+
+73
+00:05:15,050 --> 00:05:19,999
+actually belong to the operating system itself
+since all
+
+74
+00:05:19,999 --> 00:05:24,279
+the cores can run operating system code
+and they all share
+
+75
+00:05:24,279 --> 00:05:29,099
+the same memory 
+so basically here the problem is that you
+
+76
+00:05:29,099 --> 00:05:33,259
+have concurrent
+access even to the kernel not just to physical
+
+77
+00:05:33,259 --> 00:05:35,889
+devices
+like the disk as I mentioned before
+
+78
+00:05:35,889 --> 00:05:40,469
+now how do you manage this?
+
+79
+00:05:40,469 --> 00:05:44,770
+well you need some kind of synchronization
+primitive so
+
+80
+00:05:44,770 --> 00:05:49,319
+that you make sure that if something is sensitive
+inside
+
+81
+00:05:49,319 --> 00:05:55,840
+the kernel you don't modify it concurrently
+without taking care of the risks of this concurrent
+
+82
+00:05:55,840 --> 00:06:00,649
+modifications
+you could go for just using a big lock
+
+83
+00:06:00,649 --> 00:06:02,889
+so basically whenever you want to do something
+with the
+
+84
+00:06:02,889 --> 00:06:05,860
+operating system first you need to acquire
+a lock and then
+
+85
+00:06:05,860 --> 00:06:13,039
+you are the only one that is able to run the
+the code that
+
+86
+00:06:13,039 --> 00:06:16,699
+belongs to the operating system
+but you see that if you do something like
+
+87
+00:06:16,699 --> 00:06:20,339
+this then you
+are basically going back to the master-slave
+
+88
+00:06:20,339 --> 00:06:24,930
+now you don't have always the same core
+that is the one that runs the operating system
+
+89
+00:06:24,930 --> 00:06:28,550
+code
+but it's still only one core at a time that
+
+90
+00:06:28,550 --> 00:06:32,240
+can be the one
+that runs the operating system code so a big
+
+91
+00:06:32,240 --> 00:06:33,710
+lock is not really
+an option
+
+92
+00:06:33,710 --> 00:06:36,599
+what you want to do is to have critical regions
+and fine
+
+93
+00:06:36,599 --> 00:06:40,309
+grained parallelism
+but as you would see in the next lectures
+
+94
+00:06:40,309 --> 00:06:44,139
+with marina it
+complicates the matter a lot
+
+95
+00:06:44,139 --> 00:06:52,560
+okay you need to use / you can use several synchronization
+primitives and you need to do it carefully
+
+96
+00:06:52,560 --> 00:06:54,599
+because you can
+end up in deadlocks
+
+97
+00:06:54,599 --> 00:06:58,539
+okay i guess you have heard these terms before
+but if you
+
+98
+00:06:58,539 --> 00:07:01,429
+have not don't worry too much you will understand
+better
+
+99
+00:07:01,429 --> 00:07:03,060
+all these things in the following lectures
+

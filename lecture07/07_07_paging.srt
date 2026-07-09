@@ -1,0 +1,330 @@
+1
+00:00:02,240 --> 00:00:07,680
+the last part of this lecture is about 
+paging now this is the most advanced  
+
+2
+00:00:08,480 --> 00:00:16,560
+memory allocation mode and it completely separates 
+logical from physical memory we are not going  
+
+3
+00:00:16,560 --> 00:00:22,960
+to discuss virtual memory today so if it's only 
+about paging it's not really more complicated than  
+
+4
+00:00:22,960 --> 00:00:28,080
+segmentation if you understood segmentation 
+then you will also understand paging so make  
+
+5
+00:00:28,080 --> 00:00:33,840
+sure everything is clear about the segmentation 
+part when that is okay then let's move to paging  
+
+6
+00:00:34,880 --> 00:00:44,480
+so this is a mechanism to separate or let's say 
+manage disjointly physical addresses from logical  
+
+7
+00:00:44,480 --> 00:00:52,800
+ones and it doesn't need 
+to allocate contiguous portions of memory for the  
+
+8
+00:00:52,800 --> 00:00:58,720
+process the process can be completely scattered 
+around the memory into smaller units which are the  
+
+9
+00:00:59,360 --> 00:01:06,320
+pages it's basically what is used in many modern 
+operating systems and as we will see especially in  
+
+10
+00:01:06,320 --> 00:01:11,840
+the next lecture it really requires cooperation 
+between the operating system and the hardware  
+
+11
+00:01:13,040 --> 00:01:18,240
+the idea is pretty simple instead of dividing 
+a process into segments we divide a process  
+
+12
+00:01:18,240 --> 00:01:24,960
+into pages and a page is smaller than a 
+segment it's not the entire data section  
+
+13
+00:01:24,960 --> 00:01:29,680
+it's usually a power of two in terms 
+of number of addresses we will see this  
+
+14
+00:01:30,320 --> 00:01:37,280
+so the logical memory it's divided into pages 
+and the physical memory it's also divided into  
+
+15
+00:01:37,280 --> 00:01:45,840
+units these ones are called frames and 
+each frame is equal to a page so the size of a  
+
+16
+00:01:45,840 --> 00:01:51,920
+frame is the same as the size of a page you 
+keep stuff on the disk organized into pages  
+
+17
+00:01:51,920 --> 00:01:58,160
+and when you want to load a certain process into 
+memory a program into memory and start a process  
+
+18
+00:01:58,160 --> 00:02:01,440
+then what you do is that you take 
+your physical memory which has
+
+19
+00:02:04,240 --> 00:02:10,800
+which is divided into frames and you place 
+the pages of the process inside the frames  
+
+20
+00:02:10,800 --> 00:02:17,120
+you don't need to put them one after the other 
+in a contiguous fashion or order you can just put  
+
+21
+00:02:18,560 --> 00:02:23,520
+the pages into the frames the way you want 
+and what you need to do then is to keep  
+
+22
+00:02:23,520 --> 00:02:31,680
+track of where each page is located so what 
+is the frame that contains each page in this  
+
+23
+00:02:31,680 --> 00:02:39,120
+example we have a process it requires four pages 
+from zero to three it means we need four frames  
+
+24
+00:02:39,760 --> 00:02:43,760
+this is how the pages are loaded 
+into the frames in this example  
+
+25
+00:02:43,760 --> 00:02:48,320
+so what you do is that you maintain a page 
+table this is the operating system of course  
+
+26
+00:02:49,600 --> 00:02:54,640
+the number of rows you have in this table 
+is equal to the number of pages you have in  
+
+27
+00:02:56,240 --> 00:03:05,680
+the process each row refers to a page and 
+the content is the frame where you can find  
+
+28
+00:03:05,680 --> 00:03:13,040
+that page so page zero is row zero and it's frame 
+one so if you go to frame one you have page zero  
+
+29
+00:03:14,400 --> 00:03:20,960
+page one is row one on the second row and it's 
+frame four you go inside frame four and you have  
+
+30
+00:03:20,960 --> 00:03:33,360
+page one and so on now when the CPU needs 
+to read or write uh something from the memory  
+
+31
+00:03:33,360 --> 00:03:37,120
+the idea is similar to what we had before 
+with segmentation, this is why I'm saying  
+
+32
+00:03:37,120 --> 00:03:42,560
+that it's not completely different from 
+segmentation you need to specify  
+
+33
+00:03:45,120 --> 00:03:53,360
+the page you want to access and then within the 
+page the offset what is nice though is  
+
+34
+00:03:53,360 --> 00:04:02,400
+that this specifying the page and inside the 
+page the address can be done very efficiently in  
+
+35
+00:04:02,400 --> 00:04:09,920
+a single operation so the time complexity 
+is O(1) just by translating in a certain way  
+
+36
+00:04:09,920 --> 00:04:16,720
+the logical address of the process into page and 
+offset so how does the CPU know which page  
+
+37
+00:04:16,720 --> 00:04:23,360
+it should access we said before the process thinks 
+that he has a range of addresses that goes from 0 to
+
+38
+00:04:26,160 --> 00:04:34,000
+a certain limit so when it says i want to access 
+address 100 how do we compute in which page  
+
+39
+00:04:34,000 --> 00:04:41,920
+and what is the offset of others 100 if we are 
+using pages well this is how you do it so I'm  
+
+40
+00:04:41,920 --> 00:04:48,800
+going a bit rapidly here but then check the slides and 
+and try it out yourself if the size of the page  
+
+41
+00:04:48,800 --> 00:04:57,440
+or the frame they have the same size is 2 power 
+n and the logical space you need for the process  
+
+42
+00:04:57,440 --> 00:05:08,480
+is 2 power m and then you take your address in 
+binary of course the first m minus n bits indicate  
+
+43
+00:05:08,480 --> 00:05:13,920
+the page the remaining one indicate the offset 
+so you can translate the binary address into  
+
+44
+00:05:13,920 --> 00:05:23,040
+page and offset just like this let's look 
+at the example so here we have a process it's  
+
+45
+00:05:23,040 --> 00:05:28,240
+four pages each page has four addresses we have 
+the page table and we have the physical memory  
+
+46
+00:05:29,520 --> 00:05:38,880
+the page size is two power two okay so n is equal 
+to two the logical space is two power four so  
+
+47
+00:05:39,680 --> 00:05:48,320
+m is equal to four because as you can see we 
+need in this case four pages for a total of  
+
+48
+00:05:48,320 --> 00:05:55,200
+16 addresses to maintain the processing memory so 
+what is the physical address of logical address  
+
+49
+00:05:55,840 --> 00:06:05,440
+seven well you take seven you put it in binary 
+and then you take the prefix which is in this case  
+
+50
+00:06:05,440 --> 00:06:12,080
+the first two bits to compute what is the page 
+and the last bits to compute what is the offset  
+
+51
+00:06:12,080 --> 00:06:21,040
+this is saying that is page one offset three 
+let's see page one if you go in the page table and  
+
+52
+00:06:21,040 --> 00:06:30,080
+it says that it's the sixth frame so you do six 
+times four because the size of each frame is four  
+
+53
+00:06:30,720 --> 00:06:37,920
+you add three which is the offset so the 
+physical address is 27 and if you go to
+
+54
+00:06:41,680 --> 00:06:52,720
+27 you will find here h which is what 
+you want for address 7  
+
+55
+00:06:53,760 --> 00:06:57,760
+try the example out yourself now I 
+cannot cover it too much in detail  
+
+56
+00:06:57,760 --> 00:07:01,840
+it would take a lot of time but if you try 
+yourself with a piece of paper you will see that
+
+57
+00:07:04,880 --> 00:07:12,960
+it's not that complicated now as always we have 
+trade-offs the good thing with paging is that  
+
+58
+00:07:12,960 --> 00:07:21,040
+there is no external fermentation if you need to 
+load n frames and you have sorry n pages and you  
+
+59
+00:07:21,040 --> 00:07:27,520
+have n free frames then it's okay you can place 
+each page in a frame even if these frames are not  
+
+60
+00:07:27,520 --> 00:07:33,680
+contiguous independently of where they are on the 
+other hand you end up having internal fragmentation  
+
+61
+00:07:34,240 --> 00:07:41,360
+you need to use at least one frame for a page 
+for each page of the process and it might be that  
+
+62
+00:07:41,360 --> 00:07:46,880
+the process does not really require a full page or 
+maybe it requires three point something pages so  
+
+63
+00:07:46,880 --> 00:07:57,840
+on average half of the last page you need for 
+the process might be wasted of course if you  
+
+64
+00:07:57,840 --> 00:08:04,640
+want to minimize internal fragmentation you can go 
+for smaller pages but you will have more overhead  
+
+65
+00:08:04,640 --> 00:08:12,640
+you will have a larger table to maintain you can 
+also go for larger pages so you have less overhead  
+
+66
+00:08:12,640 --> 00:08:17,360
+the page table is smaller it takes less space but 
+of course then you end up with more fragmentation  
+

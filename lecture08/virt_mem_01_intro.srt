@@ -1,0 +1,345 @@
+1
+00:00:03,040 --> 00:00:10,960
+welcome to lecture nine about virtual memory 
+here you have the reading instructions is chapter  
+
+2
+00:00:10,960 --> 00:00:22,160
+3.3 to 3.6 and as always you have the pointers 
+to other parts of the facultative book you can  
+
+3
+00:00:23,360 --> 00:00:26,080
+have a look at if you want to 
+complement a bit the discussion  
+
+4
+00:00:26,960 --> 00:00:34,880
+so the objective here is to continue our 
+discussion about memory management going back  
+
+5
+00:00:34,880 --> 00:00:42,640
+from where we left so paging and describe 
+the benefits of virtual memory we will discuss  
+
+6
+00:00:42,640 --> 00:00:48,080
+concepts like demand paging page-replacement 
+algorithms and allocations of page frames  
+
+7
+00:00:48,640 --> 00:00:53,680
+and then we will discuss what the working 
+set model is thrashin and so on these are a  
+
+8
+00:00:53,680 --> 00:00:59,280
+bit more advanced concepts but hopefully 
+it will be clear let's start with a  
+
+9
+00:01:00,240 --> 00:01:08,320
+rapid recap and the introduction so the last 
+thing we discussed last time was paging we said  
+
+10
+00:01:08,320 --> 00:01:14,080
+we take a process we divide the logical space 
+into pages then we take the physical memory  
+
+11
+00:01:14,080 --> 00:01:20,800
+and that is divided into frames the size of a 
+frame and a page is the same we even maintain  
+
+12
+00:01:20,800 --> 00:01:26,480
+stuff on disk organized into pages so that 
+when we load a process we put pages into  
+
+13
+00:01:28,400 --> 00:01:33,760
+frames and this is what I said the page size is 
+equal to the frame size and of course we need  
+
+14
+00:01:33,760 --> 00:01:41,280
+a page table so that we can translate the logical 
+addresses to actual physical addresses and as you  
+
+15
+00:01:41,280 --> 00:01:49,360
+can hopefully see now since we have this 
+disjoint way of maintaining the logical addresses  
+
+16
+00:01:49,360 --> 00:01:55,040
+and or the logical space and the physical space 
+with this intermediate thing that is the pages / 
+
+17
+00:01:55,040 --> 00:02:02,880
+frames and how we translate addresses using the 
+page table we have less fragmentation paging  
+
+18
+00:02:02,880 --> 00:02:07,840
+doesn't have external fragmentation it has only 
+internal one and that you can control better with  
+
+19
+00:02:09,360 --> 00:02:14,800
+the page size plus again as long as you have 
+enough free frames you can load a process  
+
+20
+00:02:14,800 --> 00:02:19,040
+independently of where the frames are which is 
+not true for example with contiguous allocation  
+
+21
+00:02:20,000 --> 00:02:27,920
+we have better protection this is since even 
+the segmentation before paging we discussed  
+
+22
+00:02:27,920 --> 00:02:33,360
+and it's also faster to load and swap processes 
+this we will discuss now because now as you  
+
+23
+00:02:33,360 --> 00:02:41,040
+can imagine it's enough to swap some pages 
+rather than all the pages but let's see this  
+
+24
+00:02:41,040 --> 00:02:48,720
+one step at a time so the first question here 
+we should think about is what would happen if  
+
+25
+00:02:48,720 --> 00:02:56,720
+the operating system was sort of lying let's 
+say and not really loading all the pages into  
+
+26
+00:02:58,720 --> 00:03:04,640
+the frames when you want to start a process so i'm 
+saying that it just does not load a specific page  
+
+27
+00:03:04,640 --> 00:03:10,960
+here not that it places it in a different
+frame well of course the intuitive answer here  
+
+28
+00:03:10,960 --> 00:03:15,040
+would be well of course it would be a problem 
+because when I access the page and I don't find  
+
+29
+00:03:15,040 --> 00:03:21,840
+it in a frame then that of course it's a 
+problem which is of course a correct observation  
+
+30
+00:03:21,840 --> 00:03:29,440
+but then you could think but when would that be 
+a problem? because it is a problem only if you  
+
+31
+00:03:29,440 --> 00:03:35,680
+try to access page three as long as you don't 
+access page 3 whether it is or not in the real  
+
+32
+00:03:35,680 --> 00:03:43,840
+physical memory doesn't really play any 
+difference for the process that is  
+
+33
+00:03:44,480 --> 00:03:51,760
+run by the operating system so if you want to 
+oversimplify what virtual memory is it's basically  
+
+34
+00:03:51,760 --> 00:03:58,000
+something like this it's to use paging but not 
+to put everything really into the physical memory  
+
+35
+00:03:58,000 --> 00:04:03,520
+when you start the process but rather put it 
+there only when it looks like it's really needed
+
+36
+00:04:05,760 --> 00:04:10,080
+so basically waiting until the process says 
+I want a specific page and then place the  
+
+37
+00:04:10,080 --> 00:04:17,520
+page in memory if it's not already there 
+a motivation behind this could be that  
+
+38
+00:04:19,120 --> 00:04:24,720
+of course a process is quite large it 
+contains a lot of routines and so on  
+
+39
+00:04:24,720 --> 00:04:29,040
+and it's not that you are really running all 
+these things at the same time all the time  
+
+40
+00:04:30,400 --> 00:04:35,360
+this we mentioned it a bit before maybe in some 
+discussion if I remember correctly and we will  
+
+41
+00:04:35,360 --> 00:04:42,400
+mention it now again there is this concept of 
+locality so you start running a function so for a  
+
+42
+00:04:42,400 --> 00:04:46,560
+certain period of time you will be running that 
+function it will run the instructions that are  
+
+43
+00:04:46,560 --> 00:04:52,080
+close by in memory because they belong to the same 
+function you will use the same variables many  
+
+44
+00:04:52,080 --> 00:04:58,480
+times in the same portion of memory and so on so 
+for a certain amount of time you will stay there  
+
+45
+00:04:58,480 --> 00:05:03,600
+then you change function you go to another place 
+in memory where you are running other things it's  
+
+46
+00:05:03,600 --> 00:05:08,800
+not that you use all the code all the time so 
+there might even be parts of the code that are  
+
+47
+00:05:08,800 --> 00:05:13,680
+not actually used during an execution you can 
+have unusual routines you can have error codes  
+
+48
+00:05:14,480 --> 00:05:17,520
+maybe there is no error you don't 
+need to run so you can see that  
+
+49
+00:05:17,520 --> 00:05:21,120
+there is a reason why I don't really want to 
+load everything because it's not that you really  
+
+50
+00:05:21,120 --> 00:05:25,680
+need everything all the time if you can load 
+stuff only when it's needed it can be of course
+
+51
+00:05:28,480 --> 00:05:37,840
+an advantage so first of all you can run more 
+processes than the ones you could run if you load  
+
+52
+00:05:38,880 --> 00:05:42,720
+all of them at the same time so you 
+are not really constrained any longer  
+
+53
+00:05:42,720 --> 00:05:49,120
+by the physical memory you have each 
+program takes less memory while running  
+
+54
+00:05:49,120 --> 00:05:54,480
+so you can run more programs at the same time 
+it also takes less time to load the program  
+
+55
+00:05:54,480 --> 00:05:59,920
+because you don't have to load all the pages 
+you just load some of them so when you say start  
+
+56
+00:06:01,280 --> 00:06:08,000
+a process the responsiveness gets better because 
+instead of loading I don't know five gigabytes  
+
+57
+00:06:08,000 --> 00:06:12,960
+of stuff maybe you can run initially with 
+a bunch of hundred megabytes and be more  
+
+58
+00:06:14,640 --> 00:06:24,480
+responsive now of course as 
+always trade-offs what are the trade-offs in  
+
+59
+00:06:24,480 --> 00:06:30,240
+this case if you use this mechanism which places 
+a page into a frame only when it's really needed  
+
+60
+00:06:30,240 --> 00:06:35,440
+well of course that you need a mechanism to 
+check if the page is there or not so the  
+
+61
+00:06:35,440 --> 00:06:40,240
+operating system needs a way to detect that the 
+process is trying to access something that is not  
+
+62
+00:06:40,240 --> 00:06:47,840
+in memory and react rapidly and here you will 
+see it's again collaboration with the hardware  
+
+63
+00:06:49,840 --> 00:06:54,160
+there will be a degradation in the performance 
+accessing something that is in memory  
+
+64
+00:06:55,120 --> 00:07:00,960
+compared to trying to access something that is 
+in memory finding out is not there waking up the  
+
+65
+00:07:00,960 --> 00:07:07,280
+operating system letting the operating system 
+react and go to the disk fetch the page place  
+
+66
+00:07:07,280 --> 00:07:13,200
+it where it should be update the page table and 
+tell the process okay now you can access of course  
+
+67
+00:07:13,200 --> 00:07:18,400
+takes a lot of time you will pay this penalty so 
+the idea is that you should not pay this penalty  
+
+68
+00:07:18,400 --> 00:07:24,160
+too much otherwise maybe it's not worth 
+the benefits you have with virtual memory  
+
+69
+00:07:25,440 --> 00:07:28,480
+and there will be more but 
+let's look at them later on
+

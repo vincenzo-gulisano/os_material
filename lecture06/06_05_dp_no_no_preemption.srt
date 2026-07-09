@@ -1,0 +1,194 @@
+1
+00:00:02,160 --> 00:00:06,880
+Let's try now to modify our solution 
+by taking down the no preemption case. 
+
+2
+00:00:07,440 --> 00:00:12,960
+The idea behind what we are going to see next can 
+be summarized as follows: If a philosopher does  
+
+3
+00:00:12,960 --> 00:00:18,000
+not manage to get the chopstick on the right, 
+then he/she releases the chopstick on the left. 
+
+4
+00:00:18,800 --> 00:00:23,600
+This is how the solution looks like. Let's first 
+introduce some data structures and methods. 
+
+5
+00:00:24,640 --> 00:00:29,440
+We define the type chopstick_structure 
+so that it contains a binary semaphore  
+
+6
+00:00:29,440 --> 00:00:34,240
+initialized to 1 and a boolean variable 
+called available initialized to true  
+
+7
+00:00:34,240 --> 00:00:38,800
+(which means that at the very beginning of the 
+execution each chopstick_structure is available). 
+
+8
+00:00:39,840 --> 00:00:45,360
+We then define the trylock method so that, 
+when passed a chopstick_structure the first  
+
+9
+00:00:45,360 --> 00:00:51,440
+thing it does is to wait on its binary semaphore.
+After the wait, if the chopstick is available,  
+
+10
+00:00:51,440 --> 00:00:56,880
+it sets the variable to false and 
+stores true as return value, otherwise  
+
+11
+00:00:56,880 --> 00:01:01,760
+it stores false as return value. Finally, 
+it sends a signal on the chopstick's binary  
+
+12
+00:01:01,760 --> 00:01:07,280
+semaphore and returns the return value.
+The lock method simply enters a loop in  
+
+13
+00:01:07,280 --> 00:01:12,880
+which it stays until trylock returns true (i.e., 
+when it finds the chopstick to be available). 
+
+14
+00:01:14,080 --> 00:01:19,120
+The release waits on the binary semaphore. 
+Then, it sets the available variable to true  
+
+15
+00:01:19,840 --> 00:01:21,600
+and signals the binary semaphore.
+
+16
+00:01:22,720 --> 00:01:28,320
+We can now look at the solution as a whole. 
+In their entry section, the threads define  
+
+17
+00:01:28,320 --> 00:01:35,040
+a while loop. The loop goes on as long as a local 
+variable called holding_both_chopsticks is false. 
+
+18
+00:01:35,840 --> 00:01:41,920
+Inside the loop, the thread tries to lock the 
+first chopstick. Based on the method we have  
+
+19
+00:01:41,920 --> 00:01:48,480
+introduced, it means it keeps running trylock as 
+longs as it does not find the available variable  
+
+20
+00:01:48,480 --> 00:01:56,240
+of the chopstick it is trying to lock set to true.
+After that, it runs trylock on the second  
+
+21
+00:01:56,240 --> 00:02:02,960
+chopstick. If try lock returns true, then the 
+chopstick available variable was true, and  
+
+22
+00:02:02,960 --> 00:02:09,600
+the thread sets holding_both_chopsticks to true, 
+exits the loop, and enters the critical section. 
+
+23
+00:02:10,400 --> 00:02:13,360
+Otherwise, the thread 
+releases the other chopstick. 
+
+24
+00:02:14,480 --> 00:02:21,520
+After the critical section, each 
+thread/philosopher runs release on both chopsticks  
+
+25
+00:02:21,520 --> 00:02:26,720
+and sets holding_both_chopsticks to false.
+Then, the thread/philosopher enters the  
+
+26
+00:02:26,720 --> 00:02:30,480
+remainder section, in which he/she 
+can think instead of eating.
+
+27
+00:02:31,680 --> 00:02:38,320
+If you look at this solution carefully, you 
+can see a thread enters its critical section  
+
+28
+00:02:38,320 --> 00:02:44,160
+only if both chopsticks are available and, 
+when a thread finds the first chopstick to  
+
+29
+00:02:44,160 --> 00:02:48,880
+be availalbe but not the second one, 
+the first is set to available again,  
+
+30
+00:02:48,880 --> 00:02:55,920
+which means in the next iteration of loop the 
+thread will try again to get both chopsticks.
+
+31
+00:02:58,160 --> 00:03:04,000
+This solution is valid when it comes to mutual 
+exclusion, and it also avoids deadlocks. 
+
+32
+00:03:04,000 --> 00:03:09,600
+It has 2 downsides, still. One is that a process 
+can starve, since one process X could be the one  
+
+33
+00:03:09,600 --> 00:03:15,600
+that is always managing to get both chopsticks.
+The other downside is that, while preventing  
+
+34
+00:03:15,600 --> 00:03:18,800
+deadlocks, this algorithm 
+does not prevent livelocks. 
+
+35
+00:03:19,840 --> 00:03:25,520
+We have not discussed livelocks in details, but I 
+just want to draw your attention on the fact that  
+
+36
+00:03:25,520 --> 00:03:32,000
+if there are two processes and if both processes 
+do not manage to get the second chopstick  
+
+37
+00:03:32,000 --> 00:03:36,480
+it might happen that in some execution 
+order (imagine the two processes are  
+
+38
+00:03:36,480 --> 00:03:42,640
+concurrently being executed on the same CPU) they 
+both release the other chopstick and try again,  
+
+39
+00:03:42,640 --> 00:03:49,840
+and this try and retry can go on 
+for an unbounded number of times.
+

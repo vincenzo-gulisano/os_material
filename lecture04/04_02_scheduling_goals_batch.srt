@@ -1,0 +1,115 @@
+1
+00:00:00,700 --> 00:00:05,859
+let's assume that we have one process process
+0 that
+
+2
+00:00:05,859 --> 00:00:09,910
+takes 100 seconds to finish but also has to
+do one input
+
+3
+00:00:09,910 --> 00:00:14,190
+output every second
+so not really that frequently
+
+4
+00:00:14,190 --> 00:00:17,100
+and then we have another 1000 processes and
+they need to
+
+5
+00:00:17,100 --> 00:00:25,250
+perform 1000 input/output operations each
+if we use first come first serve then we start
+
+6
+00:00:25,250 --> 00:00:29,480
+with process
+0 this will take 1000 seconds to finish
+
+7
+00:00:29,480 --> 00:00:32,500
+every time process 0 requests an input
+output and goes
+
+8
+00:00:32,500 --> 00:00:40,480
+into waiting
+we have the chance to run the next process
+
+9
+00:00:40,480 --> 00:00:45,030
+processes 1 to 1000 get to perform one input/output 
+every second
+
+10
+00:00:45,030 --> 00:00:52,170
+they need 1000 I/O requests
+they are going to perform 1000 I/O requests
+
+11
+00:00:52,170 --> 00:00:55,720
+which
+implies that it will take for them 16 minutes
+
+12
+00:00:55,720 --> 00:00:59,899
+more than 16
+minutes to finish (1000 seconds)
+
+13
+00:00:59,899 --> 00:01:07,000
+on the other hand if we use a preemptive strategy
+we could
+
+14
+00:01:07,000 --> 00:01:11,179
+preempt process zero every
+10 milliseconds
+
+15
+00:01:11,179 --> 00:01:16,759
+and let the other processes run
+since they have mainly I/O requests and they
+
+16
+00:01:16,759 --> 00:01:22,619
+are I/O
+bound they would rapidly go into waiting
+
+17
+00:01:22,619 --> 00:01:26,069
+so from the perspective of process zero it
+would still
+
+18
+00:01:26,069 --> 00:01:30,649
+more or less take 1000 second to finish
+because what takes time in process zero is
+
+19
+00:01:30,649 --> 00:01:34,200
+the second of
+CPU time it spends every time on the other
+
+20
+00:01:34,200 --> 00:01:37,140
+end
+from the perspective of processes from 1 to
+
+21
+00:01:37,140 --> 00:01:39,069
+1000 they would
+complete in 10 seconds
+
+22
+00:01:39,069 --> 00:01:42,340
+so you can see that it's significantly better
+in this case
+
+23
+00:01:42,340 --> 00:01:45,579
+to use of preemptive strategy
+for their scheduling
+

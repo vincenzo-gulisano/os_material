@@ -1,0 +1,585 @@
+1
+00:00:00,450 --> 00:00:08,730
+we move now to memory virtualization so
+let's look a bit more in detail at what happens
+
+2
+00:00:08,730 --> 00:00:21,840
+when we want to virtualize the memory now
+we discussed virtual memory and paging
+
+3
+00:00:21,840 --> 00:00:29,890
+so you know that the operating system let's
+forget about virtualization for a moment
+
+4
+00:00:29,890 --> 00:00:35,910
+you know that when we have virtual memory
+the operating system collaborating with the
+
+5
+00:00:35,910 --> 00:00:44,640
+hardware it's sort of lying to the processes
+thanks to the fact that it completely
+
+6
+00:00:44,640 --> 00:00:52,690
+decouples the logical view from the physical
+view and it not only lets each process believe
+
+7
+00:00:52,690 --> 00:00:58,310
+it has a sequential set of addresses from zero
+to something
+
+8
+00:00:58,310 --> 00:01:06,749
+but the important thing here is that it actually
+makes the processes believe that the memory
+
+9
+00:01:06,749 --> 00:01:12,490
+they have access to it's actually larger than
+the physical memory you really have
+
+10
+00:01:12,490 --> 00:01:20,310
+in your computer because you are not really
+loading all the processes in their entirety
+
+11
+00:01:20,310 --> 00:01:25,439
+and even if you don't have free frames to
+load new parts of a
+
+12
+00:01:25,439 --> 00:01:29,939
+process you can still reclaim frames either from the
+same process or another process as we
+
+13
+00:01:29,939 --> 00:01:38,479
+discussed so you separate the physical
+memory from the logical representation
+
+14
+00:01:38,479 --> 00:01:43,689
+of it what the process thinks is happening
+in the memory
+
+15
+00:01:43,689 --> 00:01:48,259
+now you want to keep using virtual memory
+also if you run an hypervisor because it's
+
+16
+00:01:48,259 --> 00:01:55,830
+very convenient and efficient it provides
+a lot of benefits it's a technique that is
+
+17
+00:01:55,830 --> 00:01:59,329
+efficient that provides benefits to handle of
+the memory
+
+18
+00:01:59,329 --> 00:02:06,109
+now you probably can agree with me that nonetheless
+you cannot really play this game if you have
+
+19
+00:02:06,109 --> 00:02:13,470
+multiple operating systems at the same time
+or at least you cannot play it without extra
+
+20
+00:02:13,470 --> 00:02:20,900
+care because you need to make each operating
+system believe it has access to the memory
+
+21
+00:02:20,900 --> 00:02:28,750
+while it does not necessarily has it the real mapping
+it thinks it has in the physical one so basically
+
+22
+00:02:28,750 --> 00:02:35,370
+it's like playing the game of virtual memory
+but now not between the physical memory and
+
+23
+00:02:35,370 --> 00:02:41,400
+the processes but now between the physical
+memory and the guest operating systems which
+
+24
+00:02:41,400 --> 00:02:45,709
+in turn will play the same game between their
+operating systems their
+
+25
+00:02:45,709 --> 00:02:50,810
+guest operating system and their processes
+so what I'm trying to say is that if you
+
+26
+00:02:50,810 --> 00:02:57,890
+run two virtual machines and these ones use
+virtual memory and they are trying to run
+
+27
+00:02:57,890 --> 00:03:04,480
+two processes like this each one will have
+its page table and each one is allowed to
+
+28
+00:03:04,480 --> 00:03:07,140
+use the page table to make the process
+
+29
+00:03:07,140 --> 00:03:13,480
+believe the pages are in memory even if in
+fact only some of them might be in the physical
+
+30
+00:03:13,480 --> 00:03:18,870
+memory and the mapping could be arbitrary
+depending on how you are filling
+
+31
+00:03:18,870 --> 00:03:21,470
+the page table but you cannot do something
+like the one
+
+32
+00:03:21,470 --> 00:03:27,810
+that is shown in this figure because
+you cannot make the two processes from two
+
+33
+00:03:27,810 --> 00:03:35,069
+different operating systems believe that their
+page zero is actually in frame one where frame
+
+34
+00:03:35,069 --> 00:03:38,450
+one is the real frame one in the real hardware
+
+35
+00:03:38,450 --> 00:03:41,849
+because then of course you are using the same
+frame for two different operating systems two
+
+36
+00:03:41,849 --> 00:03:48,680
+different processes and that is not going
+to work so what you do is probably you can
+
+37
+00:03:48,680 --> 00:03:53,780
+imagine what is going to happen is that you
+add an extra layer in between so that the
+
+38
+00:03:53,780 --> 00:03:59,090
+hypervisor manages the operating system's view
+of the memory
+
+39
+00:03:59,090 --> 00:04:03,920
+and then the operating system manages its
+own view of the memory when it comes to interacting
+
+40
+00:04:03,920 --> 00:04:08,510
+with the processes and what you do is
+that you basically introduce a new page
+
+41
+00:04:08,510 --> 00:04:15,319
+table and this is called the shadow page table
+that is maintained by the hypervisor
+
+42
+00:04:15,319 --> 00:04:23,920
+and is used to translate what each virtual
+machine guest operating system sees as a frame
+
+43
+00:04:23,920 --> 00:04:35,280
+in to the actually real physical frame it
+is nonetheless challenging to do this the
+
+44
+00:04:35,280 --> 00:04:39,350
+challenges are similar in spirit to the ones
+you have when you define virtual memory but now
+
+45
+00:04:39,350 --> 00:04:41,860
+again you have an extra layer you have two layers
+at the same
+
+46
+00:04:41,860 --> 00:04:49,610
+time that you need to take care of you need
+to keep the page table at the operating system
+
+47
+00:04:49,610 --> 00:04:57,410
+at the guest operating system and the shadow
+page table at the hypervisor synchronized
+
+48
+00:04:57,410 --> 00:05:01,790
+they need to be the same because if the
+hypervisor thinks something and the guest operating
+
+49
+00:05:01,790 --> 00:05:05,730
+system thinks something else of course that
+will eventually end up
+
+50
+00:05:05,730 --> 00:05:09,890
+in problems because the guest operating
+system will try to access memory that does
+
+51
+00:05:09,890 --> 00:05:15,010
+not really belong does not necessarily belong to that
+process or even to that entire guest operating
+
+52
+00:05:15,010 --> 00:05:19,750
+system the problem is how do you keep them
+in sync?
+
+53
+00:05:19,750 --> 00:05:25,340
+because the guest operating system can keep
+updating its own page tables by just writing
+
+54
+00:05:25,340 --> 00:05:32,520
+to memory and the instruction it's using
+are not necessarily privileged or sensitive
+
+55
+00:05:32,520 --> 00:05:39,760
+so they don't necessarily trap the hypervisor
+so how do you deal with this?
+
+56
+00:05:39,760 --> 00:05:47,960
+you can go two ways here you can be proactive
+so when you see that the operating system
+
+57
+00:05:47,960 --> 00:05:54,800
+is starting to create page tables (that is done
+with a privileged instruction) the hypervisor
+
+58
+00:05:54,800 --> 00:06:02,710
+can keep track of where in which part of the
+memory that is given to that operating system
+
+59
+00:06:02,710 --> 00:06:04,150
+the operating system is going to maintain
+the
+
+60
+00:06:04,150 --> 00:06:10,990
+page table mark those has read only (read only from
+the perspective of the hypervisor of course)
+
+61
+00:06:10,990 --> 00:06:16,030
+so that whenever the operating system tries
+to modify a page table you will
+
+62
+00:06:16,030 --> 00:06:22,330
+have as a reaction an interrupt that will wake
+up the hypervisor and the hypervisor knows
+
+63
+00:06:22,330 --> 00:06:27,180
+that at that point there is a change being
+made in the table and it can
+
+64
+00:06:27,180 --> 00:06:34,290
+accordingly update the shadow page table
+the other alternative is to be lazy and let
+
+65
+00:06:34,290 --> 00:06:40,370
+the operating system do the guest operating
+system do whatever it wants because we know
+
+66
+00:06:40,370 --> 00:06:45,850
+that at the end of the day as soon as the
+operating system actually tries to access
+
+67
+00:06:45,850 --> 00:06:47,900
+a frame
+
+68
+00:06:47,900 --> 00:06:57,250
+that does not contain the page it wants then
+there will be an interrupt so the hypervisor
+
+69
+00:06:57,250 --> 00:07:05,770
+will have a chance to synchronize the tables
+the problem here is that being lazy does not
+
+70
+00:07:05,770 --> 00:07:12,960
+solve all the problems specifically it does
+not solve the problem of having the guest
+
+71
+00:07:12,960 --> 00:07:18,650
+operating system removing some mappings from
+the page table because in that case
+
+72
+00:07:18,650 --> 00:07:24,470
+since it's removing them there will not be a page fault 
+when it is trying to access them and
+
+73
+00:07:24,470 --> 00:07:34,860
+that can lead to situations in which the hypervisor
+has stale shadow page tables and believes
+
+74
+00:07:34,860 --> 00:07:39,600
+the operating system the guest operating system
+is using more memory than it is actually using
+
+75
+00:07:39,600 --> 00:07:43,940
+because it does not see a change in the guest
+operating
+
+76
+00:07:43,940 --> 00:07:52,330
+system page table now here we need to differentiate
+now page faults we have at this point two type
+
+77
+00:07:52,330 --> 00:07:59,330
+of two categories of page faults we have guest
+induced page faults and hypervisor induced page faults
+
+78
+00:07:59,330 --> 00:08:05,810
+the guest induced page fault is a page fault
+that will be intercepted by the hypervisor
+
+79
+00:08:05,810 --> 00:08:07,720
+for example to update the shadow page table
+as
+
+80
+00:08:07,720 --> 00:08:13,930
+we just said but these are actually page faults
+that the guest operating system needs to see
+
+81
+00:08:13,930 --> 00:08:18,580
+because these are the normal page faults you would have
+with virtual memory so they hypervisor
+
+82
+00:08:18,580 --> 00:08:26,440
+then needs to re-inject the page faults into
+the guest operating system so that the guest operating
+
+83
+00:08:26,440 --> 00:08:32,010
+system can take the actions that it is
+programmed to take then
+
+84
+00:08:32,010 --> 00:08:37,900
+we have hypervisor induced page faults (for example
+if you make the memory used by the guest operating
+
+85
+00:08:37,900 --> 00:08:43,650
+system to keep the page table read only)
+that are only intended for the hypervisor
+
+86
+00:08:43,650 --> 00:08:46,330
+again to update the shadow page table for
+example
+
+87
+00:08:46,330 --> 00:08:56,380
+but they don't need to be re-injected
+into the guest operating system we say
+
+88
+00:08:56,380 --> 00:09:04,080
+we are observing  a VM exit whenever
+a page fault results in the hypervisor gaining
+
+89
+00:09:04,080 --> 00:09:15,300
+control now we still have one complication
+here when it comes to virtualizing memory so
+
+90
+00:09:15,300 --> 00:09:21,440
+forget about virtualization for a moment virtual
+memory on a normal operating system as I said
+
+91
+00:09:21,440 --> 00:09:28,020
+lies to the processes makes them believe
+that they have more memory they actually physically
+
+92
+00:09:28,020 --> 00:09:33,640
+have and now back to virtualization these
+happens also when the hypervisor lies
+
+93
+00:09:33,640 --> 00:09:37,460
+to the guest operating systems pretending they
+have more frames that are
+
+94
+00:09:37,460 --> 00:09:45,000
+actually available the problem now is what
+if the hypervisor needs to reclaim some of
+
+95
+00:09:45,000 --> 00:09:50,990
+the frames that it assigned to a certain
+operating system because another operating
+
+96
+00:09:50,990 --> 00:09:57,060
+system needs more frames? how can it do that?
+it's similar to what you need to do when you
+
+97
+00:09:57,060 --> 00:09:59,130
+need to move frames from one process to the
+other
+
+98
+00:09:59,130 --> 00:10:03,630
+the problem is that now you don't have an
+operating system that sees the hardware directly
+
+99
+00:10:03,630 --> 00:10:11,870
+and takes decisions you have a hypervisor and
+the hypervisor needs to be waken up by
+
+100
+00:10:11,870 --> 00:10:17,770
+the guest operating system the problem
+is that the hypervisor needs frames but the
+
+101
+00:10:17,770 --> 00:10:20,440
+guest operating system does not need to release
+frames
+
+102
+00:10:20,440 --> 00:10:27,020
+so how can we make the hypervisor tell the
+operating system: look I need frames because
+
+103
+00:10:27,020 --> 00:10:33,779
+some of them need to be moved to a different
+guest operating system of course I cannot
+
+104
+00:10:33,779 --> 00:10:40,930
+take them simply away because then you can
+disrupt the memory of the guest operating
+
+105
+00:10:40,930 --> 00:10:41,930
+system
+
+106
+00:10:41,930 --> 00:10:47,820
+so a trick you can play here it's called ballooning
+so you can load a small module in each machine
+
+107
+00:10:47,820 --> 00:10:53,250
+as a pseudodevice it's not a real device
+it's a pseudodevice driver that is connected
+
+108
+00:10:53,250 --> 00:10:55,020
+to the hypervisor
+
+109
+00:10:55,020 --> 00:11:00,690
+so by doing this you create a communication
+channel between the hypervisor and
+
+110
+00:11:00,690 --> 00:11:10,720
+each guest operating system now since the
+hypervisor as control of this it can inflate
+
+111
+00:11:10,720 --> 00:11:19,110
+based on its own needs the amount of memory
+it makes the operating system the
+
+112
+00:11:19,110 --> 00:11:22,210
+guest operating system believes it needs for
+the driver
+
+113
+00:11:22,210 --> 00:11:30,421
+by doing this it will assign more frames
+to the operating system but it will be in
+
+114
+00:11:30,421 --> 00:11:36,330
+control of those frames because they belong
+to this pseudodevice driver that is controlled
+
+115
+00:11:36,330 --> 00:11:44,420
+by the hypervisor when the hypervisor needs
+frames then it can deflate
+
+116
+00:11:44,420 --> 00:11:51,270
+the memory needed by the driver since it inflates
+the memory that the guest operating system
+
+117
+00:11:51,270 --> 00:11:57,030
+would react by releasing the frames and the
+hypervisor can intercept these frames and
+
+118
+00:11:57,030 --> 00:12:00,690
+allocate them to a different guest operating
+system
+

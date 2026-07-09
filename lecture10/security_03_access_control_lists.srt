@@ -1,0 +1,123 @@
+1
+00:00:00,979 --> 00:00:06,279
+Let’s start discussing Access Control Lists
+
+2
+00:00:06,279 --> 00:00:12,480
+For simplicity, let’s assume each user is
+associated with one domain and that all processes
+
+3
+00:00:12,480 --> 00:00:19,020
+ran by the user belong to such domain.
+In the example, we have a user A and his/her
+
+4
+00:00:19,020 --> 00:00:26,679
+processes also belong to domain A.
+We define one access control list per file.
+
+5
+00:00:26,679 --> 00:00:33,140
+As the name suggests, it is a list, and it
+is scanned in order, stopping at the first
+
+6
+00:00:33,140 --> 00:00:41,309
+entry that matches.
+If no rights are found for a given domain,
+
+7
+00:00:41,309 --> 00:00:48,190
+then we assume such a domain as no rights
+associated with it.
+
+8
+00:00:48,190 --> 00:00:52,690
+The entry can contain the usual permissions
+for reading (R) writing (W) and executing
+
+9
+00:00:52,690 --> 00:00:56,690
+(X) but nothing prevents a system from defining
+more rights.
+
+10
+00:00:56,690 --> 00:01:02,059
+An important aspect here is how we implement
+such a system. More concretely, what are the
+
+11
+00:01:02,059 --> 00:01:10,270
+specific elements we store in each entry?
+First, we can distinguish rights for individuals
+
+12
+00:01:10,270 --> 00:01:15,070
+and for groups (the latter are useful when
+we want to apply the same rights to a set
+
+13
+00:01:15,070 --> 00:01:20,210
+of individuals that share some features, e.g.,
+students).
+
+14
+00:01:20,210 --> 00:01:28,570
+Then, we can store rights as pairs <UID,GID>.
+In this case, we refer to them as ROLES, since
+
+15
+00:01:28,570 --> 00:01:34,340
+each set of rights is associated not only
+to a user but also to the group such user
+
+16
+00:01:34,340 --> 00:01:39,520
+is representing (and one user could in principle
+be associated with multiple groups).
+
+17
+00:01:39,520 --> 00:01:46,040
+In such a case, we could also use wildcards,
+to define rights that apply to a user independently
+
+18
+00:01:46,040 --> 00:01:52,640
+of each group (<UID,*>).
+An alternative implementation is to store
+
+19
+00:01:52,640 --> 00:01:58,320
+rights on a per-user / per-group basis.
+
+20
+00:01:58,320 --> 00:02:04,730
+Revoking or granting permissions is simple
+using access control lists.
+
+21
+00:02:04,730 --> 00:02:10,780
+Let’s say we want to change the rights associated
+with user A so that user A can no longer do
+
+22
+00:02:10,780 --> 00:02:21,540
+anything with file F1.
+If we append to the ACL of F1 the pair <A,*>=(none)
+
+23
+00:02:21,540 --> 00:02:28,680
+then this will be always the first entry matched
+for user A, and user A will thus have no rights
+
+24
+00:02:28,680 --> 00:02:33,629
+for file F1.
+Notice though we might want to clean and keep
+
+25
+00:02:33,629 --> 00:02:37,260
+our access control list in order, to prevent
+it from ever-growing.
+

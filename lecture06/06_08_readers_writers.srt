@@ -1,0 +1,193 @@
+1
+00:00:01,280 --> 00:00:06,240
+After looking at Lamport's bakery algorithm, 
+let's move to a slightly different problem, that  
+
+2
+00:00:06,240 --> 00:00:12,000
+of the readers and writers. In this case, we have 
+multiple entities accessing a shared resource, but  
+
+3
+00:00:12,000 --> 00:00:16,880
+such entities are of different types and we have 
+different safety properties associated with them.
+
+4
+00:00:17,520 --> 00:00:22,480
+Both writers and readers are trying to access 
+a shared resource, for instance, a file. 
+
+5
+00:00:22,480 --> 00:00:25,600
+Only one writer at the time 
+can write to such a resource. 
+
+6
+00:00:26,480 --> 00:00:30,800
+Multiple readers are allowed to read at the 
+same time, but not concurrently with writers. 
+
+7
+00:00:31,440 --> 00:00:35,520
+We are going to look at how we can solve this 
+synchronization problem using semaphores.
+
+8
+00:00:36,560 --> 00:00:39,280
+If we try to visualize the 
+dependencies between the  
+
+9
+00:00:39,280 --> 00:00:43,920
+entry and exit sections of writers 
+and readers, it looks like this.
+
+10
+00:00:43,920 --> 00:00:49,120
+For the writer, the entry section needs to 
+wait until no one accesses the shared object. 
+
+11
+00:00:50,160 --> 00:00:55,040
+Once the critical section is over (i.e., 
+the portion in which the writer writes to  
+
+12
+00:00:55,040 --> 00:01:00,240
+the shared resource), the exit section can 
+send a signal about the fact that no one is  
+
+13
+00:01:00,240 --> 00:01:05,680
+accessing the object anymore, and such a signal 
+can be consumed by both a writer or a reader.
+
+14
+00:01:06,640 --> 00:01:10,560
+For the reader, the entry section 
+should first check if the reader  
+
+15
+00:01:10,560 --> 00:01:14,880
+is the first reader of a batch of readers 
+that tries to access the shared resource.  
+
+16
+00:01:15,440 --> 00:01:20,160
+If that is the case, then the reader should 
+wait. If other readers are already accessing  
+
+17
+00:01:20,160 --> 00:01:23,200
+the resource, then the reader can 
+simply enter its critical section. 
+
+18
+00:01:23,920 --> 00:01:28,320
+For the exit section, the reader should of 
+course inform others it is done with its  
+
+19
+00:01:28,320 --> 00:01:34,880
+critical section. If the reader was the only one / 
+the last one completing its critical section, then  
+
+20
+00:01:34,880 --> 00:01:40,400
+a signal should be sent for writers or for another 
+batch of readers to enter their critical section.
+
+21
+00:01:42,000 --> 00:01:46,640
+Let's now look at the pseudocode that uses 
+semaphores according to these dependencies.
+
+22
+00:01:47,280 --> 00:01:50,640
+We have writers and readers 
+sharing the following variables: 
+
+23
+00:01:50,640 --> 00:01:58,080
+- two binary semaphores, noone_accesses and 
+protect_check (notice that both are initially 1),  
+
+24
+00:01:58,080 --> 00:01:59,280
+and
+- rc,  
+
+25
+00:01:59,280 --> 00:02:01,840
+readers counter, which is initially set to 0.
+
+26
+00:02:02,560 --> 00:02:07,840
+The writers simply protect their critical 
+section by waiting on the noone_accesses variable  
+
+27
+00:02:08,400 --> 00:02:13,200
+(entry section) and sending a signal 
+on the same variable (exit section).
+
+28
+00:02:14,160 --> 00:02:20,160
+The readers use the protect_check variable to 
+make sure they consistently update the rc value. 
+
+29
+00:02:20,880 --> 00:02:24,240
+In the entry section, the first reader 
+that manages to increase it to 1 (i.e.,  
+
+30
+00:02:24,880 --> 00:02:27,440
+the first reader of a batch) also waits on  
+
+31
+00:02:27,440 --> 00:02:30,640
+the noone_accesses variable (to 
+synchronize with the writers). 
+
+32
+00:02:31,760 --> 00:02:38,880
+In the exit section, the reader that sets rc 
+to 0 (notice access to rc is also synchronized  
+
+33
+00:02:38,880 --> 00:02:44,800
+here using the protect_check variable among 
+readers) also signals on the noone_accesses  
+
+34
+00:02:44,800 --> 00:02:49,840
+variable, so that a writer or another batch of 
+readers can then enter the critical section.
+
+35
+00:02:50,800 --> 00:02:57,200
+As before, I suggest you try to have some formal 
+reasoning about how this solution is correct,  
+
+36
+00:02:57,200 --> 00:02:59,760
+at least in terms of mutual 
+exclusion and progress. 
+
+37
+00:03:00,480 --> 00:03:06,240
+If you think about fairness, you can probably see 
+that here readers are privileged over writers.  
+
+38
+00:03:06,240 --> 00:03:12,320
+Once a reader increases rc to 1, other readers can 
+keep accessing their critical section an unbounded  
+
+39
+00:03:12,320 --> 00:03:19,520
+number of times. As long as rc is not set back 
+to 0, writers cannot access the shared resource.
+

@@ -1,0 +1,120 @@
+1
+00:00:01,760 --> 00:00:06,400
+The third way to fight deadlocks that 
+is left is to avoid the hold and wait. 
+
+2
+00:00:07,200 --> 00:00:12,640
+Simply put, we can devise a solution in which 
+philosophers agree on who is going to eat  
+
+3
+00:00:12,640 --> 00:00:19,120
+next rather than on who gets a certain chopstick.
+You have such an approach presented here: we have  
+
+4
+00:00:19,120 --> 00:00:26,560
+one semaphore per philosopher, an extra semaphore 
+called mutex, and an array of size n of states.  
+
+5
+00:00:27,360 --> 00:00:31,040
+One state can either be 
+HUNGRY, THINKING, or EATING. 
+
+6
+00:00:32,560 --> 00:00:38,000
+To enter and exit the critical section 
+we have two methods: enterCS and exitCS. 
+
+7
+00:00:39,200 --> 00:00:45,360
+In the enterCS method, each philosopher waits on 
+the shared mutex variable. In other words, only  
+
+8
+00:00:45,360 --> 00:00:51,680
+one philosopher at a time can run the following 
+two instructions, which change his/her state to  
+
+9
+00:00:51,680 --> 00:00:57,920
+HUNGRY and call the help method.
+After calling signal on mutex,  
+
+10
+00:00:57,920 --> 00:01:04,560
+the philosopher running the entryCS method starts 
+waiting for a signal on its entry of the S array. 
+
+11
+00:01:05,440 --> 00:01:11,360
+So, how does the help function work? 
+Only if the philosopher invoking it  
+
+12
+00:01:11,360 --> 00:01:17,280
+is hungry and his/her neighbors are not eating, 
+then it changes the state of the philosopher  
+
+13
+00:01:17,280 --> 00:01:24,160
+invoking it to eating and sends a signal to it.
+Notice that since help runs in between a wait and  
+
+14
+00:01:24,160 --> 00:01:31,920
+signal on the shared variable mutex, if multiple 
+neighboring philosophers try to change their state  
+
+15
+00:01:31,920 --> 00:01:39,760
+from HUNGRY to EATING, only one manages to do so.
+Once a philosopher is done eating, then he/she  
+
+16
+00:01:39,760 --> 00:01:45,760
+runs the exitCS method. Again, the relevant 
+instructions are run inside a wait/signal  
+
+17
+00:01:45,760 --> 00:01:49,840
+on the shared variable mutex.
+In this case, the philosopher  
+
+18
+00:01:49,840 --> 00:01:56,560
+sets his/her state to THINKING and then helps 
+his/her neighbors, trying to send them a signal  
+
+19
+00:01:56,560 --> 00:02:01,360
+they can use to enter their critical 
+section (assuming they indeed want to).
+
+20
+00:02:03,440 --> 00:02:07,200
+This solution is valid when 
+it comes to mutual exclusion,  
+
+21
+00:02:07,200 --> 00:02:11,760
+and it also avoids deadlocks.
+nonetheless, a process can starve. 
+
+22
+00:02:11,760 --> 00:02:15,200
+As done before, try to reason 
+formally about these properties.
+
+23
+00:02:15,920 --> 00:02:18,960
+If you are interested in a 
+solution that also ensures  
+
+24
+00:02:18,960 --> 00:02:23,440
+fairness, you can find a paper 
+discussing it in the attached link.
+

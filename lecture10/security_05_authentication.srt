@@ -1,0 +1,346 @@
+1
+00:00:01,150 --> 00:00:05,810
+After discussing Access Control Lists and
+Capabilities, we can now move to a different
+
+2
+00:00:05,810 --> 00:00:10,290
+topic, that of Authentication.
+
+3
+00:00:10,290 --> 00:00:14,970
+Simply put, authentication is needed to be
+sure (to the extent possible) about who the
+
+4
+00:00:14,970 --> 00:00:21,640
+user is before enforcing a certain policy.
+This is because, as we saw, policies are user-specific.
+
+5
+00:00:21,640 --> 00:00:28,910
+There are different ways for a user to prove
+he/she is who he/she says: one option can
+
+6
+00:00:28,910 --> 00:00:34,670
+be for the user to show that he/she knows
+something (like a password),
+
+7
+00:00:34,670 --> 00:00:40,930
+another to prove that he/she has something,
+or to prove that he/she is someone.
+
+8
+00:00:40,930 --> 00:00:46,830
+These methods can of course be used not only
+in isolation but also combined.
+
+9
+00:00:46,830 --> 00:00:54,580
+If we focus on passwords, which are the solution
+that is commonly adopted, we can agree on
+
+10
+00:00:54,580 --> 00:01:02,120
+the fact that the following are all bad ideas
+(you can have a look at this by yourself).
+
+11
+00:01:02,120 --> 00:01:08,390
+A prominent example of why these are all bad
+ideas is the Stuxnet attack; you can search
+
+12
+00:01:08,390 --> 00:01:14,080
+for it and will see how something critical
+has the Iranian nuclear program has been affected
+
+13
+00:01:14,080 --> 00:01:18,370
+by one of these bad ideas.
+
+14
+00:01:18,370 --> 00:01:24,290
+Once agreed that storing directly the password
+associated with each user is not a good idea,
+
+15
+00:01:24,290 --> 00:01:28,440
+we can look at how authentication works in
+Unix.
+
+16
+00:01:28,440 --> 00:01:34,270
+A simple form of authentication (which is
+not adopted because it is not secure enough)
+
+17
+00:01:34,270 --> 00:01:39,460
+is to store the result obtained when encrypting
+a fixed block of data with the user password
+
+18
+00:01:39,460 --> 00:01:44,930
+rather than storing the password itself.
+As we mentioned before, if we have a cryptographically
+
+19
+00:01:44,930 --> 00:01:53,670
+secure one-way function f it means that from
+x we can compute y = f(x) but from y it is
+
+20
+00:01:53,670 --> 00:01:58,700
+infeasible to find out x (which would be the
+password in this case).
+
+21
+00:01:58,700 --> 00:02:05,180
+Notice that, in this case, it is nonetheless
+possible to exploit dictionary attacks (simply
+
+22
+00:02:05,180 --> 00:02:11,629
+put, to try all common passwords/combinations
+of words until one matches the encrypted set
+
+23
+00:02:11,629 --> 00:02:16,510
+of characters).
+Notice that if a match is found, all users
+
+24
+00:02:16,510 --> 00:02:21,060
+having the same encryption result also have
+the same password.
+
+25
+00:02:21,060 --> 00:02:27,739
+A variation to make Unix authentication more
+secure is that of using an additional n-bit
+
+26
+00:02:27,739 --> 00:02:32,519
+salt (a random prefix of n bits) for each
+user password.
+
+27
+00:02:32,519 --> 00:02:36,980
+Assuming that the value is indeed random and
+cannot be found out by the attacker, this
+
+28
+00:02:36,980 --> 00:02:46,379
+implies that each word in the dictionary should
+be tested with 2^n prefixes, which for large-enough
+
+29
+00:02:46,379 --> 00:02:48,400
+n values becomes infeasible
+
+30
+00:02:48,400 --> 00:02:56,790
+A different alternative is to use one-time
+passwords. In this case, an interesting example
+
+31
+00:02:56,790 --> 00:03:03,709
+is that of one-way hash chain functions.
+Supposing you have at your disposition a cryptographically
+
+32
+00:03:03,709 --> 00:03:10,190
+secure one-way function (here simply called
+a hash function) for which the input and the
+
+33
+00:03:10,190 --> 00:03:16,889
+output have the same length, and also supposing
+you want to use up to n one-time passwords,
+
+34
+00:03:16,889 --> 00:03:24,639
+you can compute the first password (P1) applying
+the function n times, as shown in the slide.
+
+35
+00:03:24,639 --> 00:03:33,410
+P2 can be computed applying the function n–1
+times and, in general, the i-th password can
+
+36
+00:03:33,410 --> 00:03:38,299
+be computed applying the function over the
+(i+1)-th function.
+
+37
+00:03:38,299 --> 00:03:44,819
+That is, if you want to check that password
+i+1 is correct, you can check that its hash
+
+38
+00:03:44,819 --> 00:03:56,379
+equals password i (but remember you cannot
+find password i+1 from password i).
+
+39
+00:03:56,379 --> 00:04:01,169
+In this case, the server can store P0 and
+value 1.
+
+40
+00:04:01,169 --> 00:04:06,349
+When the user wants to connect, the server
+requests password 1, and to check if it is
+
+41
+00:04:06,349 --> 00:04:10,019
+correct, it hashes it and compares it with
+the local one.
+
+42
+00:04:10,019 --> 00:04:15,239
+If they are the same, then the server can
+increase its value to 2 (it means next time
+
+43
+00:04:15,239 --> 00:04:22,069
+it will ask the user to give password 2) and
+update its local password value to P1.
+
+44
+00:04:22,069 --> 00:04:25,070
+And this, of course, can be repeated up to
+n times.
+
+45
+00:04:25,070 --> 00:04:30,900
+As I mentioned before, there are several ways
+in which authentication can be performed.
+
+46
+00:04:30,900 --> 00:04:35,310
+An alternative to passwords is that of challenge-response
+authentication.
+
+47
+00:04:35,310 --> 00:04:40,810
+A simple way to implement this is to choose
+as the secret to share the answer to a certain
+
+48
+00:04:40,810 --> 00:04:46,620
+question, an answer that is known by the user
+but not by anyone else. This of course still
+
+49
+00:04:46,620 --> 00:04:53,090
+requires the server-side storing to be secure!
+The user might also choose a certain algorithm
+
+50
+00:04:53,090 --> 00:04:58,099
+and provide the output of such algorithm to
+the input provided by the server (in this
+
+51
+00:04:58,099 --> 00:05:03,190
+case the algorithm cannot be trivial, otherwise
+the attacker can learn it easily).
+
+52
+00:05:03,190 --> 00:05:11,090
+Finally, a way to go is also for the server
+and user to share an initial password k and
+
+53
+00:05:11,090 --> 00:05:18,189
+for both to compute a certain function f over
+k and a value r shared by the server. If f
+
+54
+00:05:18,189 --> 00:05:23,731
+is a complex function (and user/server have
+enough computational power to run it) and
+
+55
+00:05:23,731 --> 00:05:31,790
+both k and r are large enough, it might be
+infeasible for the attacker to recover k (even
+
+56
+00:05:31,790 --> 00:05:39,669
+if f is known).
+
+57
+00:05:39,669 --> 00:05:44,600
+Other alternatives include authentication
+using physical objects such as smart cards
+
+58
+00:05:44,600 --> 00:05:49,520
+and biometrics.
+In the case of biometrics, an important aspect
+
+59
+00:05:49,520 --> 00:05:56,030
+to account for is variability, to have enough
+distance in the features between users while
+
+60
+00:05:56,030 --> 00:06:02,080
+allowing some distance even for the same user
+(our face does not look always the same, to
+
+61
+00:06:02,080 --> 00:06:06,629
+make a simple example).
+Of course, another important aspect is to
+
+62
+00:06:06,629 --> 00:06:11,770
+realize many techniques can be used at the
+same time.
+
+63
+00:06:11,770 --> 00:06:15,310
+If we focus on cards, we can distinguish at
+least three types.
+
+64
+00:06:15,310 --> 00:06:20,189
+Magnetic stripe cards that contain read-only
+values (the password for instance),
+
+65
+00:06:20,189 --> 00:06:24,430
+chip cards that contain values that can be
+updated, and
+
+66
+00:06:24,430 --> 00:06:29,740
+Smart cards that also mount a small CPU and
+are also capable of participating in the check
+
+67
+00:06:29,740 --> 00:06:34,460
+for authentication, for instance when using
+challenge-response authentication,
+
+68
+00:06:34,460 --> 00:06:39,599
+or by having the cards computing a small encrypted
+message (that could be helpful when buying
+
+69
+00:06:39,599 --> 00:06:44,710
+something and having no connectivity) and
+then giving such token to the seller, who
+
+70
+00:06:44,710 --> 00:06:47,610
+can give it later on to the bank to claim
+the money
+

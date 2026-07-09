@@ -1,0 +1,374 @@
+1
+00:00:01,920 --> 00:00:07,910
+Now that we have seen a valid solution to
+the critical section problem, let's look into
+
+2
+00:00:07,910 --> 00:00:11,340
+how hardware can help us in this context.
+
+3
+00:00:11,340 --> 00:00:17,330
+As mentioned in previous lectures, collaboration
+between the OS and the hardware is essential
+
+4
+00:00:17,330 --> 00:00:23,440
+and it can be observed in many modules and
+aspects of modern OSs.
+
+5
+00:00:23,440 --> 00:00:30,170
+The first option we look at is a function
+that allows users to disable/enable interrupts
+
+6
+00:00:30,170 --> 00:00:34,289
+on one specific core, as shown in the slide.
+
+7
+00:00:34,289 --> 00:00:39,079
+Such a function could in principle help, but
+you probably agree with me that disabling
+
+8
+00:00:39,079 --> 00:00:44,530
+interrupts can lead to limited ability of
+interleaving programs.
+
+9
+00:00:44,530 --> 00:00:49,930
+In a sense, the user might be given "too much
+power" and affect/limit the OS control.
+
+10
+00:00:49,930 --> 00:00:55,030
+More importantly, the problem with this solution
+is that by disabling the interrupts on one
+
+11
+00:00:55,030 --> 00:01:00,170
+core, threads running on different cores are
+still able to lead to behavior that does not
+
+12
+00:01:00,170 --> 00:01:03,940
+satisfy the critical section problem.
+
+13
+00:01:03,940 --> 00:01:09,460
+Something better is provided by Read-Modify-Write
+(RMW) operations.
+
+14
+00:01:09,460 --> 00:01:15,940
+In this case we are not talking of individual
+atomic reads or writes, but of an atomic operation
+
+15
+00:01:15,940 --> 00:01:18,600
+that performs both a read and a write.
+
+16
+00:01:18,600 --> 00:01:24,250
+Examples of these operations are TestAndSet,
+FetchAndAdd, CompareAndSwap, and so on.
+
+17
+00:01:24,250 --> 00:01:28,270
+We will look at some of these next.
+
+18
+00:01:28,270 --> 00:01:31,680
+Let's try with the TestAndSet (TAS) instruction.
+
+19
+00:01:31,680 --> 00:01:38,450
+As shown in the slide, the function gets a
+boolean variable, sets it to true and returns
+
+20
+00:01:38,450 --> 00:01:39,640
+the previous value.
+
+21
+00:01:39,640 --> 00:01:46,749
+As I said, this instruction is executed atomically,
+so it either runs in its entirety or it does
+
+22
+00:01:46,749 --> 00:01:47,979
+not.
+
+23
+00:01:47,979 --> 00:01:53,429
+Under the hood, the hardware is either disabling
+interrupts if the system is uniprocessor or
+
+24
+00:01:53,429 --> 00:01:56,880
+locking the system bus if the system is a
+multiprocessor one.
+
+25
+00:01:56,880 --> 00:02:02,920
+Now, if you think about it, you will agree
+with me that if the target variable is set
+
+26
+00:02:02,920 --> 00:02:11,950
+to false and N concurrent threads invoke the
+TAS, then only one will get false in return.
+
+27
+00:02:11,950 --> 00:02:17,510
+If you agree with this, then probably you
+can see how we can use the TAS in the entry
+
+28
+00:02:17,510 --> 00:02:20,480
+section as shown in the example.
+
+29
+00:02:20,480 --> 00:02:27,670
+A thread can enter its critical section only
+if the TAS returns false.
+
+30
+00:02:27,670 --> 00:02:33,340
+If there are concurrent invocations, the TAS
+will only return false to one thread, and
+
+31
+00:02:33,340 --> 00:02:38,460
+no other thread will be able to enter its
+critical section until another thread exits
+
+32
+00:02:38,460 --> 00:02:41,120
+its own and sets lock to false.
+
+33
+00:02:41,120 --> 00:02:47,860
+Please, take a moment and try to reason formally
+about whether this solution meets the mutual
+
+34
+00:02:47,860 --> 00:02:50,459
+exclusion, progress and fairness properties.
+
+35
+00:02:50,459 --> 00:02:55,349
+An alternative instruction we could use is
+the CompareAndSwap (CAS).
+
+36
+00:02:55,349 --> 00:02:59,980
+In this case, the instructions that are run
+atomically will set a given value to a given
+
+37
+00:02:59,980 --> 00:03:05,140
+variable only if the current value of such
+variable is the expected one.
+
+38
+00:03:05,140 --> 00:03:09,460
+If you look at this alternative formulation
+of the critical section, you will see it's
+
+39
+00:03:09,460 --> 00:03:13,560
+equivalent to the one using the TAS.
+
+40
+00:03:13,560 --> 00:03:19,420
+Something worth noticing about these solutions
+is that they are busy waiting / spinning.
+
+41
+00:03:19,420 --> 00:03:26,120
+Each thread will keep consuming CPU cycles
+until it manages to enter its critical section,
+
+42
+00:03:26,120 --> 00:03:29,620
+which is a waste of resources.
+
+43
+00:03:29,620 --> 00:03:33,909
+If you have tried to argue yourself about
+whether these are valid solutions to the critical
+
+44
+00:03:33,909 --> 00:03:39,580
+section problem, you probably have reached
+the conclusion that from the fairness perspective,
+
+45
+00:03:39,580 --> 00:03:41,799
+they are also not optimal.
+
+46
+00:03:41,799 --> 00:03:46,549
+More concretely, they can lead to starvation,
+with the same thread being the one that keeps
+
+47
+00:03:46,549 --> 00:03:52,430
+entering its critical section and other threads
+not managing to do so.
+
+48
+00:03:52,430 --> 00:03:57,930
+The third point to think about is the underlying
+OS scheduling mechanism.
+
+49
+00:03:57,930 --> 00:04:02,689
+Even if in this lecture we have not really
+made any assumption on the scheduling mechanism
+
+50
+00:04:02,689 --> 00:04:08,670
+the underlying OS is using, you should not
+think we do not need to make assumptions when
+
+51
+00:04:08,670 --> 00:04:10,909
+looking at a specific solution.
+
+52
+00:04:10,909 --> 00:04:17,280
+For instance, if we assume the OS is running
+a non-preemptive priority-based scheduler
+
+53
+00:04:17,280 --> 00:04:22,630
+and the thread that is spinning in its entry
+section is the one with the highest priority,
+
+54
+00:04:22,630 --> 00:04:29,260
+then the solution can lead to a deadlock and
+no thread is actually able to make any progess.
+
+55
+00:04:29,260 --> 00:04:36,600
+If we now go back to the observation about
+starvation, let's look at an alternative formulation
+
+56
+00:04:36,600 --> 00:04:39,470
+that can help us achieve better fairness.
+
+57
+00:04:39,470 --> 00:04:43,420
+Let's assume the entry and exit sections are
+as shown in this slide.
+
+58
+00:04:43,420 --> 00:04:52,310
+Besides a shared lock variable initially set
+to false, we have a shared array of boolean
+
+59
+00:04:52,310 --> 00:04:54,360
+values called waiting.
+
+60
+00:04:54,360 --> 00:04:58,330
+The array has one boolean per thread, initially
+set to false.
+
+61
+00:04:58,330 --> 00:05:03,600
+In its entry section, before entering the
+while loop, each thread shares its will of
+
+62
+00:05:03,600 --> 00:05:07,223
+entering the critical section by setting its
+entry in the waiting array to true.
+
+63
+00:05:07,223 --> 00:05:15,830
+The thread will stay in the loop until it
+manages to run TAS (as before) and while its
+
+64
+00:05:15,830 --> 00:05:18,360
+waiting entry remains true.
+
+65
+00:05:18,360 --> 00:05:25,480
+After exiting the while loop and before entering
+its critical section, the thread sets its
+
+66
+00:05:25,480 --> 00:05:28,140
+entry in waiting to false.
+
+67
+00:05:28,140 --> 00:05:33,710
+Now let's look at what happens after the thread
+exits its critical section.
+
+68
+00:05:33,710 --> 00:05:39,050
+The thread circles over the waiting array,
+starting from the next thread in the array
+
+69
+00:05:39,050 --> 00:05:46,340
+(as if the buffer is circular) and then stops
+as soon as it finds one entry for which waiting
+
+70
+00:05:46,340 --> 00:05:50,570
+is true or if completes the circle.
+
+71
+00:05:50,570 --> 00:05:56,190
+If no other thread is waiting in its loop
+inside its entry section, then this thread
+
+72
+00:05:56,190 --> 00:06:02,060
+sets lock to false, so some other thread that
+wants to enter its critical section later
+
+73
+00:06:02,060 --> 00:06:04,010
+on can do so.
+
+74
+00:06:04,010 --> 00:06:09,400
+Notice that the thread that enters its critical
+section next could be the thread that just
+
+75
+00:06:09,400 --> 00:06:14,280
+set lock to false, but this cannot happen
+for an unbounded number of times (if another
+
+76
+00:06:14,280 --> 00:06:18,960
+thread is waiting), since if another thread
+also wants to enter the critical section,
+
+77
+00:06:18,960 --> 00:06:24,480
+then its entry in waiting will be true and
+the thread that manages to enter its critical
+
+78
+00:06:24,480 --> 00:06:31,300
+section will then hand over the lock in its
+exit section, as shown in line 14.
+
+79
+00:06:31,300 --> 00:06:38,460
+As before, try to formally reason about whether
+this solution is valid or not by yourselves.
+

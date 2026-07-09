@@ -1,0 +1,144 @@
+1
+00:00:02,320 --> 00:00:07,040
+Now that we have discussed deadlocks, 
+let's look at a classic problem that,  
+
+2
+00:00:07,040 --> 00:00:13,840
+if not properly handled, can lead to deadlocks.
+I'm calling this the chopstick-variation of the  
+
+3
+00:00:13,840 --> 00:00:18,400
+dining philosophers' problem; the original 
+problem has been introduced by Dijkstra. 
+
+4
+00:00:19,920 --> 00:00:25,600
+Suppose we have n philosophers (they 
+represent our threads) and n chopsticks. 
+
+5
+00:00:25,600 --> 00:00:32,160
+Each philosopher would like to eat, but to do 
+so he/she needs 2 chopsticks, the one on their  
+
+6
+00:00:32,160 --> 00:00:37,600
+left side and the one on their right side.
+Once a philosopher gets both chopsticks,  
+
+7
+00:00:38,400 --> 00:00:42,080
+others of course cannot use the same 
+chopsticks used by the philosopher. 
+
+8
+00:00:42,800 --> 00:00:48,720
+If you reflect about it, you will see that if we 
+have 2 philosophers only one can eat at a time,  
+
+9
+00:00:48,720 --> 00:00:54,320
+if we have 3 philosophers only 1 can 
+eat at a time, if we have 4 philosophers  
+
+10
+00:00:54,320 --> 00:01:00,000
+than 2 can eat in parallel (but they 
+cannot be adjacent ones), and so on. 
+
+11
+00:01:01,200 --> 00:01:06,400
+So, can this setup lead to deadlock 
+if our algorithm is poorly designed?
+
+12
+00:01:07,760 --> 00:01:10,960
+Let's have a look and let us 
+consider the following solution,  
+
+13
+00:01:10,960 --> 00:01:12,960
+which we call pick-left-and-then-pick-right.
+
+14
+00:01:15,680 --> 00:01:19,600
+The first thing we have to do is to 
+check if the mutual exclusion property is  
+
+15
+00:01:19,600 --> 00:01:24,880
+satisfied or not. I leave this 
+to you as a homework (again,  
+
+16
+00:01:24,880 --> 00:01:28,160
+reason formally about whether the 
+property is satisfied or not).
+
+17
+00:01:29,920 --> 00:01:33,680
+The second thing we want to check 
+is whether deadlocks can occur. 
+
+18
+00:01:34,640 --> 00:01:39,280
+From our previous discussion, if 
+mutual exclusion, hold and wait,  
+
+19
+00:01:39,280 --> 00:01:44,240
+no preemption and circular wait can happen 
+simultanously, then deadlocks can occur. 
+
+20
+00:01:44,960 --> 00:01:49,360
+Hopefully, you have found out that 
+mutual exclusion is satisfied. 
+
+21
+00:01:50,400 --> 00:01:55,840
+Do we have hold and wait? Yes, if a 
+philosopher manages to get the left chopstick,  
+
+22
+00:01:55,840 --> 00:02:01,120
+then the philosopher will not release it until 
+he/she manages to get the right chopstick too. 
+
+23
+00:02:02,320 --> 00:02:06,320
+Do we have no preemption? Yes, 2 
+chopsticks are released by the same  
+
+24
+00:02:06,320 --> 00:02:11,520
+philosopher that manages to get them once the 
+philosopher completes its critical section.
+
+25
+00:02:12,880 --> 00:02:17,600
+Do we have circular waits? 
+Indeed, as shown in this slide. 
+
+26
+00:02:17,600 --> 00:02:21,920
+Hence, this solution is not 
+valid, it can lead to a deadlock. 
+
+27
+00:02:21,920 --> 00:02:25,360
+In this slide the arrow from 
+the philosopher to the chopstick  
+
+28
+00:02:25,360 --> 00:02:29,840
+means the philosopher is waiting for the 
+chopstick. The arrow from the chopstick  
+
+29
+00:02:29,840 --> 00:02:34,160
+to the philosopher means the 
+philosopher got the chopstick.
+

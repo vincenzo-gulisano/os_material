@@ -1,0 +1,184 @@
+1
+00:00:01,920 --> 00:00:07,920
+let's move now on copy-on-write so if you 
+remember I mentioned when we were  
+
+2
+00:00:07,920 --> 00:00:14,400
+discussing processes and fork that it might 
+look strange when we want to create a new  
+
+3
+00:00:14,400 --> 00:00:19,520
+process to actually create a copy of the 
+process that is currently running using fork  
+
+4
+00:00:20,800 --> 00:00:24,880
+but that in practice there are very efficient 
+ways to do this and now we are going to  
+
+5
+00:00:25,600 --> 00:00:31,120
+have a look at what I meant now that we 
+know what paging and virtual memory is  
+
+6
+00:00:32,320 --> 00:00:41,920
+so copy-on-write is an example of the benefits 
+you can gain when you decouple what is the logical  
+
+7
+00:00:41,920 --> 00:00:49,600
+representation of memory from the physical one 
+so when you create a copy of a process and you're  
+
+8
+00:00:49,600 --> 00:00:56,960
+using the copy and write mechanism then the 
+new process the copy of the original process  
+
+9
+00:00:56,960 --> 00:01:04,480
+does not really need to load in memory its own 
+let's say set of instructions and data since  
+
+10
+00:01:04,480 --> 00:01:10,560
+they are the same of the initial process but it 
+can actually share the same space in memory that  
+
+11
+00:01:11,520 --> 00:01:17,920
+belongs to the original process of course as long 
+as it's only reading that and it's not modifying  
+
+12
+00:01:17,920 --> 00:01:25,680
+that since we have a page table we can initially 
+set the address of each page to be actually in the  
+
+13
+00:01:25,680 --> 00:01:33,360
+frame that belongs to the other process if we are 
+only going to read those pages then it's perfectly  
+
+14
+00:01:33,360 --> 00:01:39,920
+fine actually in fact all the pages that are there 
+only to be read and not written we can keep using  
+
+15
+00:01:39,920 --> 00:01:44,800
+the ones of the original process what we need to 
+do is that whenever one of the two processes tries  
+
+16
+00:01:44,800 --> 00:01:50,800
+to modify a page since now these modifications 
+do not need to be observed by both the
+
+17
+00:01:53,200 --> 00:01:57,600
+the parent and the child not only they don't 
+need they should not be observed by both  
+
+18
+00:01:57,600 --> 00:02:05,840
+then in that case we can throw a page fault and 
+load again the page but a copy of it for the  
+
+19
+00:02:06,720 --> 00:02:09,920
+process that wants to modify it and you have  
+
+20
+00:02:11,360 --> 00:02:17,040
+variations of fork that you can use actually 
+to use the copy-on-write mechanism so it  
+
+21
+00:02:17,040 --> 00:02:24,320
+looks like this if process two is created by forking 
+process one each one will have its own page table  
+
+22
+00:02:25,680 --> 00:02:31,280
+in a different portion of memory but the content 
+of the page table so the addresses of the  
+
+23
+00:02:32,000 --> 00:02:38,240
+frames can be the same for the two of them okay we 
+have three pages here so they are both pointing to  
+
+24
+00:02:38,240 --> 00:02:42,800
+the same page that's why creating a process 
+to fork it's extremely fast because in fact  
+
+25
+00:02:42,800 --> 00:02:47,360
+you don't really need to load anything into memory 
+you just have to create of course a new page table  
+
+26
+00:02:47,360 --> 00:02:51,600
+the process control block of the new process 
+but when it comes to the information that  
+
+27
+00:02:51,600 --> 00:02:55,360
+ belongs to the process in memory 
+you can just keep using the one of the  
+
+28
+00:02:56,400 --> 00:03:02,640
+parent process if process one let's say wants 
+to modify a certain page c then in that  
+
+29
+00:03:02,640 --> 00:03:10,160
+case you create a copy of it this is just 
+a slide that put here since a couple of years  
+
+30
+00:03:11,280 --> 00:03:17,120
+to give you an indication that of course what 
+we discuss in this course it's not only basics  
+
+31
+00:03:17,120 --> 00:03:24,160
+of computer science but it's also something 
+that is active an active field of research  
+
+32
+00:03:25,200 --> 00:03:31,120
+here you have an example that comes from security 
+so I'm not going into details here but turns out  
+
+33
+00:03:31,120 --> 00:03:35,280
+that there was a bug in the implementation 
+of the copy and write mechanism and that  
+
+34
+00:03:35,280 --> 00:03:43,040
+could be exploited to gain access to parts of 
+memory that should not have been granted access  
+
+35
+00:03:43,600 --> 00:03:52,800
+and this thing was there the bug since 2007 
+and you see that it was like nine year more  
+
+36
+00:03:52,800 --> 00:03:58,320
+than nine years after that it was discovered and 
+this was four years ago so it's just to give an  
+
+37
+00:03:58,320 --> 00:04:04,480
+indication that these things we are discussing 
+right now it's they are also part of research
+

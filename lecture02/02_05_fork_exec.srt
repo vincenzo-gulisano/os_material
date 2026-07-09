@@ -1,0 +1,696 @@
+1
+00:00:01,469 --> 00:00:13,100
+let's talk now about operations on processes
+so one sort of intuitive thing here is that of course
+
+2
+00:00:13,100 --> 00:00:18,589
+the operating system
+needs to provide mechanisms to create processes
+
+3
+00:00:18,589 --> 00:00:23,009
+now as you can imagine if you let's say double
+click on your
+
+4
+00:00:23,009 --> 00:00:27,269
+screen something so that you can start a process
+it means
+
+5
+00:00:27,269 --> 00:00:31,380
+that there is a process that is listening
+to your double
+
+6
+00:00:31,380 --> 00:00:36,190
+click and as a result of this it creates a
+new process
+
+7
+00:00:36,190 --> 00:00:44,440
+so in fact each process you execute has a parent
+process
+
+8
+00:00:44,440 --> 00:00:48,350
+that is the one that is actually creating
+the process
+
+9
+00:00:48,350 --> 00:00:50,670
+and if you look at all the processes that
+are running at
+
+10
+00:00:50,670 --> 00:00:55,390
+the same time meaning
+that they are
+
+11
+00:00:55,390 --> 00:00:58,610
+either ready or running depending on how many
+cores you
+
+12
+00:00:58,610 --> 00:01:03,360
+have or waiting at the same time in your operating
+system
+
+13
+00:01:03,360 --> 00:01:10,840
+you will see that they form a tree structure
+each process has an unique id
+
+14
+00:01:10,840 --> 00:01:16,260
+that is the identifier
+and when you create processes the operating
+
+15
+00:01:16,260 --> 00:01:23,170
+system gives
+you the possibility to express a bit how you
+
+16
+00:01:23,170 --> 00:01:27,730
+want these processes
+to share resources for example with respect
+
+17
+00:01:27,730 --> 00:01:32,360
+to their parent
+process and also how you want to execute them
+
+18
+00:01:32,360 --> 00:01:38,200
+at the same
+time with the parent or maybe they first execute
+
+19
+00:01:38,200 --> 00:01:41,270
+and the parent
+waits for them to terminate and so on and so
+
+20
+00:01:41,270 --> 00:01:47,220
+forth
+so this is how it looks in a Unix operating
+
+21
+00:01:47,220 --> 00:01:48,220
+system
+
+22
+00:01:48,220 --> 00:01:51,020
+so you have the init process is the very first
+process and
+
+23
+00:01:51,020 --> 00:01:54,729
+it has process
+id one
+
+24
+00:01:54,729 --> 00:02:02,640
+and then all the rest is a child of this process
+and all the 
+
+25
+00:02:02,640 --> 00:02:07,700
+processes are connected in a tree structure
+so you have the process that manages clients
+
+26
+00:02:07,700 --> 00:02:11,080
+logging in into the
+system and the parent of this process
+
+27
+00:02:11,080 --> 00:02:15,110
+is init
+you have the one that can manage ssh connections
+
+28
+00:02:15,110 --> 00:02:17,930
+and so and
+so forth
+
+29
+00:02:17,930 --> 00:02:25,310
+and you can actually check by yourself
+you can just run this command check the manual
+
+30
+00:02:25,310 --> 00:02:28,890
+to understand
+what it does and what are its options
+
+31
+00:02:28,890 --> 00:02:33,060
+and you will see that all the processes are
+actually organized
+
+32
+00:02:33,060 --> 00:02:38,560
+in a tree if you look at their parent-child
+or parent-children
+
+33
+00:02:38,560 --> 00:02:44,440
+relation so now let's look at a specific example
+of how
+
+34
+00:02:44,440 --> 00:02:50,520
+you do this using the functionality of the
+operating system
+
+35
+00:02:50,520 --> 00:02:57,830
+so we are going to look at two system calls
+fork and exec
+
+36
+00:02:57,830 --> 00:03:01,030
+the idea is that we will start with one process
+
+37
+00:03:01,030 --> 00:03:06,780
+this process will call fork
+and from that point on there will be two processes
+
+38
+00:03:06,780 --> 00:03:09,459
+the
+parent one that is the one that is calling
+
+39
+00:03:09,459 --> 00:03:16,160
+fork that will
+wait and the child one that will call another
+
+40
+00:03:16,160 --> 00:03:20,970
+system call
+use exec do something and eventually exit
+
+41
+00:03:20,970 --> 00:03:25,450
+this will get more familiar also when you
+lab 1 and
+
+42
+00:03:25,450 --> 00:03:31,190
+the shell
+but before that fork is a system call that
+
+43
+00:03:31,190 --> 00:03:35,300
+creates a new
+process the way it creates the process is
+
+44
+00:03:35,300 --> 00:03:40,500
+that it creates
+an exact copy of the process that calls fork
+
+45
+00:03:40,500 --> 00:03:44,050
+so if you write a program and then you execute
+it as a process
+
+46
+00:03:44,050 --> 00:03:47,430
+and at a certain point you call the system
+call fork
+
+47
+00:03:47,430 --> 00:03:50,940
+if everything works well then you will create
+a new process
+
+48
+00:03:50,940 --> 00:03:59,230
+that is an exact copy of the original one
+the exec system call is usually used after
+
+49
+00:03:59,230 --> 00:04:03,930
+fork what it does
+is that it replaces the memory of the process
+
+50
+00:04:03,930 --> 00:04:05,709
+with that of
+another process
+
+51
+00:04:05,709 --> 00:04:12,200
+and then executes that process
+let's have a look at this
+
+52
+00:04:12,200 --> 00:04:20,489
+so this is an example in c
+i'm not going to go through all the instructions
+
+53
+00:04:20,489 --> 00:04:24,290
+is just
+to show you what is happening
+
+54
+00:04:24,290 --> 00:04:31,460
+when we call these system comes
+so we create a process and it starts running
+
+55
+00:04:31,460 --> 00:04:34,630
+and there is a series of instructions that
+will be executed
+
+56
+00:04:34,630 --> 00:04:41,620
+in the text portion of the process
+we create a variable called id
+
+57
+00:04:41,620 --> 00:04:45,780
+and then we set the value of this variable
+to the
+
+58
+00:04:45,780 --> 00:04:48,661
+result of the function the system call
+fork
+
+59
+00:04:48,661 --> 00:04:53,220
+this is what I just said
+this is the system call that will create a
+
+60
+00:04:53,220 --> 00:04:58,830
+new process and
+make it a copy of the existing one
+
+61
+00:04:58,830 --> 00:05:00,960
+so when we call this method we are basically
+telling the
+
+62
+00:05:00,960 --> 00:05:04,500
+operating system please create a new process
+that will eventually
+
+63
+00:05:04,500 --> 00:05:07,270
+end up in the ready state and then running
+when there is
+
+64
+00:05:07,270 --> 00:05:12,610
+CPU time
+and this process should be an exact copy of
+
+65
+00:05:12,610 --> 00:05:15,840
+myself where
+I am the process that is invoking fork
+
+66
+00:05:15,840 --> 00:05:20,000
+if everything goes well now we have two
+processes
+
+67
+00:05:20,000 --> 00:05:27,930
+and they are two exact same copies of each other
+what does it mean that both will have a text
+
+68
+00:05:27,930 --> 00:05:31,190
+section that
+has this code
+
+69
+00:05:31,190 --> 00:05:37,210
+the parent as well as the child will run as
+the next instruction
+
+70
+00:05:37,210 --> 00:05:40,250
+the instruction that comes after the fork
+
+71
+00:05:40,250 --> 00:05:47,370
+okay so let's see what that means
+both will run this instruction here
+
+72
+00:05:47,370 --> 00:05:50,889
+we are checking if the value returned by fork
+is less than
+
+73
+00:05:50,889 --> 00:05:58,560
+zero if that is the case there is an error
+so the child process was not created and
+
+74
+00:05:58,560 --> 00:06:03,259
+then we exit
+in this case since fork did not work we only
+
+75
+00:06:03,259 --> 00:06:06,110
+have one process
+so it's only the parent process that is the
+
+76
+00:06:06,110 --> 00:06:10,800
+one that is going
+to execute these instructions
+
+77
+00:06:10,800 --> 00:06:20,570
+otherwise if the value of pid is zero then
+it's going to
+
+78
+00:06:20,570 --> 00:06:24,240
+call this exec and it's going to replace his
+memory with the
+
+79
+00:06:24,240 --> 00:06:30,220
+command ls which is the command use to list
+the content of
+
+80
+00:06:30,220 --> 00:06:35,449
+a folder
+if that is not the case so pid is greater
+
+81
+00:06:35,449 --> 00:06:43,410
+than zero then
+the process will wait until the child process
+
+82
+00:06:43,410 --> 00:06:46,229
+is finished
+this is the parent process and then it will
+
+83
+00:06:46,229 --> 00:06:51,590
+print child
+complete so what is happening here?
+
+84
+00:06:51,590 --> 00:06:55,020
+if work works well there will be two processes
+and they
+
+85
+00:06:55,020 --> 00:07:01,480
+are two copies 1 of the other
+how do you differentiate between the parent and
+
+86
+00:07:01,480 --> 00:07:05,810
+the child?
+if you do that because the operating system
+
+87
+00:07:05,810 --> 00:07:13,580
+gives you a
+different result output into the value of
+
+88
+00:07:13,580 --> 00:07:19,030
+the variable pid
+if you are the child process then this value
+
+89
+00:07:19,030 --> 00:07:23,479
+will be zero
+this of course does not mean that the process
+
+90
+00:07:23,479 --> 00:07:25,550
+id of the
+child is zero
+
+91
+00:07:25,550 --> 00:07:29,229
+this is the value of the variable process
+id
+
+92
+00:07:29,229 --> 00:07:32,500
+if the value you get is greater than zero
+then you are the
+
+93
+00:07:32,500 --> 00:07:37,860
+parent in that case the value you get is actually
+the process id
+
+94
+00:07:37,860 --> 00:07:42,660
+of the child 
+now depending on the value you get you
+
+95
+00:07:42,660 --> 00:07:45,789
+can decide
+whether you want to execute the code of the
+
+96
+00:07:45,789 --> 00:07:52,620
+child or the
+code of the parent as you have functionality
+
+97
+00:07:52,620 --> 00:07:56,500
+to create processes
+of course you also have functionality to terminate
+
+98
+00:07:56,500 --> 00:08:04,690
+processes
+when you run your last instruction you can
+
+99
+00:08:04,690 --> 00:08:09,919
+exit the process
+calling the exit function or the exit system
+
+100
+00:08:09,919 --> 00:08:13,130
+call
+in this case you are telling to the operating
+
+101
+00:08:13,130 --> 00:08:16,430
+system that
+you are done and you can give back a return
+
+102
+00:08:16,430 --> 00:08:19,819
+value to the
+parent process that might be waiting for you
+
+103
+00:08:19,819 --> 00:08:23,510
+because we always have a parent process
+remember everything is organized into a tree
+
+104
+00:08:23,510 --> 00:08:27,920
+if you look at the parent and children relationship
+on the
+
+105
+00:08:27,920 --> 00:08:31,550
+other hand the parent might also terminate
+the execution of the children with
+
+106
+00:08:31,550 --> 00:08:35,800
+another system
+call which is the abort
+
+107
+00:08:35,800 --> 00:08:39,690
+this is one of the reasons why you get the
+id of the child
+
+108
+00:08:39,690 --> 00:08:42,989
+process has a return of the fork because if
+you want to
+
+109
+00:08:42,989 --> 00:08:46,239
+do operations over them and you in this case
+are the parent
+
+110
+00:08:46,239 --> 00:08:49,410
+then you need the ids to specify to the operating
+system
+
+111
+00:08:49,410 --> 00:08:53,220
+for instance which is the process you want
+to abort
+
+112
+00:08:53,220 --> 00:09:00,389
+notice that whether a process can run or not
+and how it can
+
+113
+00:09:00,389 --> 00:09:04,399
+run depends on how the operating system is
+implemented
+
+114
+00:09:04,399 --> 00:09:08,779
+some operating system might not allow the
+child process to
+
+115
+00:09:08,779 --> 00:09:12,170
+exist if the parent has terminated while others
+might say
+
+116
+00:09:12,170 --> 00:09:16,149
+well the child can still execute even if the
+parent has
+
+117
+00:09:16,149 --> 00:09:24,620
+terminated if the parent wants to wait for
+the child or
+
+118
+00:09:24,620 --> 00:09:27,779
+the children to terminate then the operating
+system gives
+
+119
+00:09:27,779 --> 00:09:31,559
+you this possibility
+and this is the wait system call
+
+120
+00:09:31,559 --> 00:09:36,959
+that is what I show you before we have these
+two terms zombie
+
+121
+00:09:36,959 --> 00:09:42,779
+and orphan
+so if no parent is waiting because they did
+
+122
+00:09:42,779 --> 00:09:48,089
+not involve wait
+then the process the child process is a zombie
+
+123
+00:09:48,089 --> 00:09:51,499
+if the parent terminated without invoking
+wait then the
+
+124
+00:09:51,499 --> 00:09:58,749
+process is an orphan
+this is the terms we use
+
+125
+00:09:58,749 --> 00:10:04,579
+now you might ask why would I create a process
+that is an
+
+126
+00:10:04,579 --> 00:10:10,449
+exact copy of myself?
+well there are different reasons we will discuss
+
+127
+00:10:10,449 --> 00:10:13,880
+them and
+we will also see that the operating system
+
+128
+00:10:13,880 --> 00:10:16,620
+is pretty smart
+despite the fact that it creates a copy
+
+129
+00:10:16,620 --> 00:10:20,569
+it has a mechanism to create such a copy that
+is extremely
+
+130
+00:10:20,569 --> 00:10:26,470
+efficient but we will discuss this later on
+but an example
+
+131
+00:10:26,470 --> 00:10:29,949
+that probably use frequently is the chrome
+browser
+
+132
+00:10:29,949 --> 00:10:35,790
+so when you run chrome you are running a set
+of processes
+
+133
+00:10:35,790 --> 00:10:41,389
+and you have one process for each tab
+this is done because if a tab crashes or let's
+
+134
+00:10:41,389 --> 00:10:44,540
+say if there
+is a problem with getting information for
+
+135
+00:10:44,540 --> 00:10:47,839
+a specific tab
+you don't freeze the entire chrome
+
+136
+00:10:47,839 --> 00:10:53,920
+but you only experience this problem for a
+specific tab
+
+137
+00:10:53,920 --> 00:10:57,689
+you can see an example since each process
+that is a tab
+
+138
+00:10:57,689 --> 00:11:01,179
+is exactly the same
+actually creating copies using the fork
+
+139
+00:11:01,179 --> 00:11:03,610
+mechanism should
+make a lot of sense
+
+140
+00:11:03,610 --> 00:11:04,110
+hopefully
+

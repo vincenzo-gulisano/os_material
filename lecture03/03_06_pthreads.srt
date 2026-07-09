@@ -1,0 +1,375 @@
+1
+00:00:01,840 --> 00:00:07,840
+let's move now to thread libraries so these are 
+libraries I mentioned this before that provide  
+
+2
+00:00:09,520 --> 00:00:15,600
+to the programmer an API so some 
+facility to manipulate and to manage create  
+
+3
+00:00:15,600 --> 00:00:22,560
+and destroy threads there are two ways of 
+course libraries that allow you to define  
+
+4
+00:00:22,560 --> 00:00:29,840
+threads that should operate in user space and 
+others that can operate at the kernel level  
+
+5
+00:00:31,360 --> 00:00:38,160
+pthreads is probably the most known 
+one common one in Unix systems at least  
+
+6
+00:00:39,360 --> 00:00:45,920
+okay it provides both user level and kernel 
+level threads and what is important here is that  
+
+7
+00:00:46,880 --> 00:00:50,480
+we're talking about a specification 
+not an implementation  
+
+8
+00:00:52,320 --> 00:00:57,760
+depending on the system you use and the version 
+you use and the implementation you use of pthreads  
+
+9
+00:00:58,400 --> 00:01:06,320
+you will have certain possibilities enabled 
+by the library some specific details about  
+
+10
+00:01:07,440 --> 00:01:13,600
+how they behave and so on it's important 
+to make this distinction because you might ask  
+
+11
+00:01:13,600 --> 00:01:17,440
+but if I called a specific 
+function like the one I show you  
+
+12
+00:01:17,440 --> 00:01:23,520
+next what will I get and the answer to that 
+is it depends on which implementation you use  
+
+13
+00:01:23,520 --> 00:01:30,800
+because we are looking at a specification not 
+at the implementation so let's have a look at  
+
+14
+00:01:32,320 --> 00:01:38,880
+a simple example the example doesn't really 
+make sense in terms of using a multi-threaded  
+
+15
+00:01:38,880 --> 00:01:45,120
+process because as you hopefully will understand 
+you don't really need to create two threads to do  
+
+16
+00:01:45,120 --> 00:01:51,280
+this but this is just from let's say an educational 
+perspective so we want to sum all the numbers  
+
+17
+00:01:51,280 --> 00:01:55,920
+between zero and n and n is a number that is 
+passed by the user and we want to create a  
+
+18
+00:01:55,920 --> 00:02:01,280
+thread to do this instead of doing it with the 
+original thread with which the process starts
+
+19
+00:02:03,680 --> 00:02:10,080
+we create some global variable sum and 
+then we define here the function runner  
+
+20
+00:02:10,720 --> 00:02:18,640
+and then we start with the main so we create 
+an id for the thread that we are going to create  
+
+21
+00:02:18,640 --> 00:02:23,920
+and we also create attributes for the thread 
+this is because at the time when we will use  
+
+22
+00:02:23,920 --> 00:02:27,920
+the pthreads to tell the operating system we 
+would like to create a new thread for this  
+
+23
+00:02:27,920 --> 00:02:32,720
+process we are requested to pass some attribute 
+some information about how the thread should  
+
+24
+00:02:32,720 --> 00:02:40,160
+be created we check the number of arguments 
+it needs to be two otherwise the program ends  
+
+25
+00:02:40,160 --> 00:02:45,200
+and you know that the first one is the name of the 
+program so we actually have to pass one number if  
+
+26
+00:02:45,200 --> 00:02:50,160
+we do we check whether the we can convert this 
+number to an integer and that that number is  
+
+27
+00:02:50,160 --> 00:03:00,400
+greater or equal to zero otherwise we also return 
+then this is what we do so we use the library  
+
+28
+00:03:01,360 --> 00:03:08,080
+to simplify our interaction with the 
+operating system and what we do is that we  
+
+29
+00:03:09,360 --> 00:03:14,800
+create an initial setup for the attributes of the 
+thread we could manually specify them but if  
+
+30
+00:03:14,800 --> 00:03:19,280
+we don't want we can just set the default 
+attributes and then we call pthread_create  
+
+31
+00:03:20,480 --> 00:03:23,520
+so here we are telling to 
+the operating system that  
+
+32
+00:03:24,240 --> 00:03:29,280
+through the library that we would like to 
+create a new thread that belongs to this process  
+
+33
+00:03:30,560 --> 00:03:38,000
+that we would like the id of this new thread to 
+be stored here in the id of the thread that these  
+
+34
+00:03:38,000 --> 00:03:44,480
+are the parameters the attributes for the thread 
+creation that when this thread starts it should  
+
+35
+00:03:44,480 --> 00:03:51,440
+run the function called runner that we defined 
+before and that we want to pass to this function  
+
+36
+00:03:52,320 --> 00:03:59,920
+what we have here which is the number that is 
+passed by the user so if this function runs  
+
+37
+00:03:59,920 --> 00:04:07,120
+successfully when it's finished in our operating 
+system we will have this process with two threads  
+
+38
+00:04:07,680 --> 00:04:14,560
+one thread will be the one that will run the next 
+instruction here so pthread_join the other thread  
+
+39
+00:04:15,120 --> 00:04:21,600
+belonging to the same process will have its 
+program counter set to run runner okay so it  
+
+40
+00:04:21,600 --> 00:04:30,320
+will start from this instruction now we have two 
+threads let's assume that these are kernel threads  
+
+41
+00:04:30,320 --> 00:04:36,960
+okay for this example now this can be scheduled by 
+the operating system in different ways each  
+
+42
+00:04:36,960 --> 00:04:42,320
+thread can run for a while can go in waiting can 
+be put back to ready there can be context switches  
+
+43
+00:04:42,320 --> 00:04:46,800
+because of interrupts everything can happen okay 
+we don't know in which order is going to happen  
+
+44
+00:04:46,800 --> 00:04:53,360
+so there is no guarantee that when the new 
+thread starts it will do everything and then exit  
+
+45
+00:04:53,360 --> 00:04:59,200
+before the original thread will run the 
+next instruction so how do we synchronize  
+
+46
+00:04:59,200 --> 00:05:04,960
+these threads because our final goal is to 
+print here the value of sum sum is a global  
+
+47
+00:05:04,960 --> 00:05:10,320
+variable and since this is in the data section 
+of the process that is shared by all the threads  
+
+48
+00:05:10,320 --> 00:05:15,600
+if one thread modifies it the other thread will 
+also see that the value has changed the problem  
+
+49
+00:05:15,600 --> 00:05:20,960
+is that before we print it we need to be sure that 
+the other thread the new one that is running the  
+
+50
+00:05:20,960 --> 00:05:26,480
+runner function has actually completed how do we 
+do this well the library gives us another function  
+
+51
+00:05:26,480 --> 00:05:33,280
+pthread_join and we pass the id here and so what 
+we are telling now the operating system is that  
+
+52
+00:05:33,280 --> 00:05:40,720
+we want this thread to stop its execution and go 
+into waiting and wait until there is a signal by  
+
+53
+00:05:40,720 --> 00:05:45,280
+the operating system that tells to this thread 
+that the other thread the one that is running  
+
+54
+00:05:45,280 --> 00:05:51,200
+the function runner has completed again we 
+don't know in which order threads will be executed  
+
+55
+00:05:51,200 --> 00:05:56,560
+it might be that by the time this thread calls 
+pthread_join the other thread is already done  
+
+56
+00:05:57,200 --> 00:06:02,400
+or not but it doesn't really matter the 
+important thing is that for sure by the time that  
+
+57
+00:06:03,760 --> 00:06:10,320
+this thread wants to run print then the other 
+thread will be finished for sure because here we  
+
+58
+00:06:10,320 --> 00:06:16,320
+force the execution to stop until the other thread 
+is finished so what the other thread does is the  
+
+59
+00:06:16,320 --> 00:06:21,920
+following it creates some local variable it gets a 
+parameter it converts it to an integer  
+
+60
+00:06:22,640 --> 00:06:28,560
+it sets 0 to sum sum is a global variable 
+is not a local one so these modifications  
+
+61
+00:06:28,560 --> 00:06:35,200
+the modifications done on this variable will be 
+visible also for the other thread then it runs  
+
+62
+00:06:35,200 --> 00:06:42,320
+the sum and it uses again the library to tell to 
+the operating system i'm done i'm finished and  
+
+63
+00:06:42,320 --> 00:06:49,520
+everything went well this is why it's passing 
+value zero as I said before manual read the  
+
+64
+00:06:49,520 --> 00:06:56,320
+specification of all these functions to understand 
+well what they're doing and even more now  
+
+65
+00:06:59,840 --> 00:07:06,640
+we can create one thread or we can create a lot 
+of threads so we could  
+
+66
+00:07:06,640 --> 00:07:11,600
+call the function pthread_create many times 
+and we would get if we call  
+
+67
+00:07:11,600 --> 00:07:15,600
+it 10 times we would get a process with 
+10 plus one thread the original one plus  
+
+68
+00:07:15,600 --> 00:07:20,880
+the 10 ones we create we can of course create 
+an array like here in which we keep
+
+69
+00:07:23,440 --> 00:07:30,560
+the ids of all the workers and if 
+we want to wait for all of them  
+
+70
+00:07:30,560 --> 00:07:36,240
+before going on with our execution we can of 
+course do something like this so create a for loop  
+
+71
+00:07:36,880 --> 00:07:43,680
+and then wait for each one of them to complete 
+again it might be that by the time we ask the  
+
+72
+00:07:43,680 --> 00:07:48,560
+first one whether it has completed it has already 
+completed by the time we ask the second one that  
+
+73
+00:07:48,560 --> 00:07:53,360
+has not completed it and we have to actually 
+wait by the time we ask the third one it has  
+
+74
+00:07:53,360 --> 00:07:57,600
+completed and so on we don't know in which order 
+these things would be executed but we know for  
+
+75
+00:07:57,600 --> 00:08:05,440
+sure that nothing will happen in the main thread 
+until all of them have completed their execution
+

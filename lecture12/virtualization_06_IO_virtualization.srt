@@ -1,0 +1,172 @@
+1
+00:00:01,280 --> 00:00:09,510
+now that we have discussed memory virtualization
+let's briefly discuss I/O virtualization
+
+2
+00:00:09,510 --> 00:00:18,670
+so in general the hypervisor so here we are assuming
+now it is directly working on top of the
+
+3
+00:00:18,670 --> 00:00:25,100
+hardware probes the devices at start up similarly
+to what their operating system does when there
+
+4
+00:00:25,100 --> 00:00:27,050
+is no virtualization
+
+5
+00:00:27,050 --> 00:00:33,640
+and once this is done it can report them to
+the different operating systems the guest operating
+
+6
+00:00:33,640 --> 00:00:39,809
+systems that it is running and of course we can
+use the interrupt mechanism to make sure
+
+7
+00:00:39,809 --> 00:00:45,579
+the hypervisor wakes up and does that
+necessarily emulation when each guest operating
+
+8
+00:00:45,579 --> 00:00:48,899
+system is trying to interact with a device
+
+9
+00:00:48,899 --> 00:00:54,190
+now for some devices of course you realize
+the operating system cannot really take control
+
+10
+00:00:54,190 --> 00:00:59,860
+of the entire device so if you have one disk
+and that is being shared with all the operating
+
+11
+00:00:59,860 --> 00:01:04,460
+systems you cannot really let the operating
+system take full control of the disk because
+
+12
+00:01:04,460 --> 00:01:07,810
+parts of that disk belong to other or are accessed
+by
+
+13
+00:01:07,810 --> 00:01:15,409
+other guest operating systems so for some devices
+actually with virtualization what
+
+14
+00:01:15,409 --> 00:01:22,200
+you do is that you emulate the device in
+different ways so for a disk for example you
+
+15
+00:01:22,200 --> 00:01:30,250
+actually create a file that is maintained
+by the hypervisor and that is what is actually
+
+16
+00:01:30,250 --> 00:01:34,790
+used to store what the guest operating system
+believes is storing on
+
+17
+00:01:34,790 --> 00:01:40,090
+disk it's beneficial because for example you
+can initially create a small file and let
+
+18
+00:01:40,090 --> 00:01:45,130
+the file grow depending on what is being written
+there by the guest operating system rather
+
+19
+00:01:45,130 --> 00:01:53,070
+than allocating right from the start the entire
+space that the guest operating system
+
+20
+00:01:53,070 --> 00:01:56,350
+believe it has access to in the disk
+
+21
+00:01:56,350 --> 00:02:01,450
+when it comes to a network device for example
+then you could have the emulation performed
+
+22
+00:02:01,450 --> 00:02:07,790
+by the hypervisor by actually having the
+hypervisor acting as a switch so each guest
+
+23
+00:02:07,790 --> 00:02:14,740
+operating system can have a different
+mac address and then the way in which the
+
+24
+00:02:14,740 --> 00:02:19,330
+hypervisor handles different requests
+for the network card is by actually behaving
+
+25
+00:02:19,330 --> 00:02:27,959
+like a regular switch also for virtualization
+of I/O operations we have here the hardware
+
+26
+00:02:27,959 --> 00:02:36,870
+coming to the rescue of the software
+because as we mentioned several times at this
+
+27
+00:02:36,870 --> 00:02:41,680
+point sometimes it's beneficial to let the
+guest operating system and the processes run
+
+28
+00:02:41,680 --> 00:02:46,250
+by having the guest operating system interact directly
+with the hardware rather than
+
+29
+00:02:46,250 --> 00:02:56,340
+having a sort of hypervisor-in-the-middle setup
+so this is supported by modern hardware through
+
+30
+00:02:56,340 --> 00:03:05,240
+this thing called single route I/O virtualization 
+which basically is provided
+
+31
+00:03:05,240 --> 00:03:12,790
+by having at the hardware level different
+memory spaces different interrupts reserved
+
+32
+00:03:12,790 --> 00:03:20,090
+for each different virtual operating system
+guest virtual machine
+
+33
+00:03:20,090 --> 00:03:25,870
+so basically each virtual machine can map 
+his own memory to the corresponding portion
+
+34
+00:03:25,870 --> 00:03:34,260
+of memory you have in the physical hardware and
+then you can handle the different I/O
+
+35
+00:03:34,260 --> 00:03:40,510
+requests coming from different guest operating
+systems directly at the hardware level
+

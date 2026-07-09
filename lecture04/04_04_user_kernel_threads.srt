@@ -1,0 +1,244 @@
+1
+00:00:00,880 --> 00:00:04,920
+now that we have discussed the different scheduling
+strategies
+
+2
+00:00:04,920 --> 00:00:09,360
+we have for batch and interactive systems
+we can go back
+
+3
+00:00:09,360 --> 00:00:14,910
+for a moment at the differences between 
+user-level threads
+
+4
+00:00:14,910 --> 00:00:19,659
+and kernel-level threads and how they are
+related to scheduling
+
+5
+00:00:19,659 --> 00:00:23,359
+and hopefully now
+this should be clear
+
+6
+00:00:23,359 --> 00:00:27,489
+so we said last time in the previous lecture
+that we have
+
+7
+00:00:27,489 --> 00:00:32,070
+user-level threads and 
+kernel-level threads
+
+8
+00:00:32,070 --> 00:00:39,340
+if we use user-level threads then a set of
+threads are managed
+
+9
+00:00:39,340 --> 00:00:43,650
+in the user space but they are all linked
+together with
+
+10
+00:00:43,650 --> 00:00:48,640
+the same kernel thread
+so from the perspective of the operating system
+
+11
+00:00:48,640 --> 00:00:51,010
+the kernel
+is picking a process
+
+12
+00:00:51,010 --> 00:00:54,730
+it could be process A or Process B within
+the process
+
+13
+00:00:54,730 --> 00:01:01,670
+then there can be several user-level threads
+and these are
+
+14
+00:01:01,670 --> 00:01:09,240
+scheduled in user space by the process itself
+on the other end if we have kernel-level threads
+
+15
+00:01:09,240 --> 00:01:13,539
+then the
+kernel is actually picking a thread of a specific
+
+16
+00:01:13,539 --> 00:01:17,659
+process
+so it can run thread 1 here then it
+
+17
+00:01:17,659 --> 00:01:20,490
+can go to
+thread 2 here and then you can go back thread
+
+18
+00:01:20,490 --> 00:01:23,580
+3 here
+so these three threads can belong to different
+
+19
+00:01:23,580 --> 00:01:26,030
+processes
+while here you would probably change between thread
+
+20
+00:01:26,030 --> 00:01:29,619
+1 2 and 3
+while the operating system is just running
+
+21
+00:01:29,619 --> 00:01:37,680
+this process
+as we said if you use user-level threads and
+
+22
+00:01:37,680 --> 00:01:42,649
+one of them
+for example issues a request through a
+
+23
+00:01:42,649 --> 00:01:46,090
+system call to
+the operating system the entire process will
+
+24
+00:01:46,090 --> 00:01:50,490
+go into waiting
+so all the threads not just the one that is
+
+25
+00:01:50,490 --> 00:01:56,610
+asking for some
+I/O will stop executing
+
+26
+00:01:56,610 --> 00:01:58,439
+because of
+a blocking call
+
+27
+00:01:58,439 --> 00:02:04,509
+this does not happen with kernel threads
+if we look at the pros and cons so you see
+
+28
+00:02:04,509 --> 00:02:08,860
+that now
+user-level threads are actually extremely good
+
+29
+00:02:08,860 --> 00:02:12,540
+when you want
+to have fast context switch because actually
+
+30
+00:02:12,540 --> 00:02:15,790
+you can change
+the thread that is executing with no real
+
+31
+00:02:15,790 --> 00:02:17,970
+context switch
+you don't need to involve the operating system
+
+32
+00:02:17,970 --> 00:02:18,970
+to do the
+context switch
+
+33
+00:02:18,970 --> 00:02:24,330
+so you save a lot of time the time it takes
+to go from one
+
+34
+00:02:24,330 --> 00:02:28,440
+quantum of execution to another one and change
+the thread
+
+35
+00:02:28,440 --> 00:02:30,940
+it's basically nothing because everything
+happens inside
+
+36
+00:02:30,940 --> 00:02:34,240
+the process without involving the operating
+system
+
+37
+00:02:34,240 --> 00:02:37,980
+and you can define your own scheduler
+so if you don't like the scheduler that we
+
+38
+00:02:37,980 --> 00:02:41,220
+have in your operating
+system to run a set of processes that are CPU-bound
+
+39
+00:02:41,220 --> 00:02:44,580
+you can
+use user-level threads and then write your
+
+40
+00:02:44,580 --> 00:02:48,160
+own scheduler
+with your own policy to run your processes
+
+41
+00:02:48,160 --> 00:02:51,780
+but the negative side as we said is that if
+one thread
+
+42
+00:02:51,780 --> 00:02:55,470
+blocks because of input output the entire process
+blocks so all
+
+43
+00:02:55,470 --> 00:03:00,380
+the user thread
+if you look at kernel level or if you use 
+
+44
+00:03:00,380 --> 00:03:03,400
+kernel-level threads
+then it will cost more to do the context switch
+
+45
+00:03:03,400 --> 00:03:04,400
+so you pay
+an overhead
+
+46
+00:03:04,400 --> 00:03:10,680
+but you can have threads of a multi-threaded
+process that
+
+47
+00:03:10,680 --> 00:03:15,240
+are still executing even if some of them are
+into some input
+
+48
+00:03:15,240 --> 00:03:18,310
+output and they need to wait before they get
+access to the
+
+49
+00:03:18,310 --> 00:03:18,810
+CPU
+

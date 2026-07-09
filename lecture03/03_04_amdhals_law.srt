@@ -1,0 +1,85 @@
+1
+00:00:00,880 --> 00:00:08,080
+to give a first example of why multithreaded 
+processes and writing applications that can  
+
+2
+00:00:08,080 --> 00:00:12,880
+run in parallel is challenging let's look at 
+this question let's assume we have a program  
+
+3
+00:00:12,880 --> 00:00:18,800
+initially it was designed to run on a single core 
+but now we buy 100 cores and we want to make it  
+
+4
+00:00:18,800 --> 00:00:25,520
+more efficient so what we do is that we start 
+writing the code and we do a nice job eventually  
+
+5
+00:00:25,520 --> 00:00:32,080
+we end up with only 25 percent of the initial 
+program so one every four lines that cannot be  
+
+6
+00:00:32,080 --> 00:00:38,640
+executed in parallel if we now run this with one 
+hundred cores how many times faster will this program be?  
+
+7
+00:00:39,680 --> 00:00:44,800
+the answer to that is in between one 
+and ten so actually it turns out that you can  
+
+8
+00:00:46,640 --> 00:00:55,120
+get a limit or an upper bound on how much your 
+parallel process can be faster compared to the  
+
+9
+00:00:55,120 --> 00:01:01,760
+sequential one or serial one using 
+Amdahl's law
+
+10
+00:01:04,240 --> 00:01:11,600
+if you see the speed up it's always less than or 
+equal to this formula so here you have one divided  
+
+11
+00:01:11,600 --> 00:01:17,360
+s which is the portion that is not parallel plus 
+the portion that is parallel that gets smaller  
+
+12
+00:01:17,360 --> 00:01:23,440
+and smaller with the higher number of cores 
+you use which in this case is n if you use  
+
+13
+00:01:23,440 --> 00:01:32,480
+an infinite number of cores then this component 
+here disappears and what you are left with it's  
+
+14
+00:01:32,480 --> 00:01:39,760
+one divided s that is the limit for the speed up s 
+in our example is 25% which means that this program  
+
+15
+00:01:39,760 --> 00:01:47,920
+will never be faster than four times its serial 
+counterpart no matter how many cores you use  
+
+16
+00:01:47,920 --> 00:01:53,760
+so the serial portion of an application has 
+disproportionate effects on the performance  
+
+17
+00:01:53,760 --> 00:02:03,120
+gained by adding additional cores and with this you 
+can actually compute which is the maximum speed up
+

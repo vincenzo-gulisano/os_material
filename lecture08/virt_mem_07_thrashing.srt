@@ -1,0 +1,424 @@
+1
+00:00:01,600 --> 00:00:07,200
+let's move now to the last part we are going to 
+discuss thrashing this is actually one of the  
+
+2
+00:00:07,200 --> 00:00:10,080
+parts that is usually a bit more complicated
+
+3
+00:00:12,240 --> 00:00:21,040
+so there is this thing called thrashing is 
+something that can happen during your  
+
+4
+00:00:21,040 --> 00:00:28,720
+execution and it's based on the following if 
+a process does not have enough pages because  
+
+5
+00:00:28,720 --> 00:00:34,800
+there are not enough frames that the process can 
+use then you will have a high number of page faults  
+
+6
+00:00:35,840 --> 00:00:41,360
+now you know that when you have a page fault 
+there is this routine to fetch the page that maybe  
+
+7
+00:00:41,360 --> 00:00:48,960
+you have to swap out so when there is a page fault 
+you start using the disk and that of course has an  
+
+8
+00:00:48,960 --> 00:00:56,880
+implication because you have a lot of input/output 
+what happens is that since the process  
+
+9
+00:00:56,880 --> 00:01:02,640
+now is spending more time waiting for/reading 
+and writing to the disk than actually running  
+
+10
+00:01:03,200 --> 00:01:08,160
+it starts behaving like an IO-bound process 
+rather than a CPU-bound process and its  
+
+11
+00:01:08,160 --> 00:01:16,800
+CPU consumption goes down now if your operating 
+system is naive and it just assumes that since the  
+
+12
+00:01:16,800 --> 00:01:23,760
+process it's not using a lot of CPU then it means 
+that I have free CPU I can use for other processes  
+
+13
+00:01:23,760 --> 00:01:29,280
+what happens is that the scheduler will run more 
+processes but these processes will also generate a  
+
+14
+00:01:29,280 --> 00:01:34,400
+lot of page faults because they will be also 
+fighting to get frames that are not really
+
+15
+00:01:37,120 --> 00:01:44,960
+available so this degenerates because the 
+more you see that the CPU is not being used  
+
+16
+00:01:45,840 --> 00:01:52,080
+the more you add processes and the less the CPU 
+will be used because also these processes will be  
+
+17
+00:01:52,080 --> 00:01:58,160
+fighting for the same frames or the same physical 
+memory that is not enough and this is what  
+
+18
+00:01:58,160 --> 00:02:06,560
+thrashing is when a process needs frames and 
+here we are of course in global page replacement  
+
+19
+00:02:06,560 --> 00:02:13,520
+it steals from other processes then you start 
+having input/output waiting because you have to
+
+20
+00:02:16,160 --> 00:02:22,880
+move the processes into the queues of those 
+waiting for the disk to read and write pages  
+
+21
+00:02:23,520 --> 00:02:28,000
+you think that you can run more stuff because most 
+of the processes are waiting rather than  
+
+22
+00:02:28,000 --> 00:02:33,120
+in the ready queue so you increase even more 
+but this results in those news processes you  
+
+23
+00:02:33,120 --> 00:02:38,320
+want to run to steal frames from the 
+other processes and this degenerates  
+
+24
+00:02:40,320 --> 00:02:46,000
+so this is the effect on the CPU utilization when 
+you increase the degree of multi-programming in  
+
+25
+00:02:46,000 --> 00:02:54,320
+the beginning it gets better you use more CPU but 
+if you go above a certain threshold then the CPU  
+
+26
+00:02:54,320 --> 00:03:00,160
+utilization collapses and this phase here this 
+part of the graph is where you are entering the  
+
+27
+00:03:00,160 --> 00:03:06,000
+thrashing mode which means this might sound 
+strange but it basically means that sometimes  
+
+28
+00:03:06,800 --> 00:03:18,960
+if you want to use more CPU you should 
+decrease the parallelism degree now  
+
+29
+00:03:22,320 --> 00:03:30,320
+how do we know or how can we know that 
+paging / virtual memory is working and  
+
+30
+00:03:30,320 --> 00:03:36,080
+we don't end up into thrashing well we have 
+this concept that we discussed before about  
+
+31
+00:03:37,280 --> 00:03:40,560
+locality we said that when we run 
+a process we are not really using  
+
+32
+00:03:41,200 --> 00:03:47,440
+all the pages all the time at the same time but 
+that during portions of time we are going to use  
+
+33
+00:03:47,440 --> 00:03:52,640
+a subset of pages maybe the ones that are related 
+to a certain function and then we move to another  
+
+34
+00:03:52,640 --> 00:03:59,680
+function so we change locality and so on 
+so if we want to avoid trashing what we need  
+
+35
+00:03:59,680 --> 00:04:06,080
+to make sure is that the space we have is enough 
+to maintain at the same time all the localities  
+
+36
+00:04:06,640 --> 00:04:10,960
+of the processes we are trying to run it's 
+not about all the space the processes need  
+
+37
+00:04:10,960 --> 00:04:18,720
+it's about the space that is needed by their 
+localities so this is just an example this is  
+
+38
+00:04:20,400 --> 00:04:26,880
+a graph in which you have the execution time 
+and then you have a small dot every time a certain  
+
+39
+00:04:26,880 --> 00:04:33,200
+process is accessing some of his pages so 
+what this figure is trying to show you is that  
+
+40
+00:04:33,200 --> 00:04:42,240
+you can see that during this portion of time here 
+pages 18 to 24 here and 30 to 34 are being used  
+
+41
+00:04:42,240 --> 00:04:47,520
+so you see here this is empty so it means that 
+that is not part of the current locality because  
+
+42
+00:04:47,520 --> 00:04:53,680
+you don't really try to access these pages but at 
+a certain point here the locality changes so now  
+
+43
+00:04:54,880 --> 00:04:59,680
+for example these three pages here are 
+no longer used and these pages that were  
+
+44
+00:04:59,680 --> 00:05:06,720
+not used before they start being used now so 
+you can see that is changing locality over time so  
+
+45
+00:05:07,360 --> 00:05:14,400
+how can the operating system in practice avoid 
+entering the thrashing mode one way to go  
+
+46
+00:05:14,400 --> 00:05:20,640
+is to use the working set model so you 
+define a window a working set window it's  
+
+47
+00:05:20,640 --> 00:05:26,000
+a fixed number of page references could be 
+the last 10 000 instructions for example  
+
+48
+00:05:27,520 --> 00:05:33,600
+then you keep track looking only at the last 10000 
+instructions at the set of pages that you are  
+
+49
+00:05:33,600 --> 00:05:40,480
+trying to that is currently being used by the 
+by the process and you assume that  
+
+50
+00:05:41,840 --> 00:05:46,480
+the size of the locality is the size of this 
+set so here you could have five pages and  
+
+51
+00:05:46,480 --> 00:05:52,000
+now you could have two pages so these are two 
+different locations now you can imagine that one  
+
+52
+00:05:52,000 --> 00:05:57,840
+key question here is how do you decide how big the 
+window should be because if you make it too small  
+
+53
+00:05:58,480 --> 00:06:03,440
+then you will not really encompass the entire 
+locality so you might think that you have space  
+
+54
+00:06:03,440 --> 00:06:09,600
+for enough to fit your locality but actually your 
+locality is bigger so you don't really have it  
+
+55
+00:06:10,240 --> 00:06:14,400
+on the other end if you pick it too big then 
+you might encompass several localities and  
+
+56
+00:06:14,400 --> 00:06:18,560
+so you might think the opposite I don't have 
+enough free space because my locality is bigger  
+
+57
+00:06:18,560 --> 00:06:24,960
+but actually no your locality is not that big it's 
+just that the window you take it's too big and  
+
+58
+00:06:26,000 --> 00:06:32,720
+what you can check is the sum of all the 
+localities at each point in time and if  
+
+59
+00:06:32,720 --> 00:06:40,000
+this is more than the available frames then you 
+are clearly entering into the thrashing mode
+
+60
+00:06:42,240 --> 00:06:48,480
+so in that case you want to suspend or swap out 
+some of the processes or at least one of them
+
+61
+00:06:50,880 --> 00:06:56,240
+so again challenge here how do you keep track of 
+the working set how do you choose the window size?
+
+62
+00:06:57,840 --> 00:07:03,520
+an alternative you can use to the working set 
+model it's actually to look at the page fault  
+
+63
+00:07:03,520 --> 00:07:09,120
+frequency so you can define two bounds 
+for the frequency with which you can  
+
+64
+00:07:10,000 --> 00:07:15,120
+you observe sorry page faults and you 
+decide whether to allocate or remove frames  
+
+65
+00:07:15,120 --> 00:07:22,240
+and on the long run whether to swap out a process 
+depending on how many page faults you get so  
+
+66
+00:07:22,240 --> 00:07:28,960
+as long as they stay within the given boundaries 
+it is okay if they go above you can ask for more  
+
+67
+00:07:28,960 --> 00:07:35,280
+frames and below you can release frames and 
+when you have many that are above then you can  
+
+68
+00:07:36,000 --> 00:07:44,000
+suspend some of them now here you see that you 
+have two different alternatives and actually  
+
+69
+00:07:44,000 --> 00:07:51,360
+they are connected so as always one of the 
+challenges here is that you don't really know how  
+
+70
+00:07:52,000 --> 00:07:58,480
+to choose the window set or the specific 
+number of page faults you can tolerate until  
+
+71
+00:07:58,480 --> 00:08:03,680
+you actually start running your operating system 
+and see what processes the user is trying to run  
+
+72
+00:08:03,680 --> 00:08:09,600
+how many of them how many cores you have available 
+and so on and so forth and here you can also  
+
+73
+00:08:09,600 --> 00:08:17,280
+see that there is a direct relationship between 
+the working set and the page fault rate because  
+
+74
+00:08:18,480 --> 00:08:25,840
+what you will see over time if you just 
+look at the page fault rate is that  
+
+75
+00:08:29,120 --> 00:08:36,320
+usually you start observing an increasing page 
+fault rate when there is a new locality because  
+
+76
+00:08:36,320 --> 00:08:41,920
+the processes start accessing pages that are 
+not loaded right now then at a certain point  
+
+77
+00:08:41,920 --> 00:08:48,080
+this peak goes down because now all the pages of 
+that locality have been requested so they have been  
+
+78
+00:08:48,080 --> 00:08:57,040
+swapped in and for a certain period of time the 
+the page faults will be low because the process  
+
+79
+00:08:57,040 --> 00:09:03,360
+is still accessing the same set of pages that have 
+been loaded yet some of them might be swapped out  
+
+80
+00:09:03,360 --> 00:09:10,720
+because of other processes stealing frames but 
+the number of page faults remains low then all  
+
+81
+00:09:10,720 --> 00:09:16,800
+of a sudden it starts growing again because you 
+know the process is entering a different locality  
+
+82
+00:09:16,800 --> 00:09:22,480
+and so on so actually if you want to find 
+an approximation of how big the working set  
+
+83
+00:09:23,200 --> 00:09:30,000
+could be or should be to be the 
+correct one then you can monitor the  
+
+84
+00:09:31,040 --> 00:09:34,720
+rate with which you observe page faults 
+in your operating system but as you can  
+
+85
+00:09:34,720 --> 00:09:43,520
+see this now becomes complicated because of 
+this relationship between the two measures
+

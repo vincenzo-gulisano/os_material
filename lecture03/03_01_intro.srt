@@ -1,0 +1,155 @@
+1
+00:00:02,000 --> 00:00:06,400
+this is the third lecture and 
+it is about multi-threaded programming
+
+2
+00:00:08,720 --> 00:00:16,160
+as always here you have the reading 
+instructions it is chapter 2.2 and  
+
+3
+00:00:16,160 --> 00:00:23,680
+10.3.3 but there are concepts there that 
+we will discuss in future lectures too  
+
+4
+00:00:24,240 --> 00:00:29,840
+and as always you also have the extra facultative 
+reading if you want from the other book  
+
+5
+00:00:31,680 --> 00:00:38,320
+the objectives for this lecture are to 
+introduce the notion of a thread it's a  
+
+6
+00:00:38,320 --> 00:00:46,720
+fundamental concept in operating systems we also 
+discuss APIs for example for the pthreads library  
+
+7
+00:00:47,760 --> 00:00:54,000
+we will look at several strategies that provide 
+implicit threading and also discuss some of the  
+
+8
+00:00:54,000 --> 00:01:01,840
+issues and challenges related to multi-threaded 
+programming but let's start with introducing a bit  
+
+9
+00:01:03,840 --> 00:01:11,200
+threads and actually what I'm going 
+to do is to go back to a slide I  
+
+10
+00:01:11,200 --> 00:01:16,240
+show you in the processes lecture 
+so we had these two sentences  
+
+11
+00:01:16,240 --> 00:01:21,440
+we run several programs at the same time and 
+one CPU can only run one program at the time  
+
+12
+00:01:22,720 --> 00:01:29,200
+and I mentioned before that these two 
+sentences are not really correct meaning  
+
+13
+00:01:29,200 --> 00:01:34,720
+they're not completely wrong but if you want to be 
+precise especially in the context of this course  
+
+14
+00:01:35,680 --> 00:01:42,720
+you probably want to say that we feel several 
+programs run at the same time you remember we  
+
+15
+00:01:42,720 --> 00:01:48,160
+have discussed context switches so the fact 
+that the operating system together with the  
+
+16
+00:01:48,160 --> 00:01:53,680
+hardware is continuously switching the process 
+it runs so it gives you this feeling of things  
+
+17
+00:01:53,680 --> 00:01:59,680
+running at the same time while 
+in practice only one at the time is running  
+
+18
+00:02:00,720 --> 00:02:07,520
+but what we will see today is that indeed it 
+is possible to have multiple processes that are  
+
+19
+00:02:07,520 --> 00:02:12,320
+actually running at the same time so if you 
+freeze time and you look inside your computer  
+
+20
+00:02:12,320 --> 00:02:17,440
+your hardware your CPU you might find that there 
+are multiple processes running at the same time  
+
+21
+00:02:18,560 --> 00:02:22,960
+so if you actually freeze time and 
+you look inside your hardware your  
+
+22
+00:02:24,800 --> 00:02:30,960
+CPU you can find that two instructions from 
+different processes or even from the same  
+
+23
+00:02:30,960 --> 00:02:38,240
+process we will see why both things can happen 
+could be potentially be executed physically at  
+
+24
+00:02:38,240 --> 00:02:43,520
+the same time okay so the right way to put it 
+is that each CPU core can only run one program  
+
+25
+00:02:43,520 --> 00:02:50,880
+at a time but it's the core not the entire CPU 
+this is what we will discuss in this lecture  
+
+26
+00:02:50,880 --> 00:02:55,200
+and you remember I show you this I said this 
+is the main activity done by the brain of the  
+
+27
+00:02:55,200 --> 00:02:59,920
+computer the CPU it's a simplified version 
+there is also the checking for interrupts  
+
+28
+00:02:59,920 --> 00:03:08,480
+is not there so when you have a multi-core 
+CPU what happens is that inside each core  
+
+29
+00:03:08,480 --> 00:03:14,880
+you have one such brain that can be fetching 
+the next instruction and then running  
+
+30
+00:03:16,080 --> 00:03:20,480
+that instruction and this can happen in 
+parallel at the same time you can have this  
+
+31
+00:03:20,480 --> 00:03:26,240
+execute instruction with different instructions 
+being executed physically at the same time
+

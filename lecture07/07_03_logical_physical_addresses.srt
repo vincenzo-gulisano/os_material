@@ -1,0 +1,246 @@
+1
+00:00:00,969 --> 00:00:03,090
+let's now move to logical or virtual
+
+2
+00:00:03,090 --> 00:00:08,050
+addresses versus physical addresses
+
+3
+00:00:08,050 --> 00:00:13,690
+so let's say we write a program and we have
+this instruction
+
+4
+00:00:13,690 --> 00:00:21,439
+equal b plus two
+we know that when we run this instruction
+
+5
+00:00:21,439 --> 00:00:25,099
+inside the process
+we will have some memory allocated and at
+
+6
+00:00:25,099 --> 00:00:28,439
+a specific address
+we will have the variable a and at another one
+
+7
+00:00:28,439 --> 00:00:32,880
+we will have variable b and then we're going
+to read b sum 2
+
+8
+00:00:32,880 --> 00:00:41,200
+and store that in the address of variable a
+now the question here would be if the program
+
+9
+00:00:41,200 --> 00:00:46,120
+has not been
+loaded yet into memory so it's just stored
+
+10
+00:00:46,120 --> 00:00:49,510
+in a disk what
+is the compiled program?
+
+11
+00:00:49,510 --> 00:00:55,940
+so like the c program that runs this how does
+this program
+
+12
+00:00:55,940 --> 00:00:59,940
+knows how are we storing the addresses of
+a and b given
+
+13
+00:00:59,940 --> 00:01:02,930
+that we don't know yet where they will be
+placed in memory
+
+14
+00:01:02,930 --> 00:01:07,180
+if we first don't actually start the process?
+
+15
+00:01:07,180 --> 00:01:11,190
+so how does the operating system support the
+definition of
+
+16
+00:01:11,190 --> 00:01:15,760
+variables and memory if we don't know exactly
+where the process
+
+17
+00:01:15,760 --> 00:01:18,940
+will be placed in memory until we actually
+start running
+
+18
+00:01:18,940 --> 00:01:22,000
+it? and given that if we run the same process
+n times we
+
+19
+00:01:22,000 --> 00:01:26,520
+can have n different locations at which
+we are maintaining
+
+20
+00:01:26,520 --> 00:01:32,920
+the process in memory
+well the operating system helps processes
+
+21
+00:01:32,920 --> 00:01:37,840
+and programmers
+differentiating between logical or virtual
+
+22
+00:01:37,840 --> 00:01:40,690
+addresses and
+the physical addresses the real ones that
+
+23
+00:01:40,690 --> 00:01:46,600
+you have in the
+memory each process believes that its own memory
+
+24
+00:01:46,600 --> 00:01:51,740
+starts at address
+zero and goes up to a certain address
+
+25
+00:01:51,740 --> 00:01:56,590
+okay so all addresses are relative to address
+zero which
+
+26
+00:01:56,590 --> 00:02:00,220
+is the beginning of the process
+this is the logical address
+
+27
+00:02:00,220 --> 00:02:03,310
+the physical one of course will actually start
+at a specific
+
+28
+00:02:03,310 --> 00:02:07,350
+address and extend up to another address
+for now
+
+29
+00:02:07,350 --> 00:02:10,830
+I'm just assuming that you take a big chunk
+of main memory
+
+30
+00:02:10,830 --> 00:02:17,420
+and you place the entire process
+so it's contiguous a contiguous set of addresses
+
+31
+00:02:17,420 --> 00:02:21,240
+we will see that this is actually not what
+is really happening
+
+32
+00:02:21,240 --> 00:02:28,890
+but let's keep things simple for now
+so what the operating system does is that
+
+33
+00:02:28,890 --> 00:02:33,050
+whenever a process
+tries to access something that is in memory
+
+34
+00:02:33,050 --> 00:02:37,220
+it uses our
+logical address and it says I want the address
+
+35
+00:02:37,220 --> 00:02:41,730
+3-4-6 for
+example and then the operating system will
+
+36
+00:02:41,730 --> 00:02:44,720
+translate that
+actually to the physical address in the real
+
+37
+00:02:44,720 --> 00:02:48,540
+physical main
+memory at which the variable is maintained
+
+38
+00:02:48,540 --> 00:02:54,860
+the question is how do you convert logical
+to physical addresses
+
+39
+00:02:54,860 --> 00:02:59,989
+efficiently getting help from the hardware?
+something you can do
+
+40
+00:02:59,989 --> 00:03:04,370
+very simple
+we will see again as I said that there are
+
+41
+00:03:04,370 --> 00:03:05,770
+more complicated
+things happening
+
+42
+00:03:05,770 --> 00:03:10,560
+but for the discussion so far something simple
+you can do
+
+43
+00:03:10,560 --> 00:03:17,860
+is to use a relocation register
+so basically you take the address given by
+
+44
+00:03:17,860 --> 00:03:22,770
+the CPU
+and since the process believes its first address
+
+45
+00:03:22,770 --> 00:03:25,250
+is zero
+it basically means that it's giving you an
+
+46
+00:03:25,250 --> 00:03:31,250
+offset
+you sum that the base address of each process
+
+47
+00:03:31,250 --> 00:03:37,319
+that is basically the conversion to the physical
+address
+
+48
+00:03:37,319 --> 00:03:44,590
+you actually need to access in the main memory
+so logical addesses will go from zero to max
+
+49
+00:03:44,590 --> 00:03:46,830
+in practice the real one we go from a certain
+R to a
+
+50
+00:03:46,830 --> 00:03:48,190
+certain R plus max
+

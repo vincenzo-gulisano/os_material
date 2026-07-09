@@ -1,0 +1,123 @@
+1
+00:00:00,880 --> 00:00:05,400
+Let’s move now to protection domains
+
+2
+00:00:05,400 --> 00:00:10,930
+We said that for building a trusted system,
+we need to have a clear understanding of what
+
+3
+00:00:10,930 --> 00:00:16,939
+can be done and who can do it. We can ask
+ourselves: what does it mean to have a clear
+
+4
+00:00:16,939 --> 00:00:19,909
+understanding of what can be done and who
+can do it?
+
+5
+00:00:19,909 --> 00:00:25,260
+To answer such a question, we can note that
+each system is composed of a set of objects
+
+6
+00:00:25,260 --> 00:00:31,839
+(could be both hardware and software).
+Each object can be manipulated through a set
+
+7
+00:00:31,839 --> 00:00:39,020
+of operations, and such operations can take
+place within the execution of processes.
+
+8
+00:00:39,020 --> 00:00:47,450
+A domain is a set of <object, rights> pairs
+that refer to one user or a group of users.
+
+9
+00:00:47,450 --> 00:00:53,350
+According to the Principle of Least Authority,
+security works best when each domain has the
+
+10
+00:00:53,350 --> 00:00:59,710
+minimum objects/privileges required to perform
+a certain task.
+
+11
+00:00:59,710 --> 00:01:06,659
+Here we have an example with three domains,
+each containing some objects and associated
+
+12
+00:01:06,659 --> 00:01:12,299
+operations. As you can see, the same object
+(File 1 for instance) can be associated with
+
+13
+00:01:12,299 --> 00:01:17,819
+different domains and with different operations.
+At the same time, the same object (Printer
+
+14
+00:01:17,819 --> 00:01:24,780
+1) can also exist with the same operation
+for multiple domains.
+
+15
+00:01:24,780 --> 00:01:29,999
+We assume that each process is executed in
+one protection domain and that the operating
+
+16
+00:01:29,999 --> 00:01:36,119
+system could allow the process to switch between
+domains. In Unix, the domain of a process
+
+17
+00:01:36,119 --> 00:01:41,670
+is given by the user id and the group id of
+the user that is currently logged in and running
+
+18
+00:01:41,670 --> 00:01:45,829
+such a process.
+
+19
+00:01:45,829 --> 00:01:51,050
+If we now focus our attention on how to maintain
+the information about various domains, we
+
+20
+00:01:51,050 --> 00:01:56,439
+realize we need to maintain a matrix like
+the one shown in these figures (the one at
+
+21
+00:01:56,439 --> 00:02:03,049
+the bottom is an extension on the one on the
+top with domain-switching permissions too).
+
+22
+00:02:03,049 --> 00:02:09,930
+In practice, such a matrix would be sparse
+(most cells are empty), and storing it as
+
+23
+00:02:09,930 --> 00:02:16,270
+a matrix is not efficient, we can go for either
+rows or columns. If we store information per
+
+24
+00:02:16,270 --> 00:02:23,380
+column , we are then referring to Access Control
+Lists. If we do it per-row , we are referring
+
+25
+00:02:23,380 --> 00:02:27,250
+to Capabilities. We will cover both in the
+following videos.
+

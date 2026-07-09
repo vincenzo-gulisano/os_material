@@ -1,0 +1,394 @@
+1
+00:00:00,590 --> 00:00:11,560
+welcome to lecture number 13 about virtualization
+so you have the reading instructions as always
+
+2
+00:00:11,560 --> 00:00:20,840
+and also as always I will start introducing
+a bit the topic of this lecture so let's start
+
+3
+00:00:20,840 --> 00:00:32,439
+with the introduction if you think about a
+company that is providing services they can
+
+4
+00:00:32,439 --> 00:00:39,300
+be digital services or any type of services
+basically you know
+
+5
+00:00:39,300 --> 00:00:49,660
+the most likely they need to keep different
+servers different applications so that they
+
+6
+00:00:49,660 --> 00:00:56,200
+can maintain their own emails they can add
+their own webserver an FTP server
+
+7
+00:00:56,200 --> 00:01:07,859
+an e-commerce service and so on so you are
+young and probably what I'm saying sounds
+
+8
+00:01:07,859 --> 00:01:13,009
+a bit strange but if you think about some
+10 15 years
+
+9
+00:01:13,009 --> 00:01:19,240
+ago the normal way to do this would be to
+actually buy a set of physical machines and
+
+10
+00:01:19,240 --> 00:01:26,079
+set up servers place them in a rack and then
+use these dedicated servers one for the email
+
+11
+00:01:26,079 --> 00:01:33,289
+server one for the web server and so on the
+reason here is that sure you could install
+
+12
+00:01:33,289 --> 00:01:34,479
+all these services in the
+
+13
+00:01:34,479 --> 00:01:40,399
+same server but at the end of the day you
+might need different operating systems for
+
+14
+00:01:40,399 --> 00:01:47,090
+the different services you might want to have
+a machine that has some RAID architecture
+
+15
+00:01:47,090 --> 00:01:52,039
+and it duplicates all the data on disk for
+safety when it comes to emails and the e-commerce
+
+16
+00:01:52,039 --> 00:01:56,499
+service but maybe for some other thing that's
+not needed
+
+17
+00:01:56,499 --> 00:02:02,090
+maybe you want to have a machine with a very
+good network card or connected to a fast switch
+
+18
+00:02:02,090 --> 00:02:05,609
+when it comes to some kind of service and
+so on so the normal thing is that you end
+
+19
+00:02:05,609 --> 00:02:07,889
+up using several machines
+
+20
+00:02:07,889 --> 00:02:14,760
+now we will discuss in the next slide that
+this has of course good/positive aspects but
+
+21
+00:02:14,760 --> 00:02:24,290
+also negative ones but the idea with
+virtualization it's simple at least theoretically
+
+22
+00:02:24,290 --> 00:02:30,370
+and notice that virtualization is something that
+has been discussed basically for 60 years so
+
+23
+00:02:31,439 --> 00:02:38,409
+it's not really something new despite the
+fact that many advances are
+
+24
+00:02:38,409 --> 00:02:42,129
+happening right now I mean with the cloud
+infrastructures and the recent advancements
+
+25
+00:02:42,129 --> 00:02:50,390
+let's say the last 10 15 years are
+the really good ones in terms of what is available
+
+26
+00:02:50,390 --> 00:02:52,760
+what you can use nowadays
+
+27
+00:02:52,760 --> 00:03:04,050
+but now the idea is to create an extra layer
+an extra middleware that separates the physical
+
+28
+00:03:04,050 --> 00:03:11,750
+hardware in this case one single server
+this can be called virtual machine monitor but
+
+29
+00:03:11,750 --> 00:03:19,620
+we call this hypervisor and on top of that
+run different operating systems letting
+
+30
+00:03:19,620 --> 00:03:22,480
+each operating system believe that it's the
+only one that
+
+31
+00:03:22,480 --> 00:03:31,719
+is accessing the physical hardware / the computer / the server you have below
+
+32
+00:03:31,719 --> 00:03:36,091
+it's not really different conceptually from
+the operating system the operating system
+
+33
+00:03:36,091 --> 00:03:42,170
+does this for the processes the hypervisor
+does this for the operating systems that will
+
+34
+00:03:42,170 --> 00:03:43,980
+do this for the processes
+
+35
+00:03:43,980 --> 00:03:48,650
+so many aspects we are discussing here
+we will see they are connected to what we have
+
+36
+00:03:48,650 --> 00:03:57,969
+discussed so far so if one wants to think
+about benefits and downsides here
+
+37
+00:03:57,969 --> 00:04:03,499
+if you don't use virtualization so if you
+have individual servers for each let's say
+
+38
+00:04:03,499 --> 00:04:05,299
+service you want to offer
+
+39
+00:04:05,299 --> 00:04:11,870
+of course you can handle more load if one machine 
+cannot do everything you can move to a
+
+40
+00:04:11,870 --> 00:04:18,199
+different machine part of the services
+it's more reliable if one server crashes the
+
+41
+00:04:18,199 --> 00:04:22,520
+others can still work it's also better for
+security
+
+42
+00:04:22,520 --> 00:04:28,210
+so if an intruder manages to corrupt one of
+the machines the others might still
+
+43
+00:04:28,210 --> 00:04:33,470
+be safe as long as they don't suffer from
+the same possible problem and of course you
+
+44
+00:04:33,470 --> 00:04:37,610
+can run different operating systems you have
+no restrictions on what you do on the different
+
+45
+00:04:37,610 --> 00:04:38,680
+computers
+
+46
+00:04:38,680 --> 00:04:42,580
+but of course this costs a lot of money and
+a lot of time because you have to maintain
+
+47
+00:04:42,580 --> 00:04:53,900
+all the servers on the other end if you go
+with virtualization it's still reliable as long as the failures
+
+48
+00:04:53,900 --> 00:04:59,330
+are happening at the software level if one
+operating system crashes the hypervisor can
+
+49
+00:04:59,330 --> 00:05:02,950
+still let the other operating systems run
+
+50
+00:05:02,950 --> 00:05:08,870
+and in practice there are higher chances that
+a failure happens because of software than
+
+51
+00:05:08,870 --> 00:05:15,490
+it does because of hardware you can run still
+different operating systems that's fine
+
+52
+00:05:15,490 --> 00:05:22,670
+also the code you really need to maintain
+and trust because it's the one that is accessing
+
+53
+00:05:22,670 --> 00:05:26,590
+the physical hardware is the one of the hypervisor
+and the
+
+54
+00:05:26,590 --> 00:05:32,259
+code of the hypervisor usually does not need
+to be as big as the code of the operating
+
+55
+00:05:32,259 --> 00:05:40,789
+system so it's also easier to maintain it
+costs less of course you only have to buy one server it's
+
+56
+00:05:40,789 --> 00:05:43,289
+also cheaper to try out applications and services
+
+57
+00:05:43,289 --> 00:05:47,229
+if you want to try a piece of software and
+how it works on different operating systems
+
+58
+00:05:47,229 --> 00:05:53,310
+you don't need to install these on different
+servers you can just create an operating
+
+59
+00:05:53,310 --> 00:05:59,250
+system for a while let the hypervisor run it
+and then test your stuff
+
+60
+00:05:59,250 --> 00:06:05,010
+and actually this is what you use to provide
+virtual appliances so if you want to provide
+
+61
+00:06:05,010 --> 00:06:09,460
+a piece of software that requires a specific
+operating system with specific versions of
+
+62
+00:06:09,460 --> 00:06:16,319
+libraries and so on and so forth you can create
+a virtual machine that has the perfect environment
+
+63
+00:06:16,319 --> 00:06:20,810
+the exact environment you need for that application
+install the application and
+
+64
+00:06:20,810 --> 00:06:25,180
+then give to your clients not just the application
+but the entire operating system with all the
+
+65
+00:06:25,180 --> 00:06:33,930
+requirements and the application and then
+ask your clients to run it within a hypervisor
+
+66
+00:06:33,930 --> 00:06:37,940
+you can run old applications that require
+operating systems that are very old and you
+
+67
+00:06:37,940 --> 00:06:41,550
+don't want the maintain so you just have a
+copy of that at
+
+68
+00:06:41,550 --> 00:06:47,620
+a virtual machine to run them we will see
+that it's easier to migrate
+
+69
+00:06:47,620 --> 00:06:53,340
+services and operating systems since everything
+is virtual you do not really around the stuff
+
+70
+00:06:53,340 --> 00:06:58,229
+it's not really installed on top of the
+hardware but it's the hypervisor
+
+71
+00:06:58,229 --> 00:07:02,139
+it's easier to move one virtual machine from
+one server with one hypervisor to a server
+
+72
+00:07:02,139 --> 00:07:07,130
+with another hypervisor if that
+is what you have to do but of course here you
+
+73
+00:07:07,130 --> 00:07:13,330
+need to take into account that if the hardware
+fails then you might be paying a very high
+
+74
+00:07:13,330 --> 00:07:15,669
+price because now the hypervisor will die
+
+75
+00:07:15,669 --> 00:07:23,689
+and all your operating systems will die and
+I guess everyone is familiar with the term
+
+76
+00:07:23,689 --> 00:07:31,050
+cloud or the cloud and despite the fact that
+many people have different opinions on what
+
+77
+00:07:31,050 --> 00:07:37,360
+exactly it is hopefully you can agree
+with me here that if you think about virtualization
+
+78
+00:07:37,360 --> 00:07:40,580
+and you stretch it to the point in which you
+actually
+
+79
+00:07:40,580 --> 00:07:45,879
+don't even buy the physical server but you
+just connect to a server that runs an hypervisor
+
+80
+00:07:45,879 --> 00:07:53,030
+and delivers you different services different
+operating systems that is basically the cloud
+
+81
+00:07:53,030 --> 00:07:53,530
+ 
+

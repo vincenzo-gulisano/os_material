@@ -1,0 +1,191 @@
+1
+00:00:00,750 --> 00:00:04,751
+Let’s move now to the last part of this
+lecture, focusing on bugs and how they can
+
+2
+00:00:04,751 --> 00:00:09,000
+be exploited by adversaries.
+In this case, we will focus on a specific
+
+3
+00:00:09,000 --> 00:00:13,270
+type of attack, the buffer overflow attack.
+
+4
+00:00:13,270 --> 00:00:19,440
+Before focusing on buffer overflow attacks,
+let me focus on some general considerations.
+
+5
+00:00:19,440 --> 00:00:25,010
+It should be clear that cracking a password
+is only one way to gain control from the attacker's
+
+6
+00:00:25,010 --> 00:00:31,510
+perspective. There can be alternative ways,
+which even require fewer efforts in some cases.
+
+7
+00:00:31,510 --> 00:00:37,730
+One of them is to manage to trick the user
+into doing something that will harm him/her,
+
+8
+00:00:37,730 --> 00:00:42,520
+and this could be done by infecting the browser,
+have users download malicious content, and
+
+9
+00:00:42,520 --> 00:00:46,290
+so on...
+The other is to exploit bugs, which are definitely
+
+10
+00:00:46,290 --> 00:00:48,840
+there in Operating Systems.
+
+11
+00:00:48,840 --> 00:00:55,660
+Let’s focus now on buffer overflow attacks.
+First, we need to know that the C programming
+
+12
+00:00:55,660 --> 00:01:01,829
+language does not perform array bounds checks.
+If we want to be sure we do not write in an
+
+13
+00:01:01,829 --> 00:01:07,610
+array (a buffer of characters, for instance)
+something that is larger than the array itself,
+
+14
+00:01:07,610 --> 00:01:13,570
+we need to do that explicitly.
+Second, we need to remember that the stack
+
+15
+00:01:13,570 --> 00:01:20,439
+of a process grows downwards, from the last
+address to smaller ones.
+
+16
+00:01:20,439 --> 00:01:29,450
+Let’s see now what is happening.
+When we jump from the main function to a different
+
+17
+00:01:29,450 --> 00:01:34,870
+function, we need to keep track of where we
+were, so that we can get back there once the
+
+18
+00:01:34,870 --> 00:01:42,740
+function has completed its execution. We do
+this by writing a return address.
+
+19
+00:01:42,740 --> 00:01:49,500
+After such a return address, we will have
+the various variables used by the function
+
+20
+00:01:49,500 --> 00:01:54,830
+(A in the example).
+Among these, we can have a buffer B.
+
+21
+00:01:54,830 --> 00:02:02,630
+If a malicious user is aware of this and also
+has the chance of giving back to the procedure
+
+22
+00:02:02,630 --> 00:02:13,849
+A what should be written inside B, then it
+can give a longer input. This input can overwrite
+
+23
+00:02:13,849 --> 00:02:18,430
+the return address.
+In this case, the attacker can put a predefined
+
+24
+00:02:18,430 --> 00:02:28,740
+value there, even pointing to an address within
+the input he/she just provided.
+
+25
+00:02:28,740 --> 00:02:33,750
+The code available there would then be executed
+next.
+
+26
+00:02:33,750 --> 00:02:41,120
+It turns out some system calls from the OS
+suffer from this bug. If the return address
+
+27
+00:02:41,120 --> 00:02:46,570
+is changed to point to an injected code that
+starts a terminal, a malicious user can have
+
+28
+00:02:46,570 --> 00:02:50,730
+access with full privileges to the computer
+(because the system call was being run by
+
+29
+00:02:50,730 --> 00:02:56,599
+the operating system itself)
+
+30
+00:02:56,599 --> 00:03:03,400
+A way to detect possible attacks (that is
+not 100% secure) is to use stack canaries.
+
+31
+00:03:03,400 --> 00:03:08,060
+In this case, just below the return address,
+we can add a random value and compile programs
+
+32
+00:03:08,060 --> 00:03:12,870
+with special code that will stop the execution
+if such value is changed.
+
+33
+00:03:12,870 --> 00:03:18,540
+The idea is that when overflowing the buffer,
+the attacker will also change such random
+
+34
+00:03:18,540 --> 00:03:22,040
+value, and the program will be able to detect
+this.
+
+35
+00:03:22,040 --> 00:03:29,060
+As I mention in the slide, you can check in
+the book how stack canaries can be avoided.
+
+36
+00:03:29,060 --> 00:03:34,590
+Alternative ways to go include the no-execute
+bit, which in this case is based on the hardware
+
+37
+00:03:34,590 --> 00:03:40,590
+itself and used to specify portions of memory
+that cannot contain executable parts.
+
+38
+00:03:40,590 --> 00:03:45,640
+In this case, it is possible to prevent code
+injection attacks (because no code will be
+
+39
+00:03:45,640 --> 00:03:46,620
+executed).
+

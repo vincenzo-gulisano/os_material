@@ -1,0 +1,118 @@
+1
+00:00:00,859 --> 00:00:02,409
+Let’s move now to capabilities.
+
+2
+00:00:02,409 --> 00:00:08,660
+In this case, we associate a list of permissions
+to each domain/process. Each entry in the
+
+3
+00:00:08,660 --> 00:00:16,299
+list is a capability, a file (or another object),
+and the set of rights associated with it.
+
+4
+00:00:16,299 --> 00:00:21,970
+Since two domains can have part of their capabilities
+lists overlapping, they could use pointers
+
+5
+00:00:21,970 --> 00:00:27,670
+to point to other lists hierarchically.
+Also in this case, we can have the common
+
+6
+00:00:27,670 --> 00:00:33,650
+read, write, and execute rights, as well as
+other additional rights that are specific
+
+7
+00:00:33,650 --> 00:00:37,530
+to a certain system or operating system.
+
+8
+00:00:37,530 --> 00:00:44,890
+We can ask ourselves: how to prevent a user
+from altering his/her capabilities?
+
+9
+00:00:44,890 --> 00:00:52,350
+One way is to use a so-called tagged architecture.
+In this case, each word in memory (the word
+
+10
+00:00:52,350 --> 00:00:59,329
+is the unit of data used by the processor)
+has a special bit (the tag) that, if set,
+
+11
+00:00:59,329 --> 00:01:06,060
+indicates the word contains a capability and
+can only be changed when in kernel mode (so,
+
+12
+00:01:06,060 --> 00:01:12,810
+by an OS process or a trusted process).
+A second way to go is to keep the capabilities
+
+13
+00:01:12,810 --> 00:01:19,540
+lists in OS memory, so user processes can
+point to them but not alter them.
+
+14
+00:01:19,540 --> 00:01:27,720
+Finally, a third way to go, which is particularly
+useful in distributed systems, is for user
+
+15
+00:01:27,720 --> 00:01:34,549
+processes to prove their rights are indeed
+correct when using files maintained by remote
+
+16
+00:01:34,549 --> 00:01:43,600
+servers. This technique simplify the sharing
+of files/rights in distributed systems.
+
+17
+00:01:43,600 --> 00:01:52,470
+Let’s assume we have a cryptographically
+secure one-way function f (it means from x
+
+18
+00:01:52,470 --> 00:02:02,150
+we can compute y = f(x) but from y it is infeasible
+to find out x). In this case, when a file
+
+19
+00:02:02,150 --> 00:02:08,759
+is created at the server, the server generates
+a random number (called check) and returns
+
+20
+00:02:08,759 --> 00:02:17,220
+to the client the file id, the rights, and
+f(file id/Rights/Check), without giving the
+
+21
+00:02:17,220 --> 00:02:24,310
+value of check back to the client but rather
+storing it locally. When the client wants
+
+22
+00:02:24,310 --> 00:02:30,950
+to access the file, it shares the id, the
+rights, and the value of f. The server recomputes
+
+23
+00:02:30,950 --> 00:02:38,040
+f taking the file id and rights from the client,
+but the check from its tables. If the values
+
+24
+00:02:38,040 --> 00:02:43,689
+match, then the rights claimed by the client
+are correct and the request can be honored.
+

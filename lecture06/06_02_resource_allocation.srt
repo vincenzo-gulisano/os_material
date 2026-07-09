@@ -1,0 +1,128 @@
+1
+00:00:02,080 --> 00:00:06,400
+After discussing the bounded buffer 
+producer/consumer problem, let's  
+
+2
+00:00:06,400 --> 00:00:10,400
+move to resource allocation.
+We are going to make a small,  
+
+3
+00:00:10,400 --> 00:00:13,280
+yet important change to our problem definition.  
+
+4
+00:00:13,840 --> 00:00:18,800
+In this new model, threads need to acquire 
+multiple resources to complete a task. 
+
+5
+00:00:19,680 --> 00:00:22,800
+The new pseudocode for the 
+model is shown in the slide. 
+
+6
+00:00:23,520 --> 00:00:27,120
+We still want to ensure mutual 
+exclusion, progress, and fairness. 
+
+7
+00:00:28,080 --> 00:00:33,600
+Pay attention to 2 aspects, though:
+First, each thread needs to acquire  
+
+8
+00:00:33,600 --> 00:00:37,680
+all the resources it needs to 
+proceed, not just part of them. 
+
+9
+00:00:38,240 --> 00:00:43,360
+Second, to ensure progress we need to ensure 
+threads cannot enter a deadlock state. 
+
+10
+00:00:43,360 --> 00:00:44,480
+So, what is a deadlock?
+
+11
+00:00:45,920 --> 00:00:51,440
+A set of processes/threads blocking each 
+other so that none of them can proceed.
+
+12
+00:00:53,600 --> 00:00:59,760
+Can we have some formal reasoning about what 
+could cause a deadlock? Luckily yes. Coffman,  
+
+13
+00:00:59,760 --> 00:01:05,680
+back in 1971, proved that for a deadlock 
+to happen, all the following conditions  
+
+14
+00:01:05,680 --> 00:01:10,640
+need to hold simultaneously:
+mutual exclusion is enforced. 
+
+15
+00:01:10,640 --> 00:01:16,240
+A process or thread that already holds one 
+resource can ask for a second resource and  
+
+16
+00:01:16,240 --> 00:01:21,680
+wait for it without releasing the resource it 
+already holds (this is called hold and wait) 
+
+17
+00:01:22,320 --> 00:01:27,760
+There is no preemption: a resource can only be 
+released by the process/thread that holds it 
+
+18
+00:01:28,480 --> 00:01:33,680
+and there is a circular wait: a circular 
+chain of 2 or more blocked processes/threads  
+
+19
+00:01:34,720 --> 00:01:39,840
+each waiting for a resource held by 
+the next process/thread in the chain
+
+20
+00:01:40,880 --> 00:01:46,240
+Knowing that these 4 conditions need 
+to hold simultaneously implies that by  
+
+21
+00:01:46,240 --> 00:01:51,280
+removing one of them, then we can prevent 
+deadlocks. Of course, we cannot remove the  
+
+22
+00:01:51,280 --> 00:01:57,280
+mutual exclusion, ensuring it is our goal, 
+but we can eliminate one of the other 3. 
+
+23
+00:01:57,920 --> 00:02:03,440
+We can eliminate the circular wait by making sure 
+that resources are acquired in a certain order. 
+
+24
+00:02:04,160 --> 00:02:08,400
+We can eliminate the non-preemption, 
+by having a thread releasing a resource  
+
+25
+00:02:08,400 --> 00:02:12,880
+if it cannot get the next one.
+Or, we can eliminate the hold and wait,  
+
+26
+00:02:12,880 --> 00:02:19,840
+making sure a thread either gets all 
+its resources at once or none of it.
+

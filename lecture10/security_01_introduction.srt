@@ -1,0 +1,345 @@
+1
+00:00:00,890 --> 00:00:04,430
+Welcome to the lecture about Security in Operating
+Systems.
+
+2
+00:00:04,430 --> 00:00:09,440
+You can find here the reading instructions
+for this lecture. Most of the material is
+
+3
+00:00:09,440 --> 00:00:14,420
+covered in these slides, while other parts
+are for you to read directly from the book.
+
+4
+00:00:14,420 --> 00:00:20,359
+We are going to begin this lecture with an
+introduction and overview of what security
+
+5
+00:00:20,359 --> 00:00:25,579
+is (in the context of Operating Systems),
+we will then cover the topic of Protection
+
+6
+00:00:25,579 --> 00:00:32,750
+Domains and have a look at both Access Control
+Lists and Capabilities. We will then discuss
+
+7
+00:00:32,750 --> 00:00:39,039
+Authentication and finally cover a very well-known
+way of exploiting software bugs: buffer overflow
+
+8
+00:00:39,039 --> 00:00:40,280
+attacks.
+
+9
+00:00:40,280 --> 00:00:43,859
+Let’s start with our overview.
+
+10
+00:00:43,859 --> 00:00:50,269
+We all know that the information we access
+and store in our computer is being moved across
+
+11
+00:00:50,269 --> 00:00:55,679
+different devices, like the disk, the main
+memory, the network card, and so on.
+
+12
+00:00:55,679 --> 00:00:59,600
+We also know that the operating system has
+a key role in deciding how this information
+
+13
+00:00:59,600 --> 00:01:04,930
+is being moved.
+It is of course clear that part of this information
+
+14
+00:01:04,930 --> 00:01:10,690
+is important and/or sensitive: your passwords,
+your credit card number, and so on
+
+15
+00:01:10,690 --> 00:01:17,409
+and we can imagine attackers might be interested
+in accessing such information. Something important
+
+16
+00:01:17,409 --> 00:01:22,070
+to notice here is that such wish to access
+information is not limited to reading the
+
+17
+00:01:22,070 --> 00:01:26,990
+information, someone might want to alter it
+(to pretend you said something in a mail you
+
+18
+00:01:26,990 --> 00:01:33,250
+did not) or just prevent you (the real owner
+of such information) from accessing it (so
+
+19
+00:01:33,250 --> 00:01:39,540
+that you cannot recover all your files if
+you do not pay a ransom for them).
+
+20
+00:01:39,540 --> 00:01:45,240
+Unfortunately for us, the software we use
+(including the operating system’s one) is
+
+21
+00:01:45,240 --> 00:01:52,430
+full of bugs. Security bugs, called vulnerabilities,
+are often used by attackers to inject special
+
+22
+00:01:52,430 --> 00:01:59,520
+input (exploit) that allows them, in a way
+or another, to fulfill their malicious intentions.
+
+23
+00:01:59,520 --> 00:02:06,610
+At this point, it is important to realize
+that one additional trade-off we have in the
+
+24
+00:02:06,610 --> 00:02:13,740
+context of Operating Systems is that of feature-rich
+software versus simple and secure software.
+
+25
+00:02:13,740 --> 00:02:20,519
+We tend to like systems with a lot of tools,
+gadgets, and features, but the truth is that
+
+26
+00:02:20,519 --> 00:02:26,160
+the more of these we get, the higher the chances
+that a bug can be used against us.
+
+27
+00:02:26,160 --> 00:02:33,379
+If you take the very simple example about
+mails, you probably agree with me that the
+
+28
+00:02:33,379 --> 00:02:39,300
+possibility of sending images and files is
+something we prefer over the possibility of
+
+29
+00:02:39,300 --> 00:02:44,650
+sending only plain text.
+But we have to acknowledge that it is hard
+
+30
+00:02:44,650 --> 00:02:49,800
+for the attacker to gain control of a system
+through simple text, while it is significantly
+
+31
+00:02:49,800 --> 00:02:54,640
+easier if executable files can be shared via
+mail.
+
+32
+00:02:54,640 --> 00:03:02,240
+At this point, I want to stress that the topic
+of security is a very broad and complicated
+
+33
+00:03:02,240 --> 00:03:09,290
+one, and this lecture does not aim at covering
+all aspects of it, of course.
+
+34
+00:03:09,290 --> 00:03:15,220
+If we focus on the type of attacks and security
+threats that exist, we can list (among others),
+
+35
+00:03:15,220 --> 00:03:21,629
+worms: freestanding programs that can propagate
+through various computers without user intervention,
+
+36
+00:03:21,629 --> 00:03:28,569
+viruses, which on the other hand will attach
+to files and programs and will propagate depending
+
+37
+00:03:28,569 --> 00:03:35,180
+on how users interact with infected files
+and programs, trojan horses, malware disguised
+
+38
+00:03:35,180 --> 00:03:40,319
+as legitimate software, Denial of Service
+and Distributed Denial of Service attacks,
+
+39
+00:03:40,319 --> 00:03:45,011
+and so on...
+If we focus on the concept of "victim", we
+
+40
+00:03:45,011 --> 00:03:50,030
+must note that being a victim of a security
+incident does not imply the attacker is after
+
+41
+00:03:50,030 --> 00:03:55,980
+you or your data, the attacker might be using
+you to achieve his or her goals.
+
+42
+00:03:55,980 --> 00:04:00,329
+In this lecture, we will only focus on some
+security aspects that concern the Operating
+
+43
+00:04:00,329 --> 00:04:01,370
+System.
+
+44
+00:04:01,370 --> 00:04:07,879
+More concretely, we will focus on
+confidentiality, which is about keeping secret
+
+45
+00:04:07,879 --> 00:04:13,010
+data secret or ensuring data is accessed only
+by authorized people,
+
+46
+00:04:13,010 --> 00:04:18,760
+integrity, which is about ensuring data is
+modified only by authorized persons,
+
+47
+00:04:18,760 --> 00:04:22,790
+and availability, which is about ensuring
+no one can disturb the system and make it
+
+48
+00:04:22,790 --> 00:04:28,070
+unusable.
+As you can imagine, these are not the only
+
+49
+00:04:28,070 --> 00:04:35,480
+security aspects one can think about, but
+we will not cover additional ones.
+
+50
+00:04:35,480 --> 00:04:41,310
+Something worth mentioning here is that we
+often hear the term hacker used to refer to
+
+51
+00:04:41,310 --> 00:04:45,500
+malicious attackers.
+In reality, a hacker only refers to someone
+
+52
+00:04:45,500 --> 00:04:51,390
+with excellent programming skills. We can
+differentiate between white hats, who try
+
+53
+00:04:51,390 --> 00:04:57,030
+to attack a system and develop security tools
+to make such a system more secure, and black
+
+54
+00:04:57,030 --> 00:05:03,590
+hats, who on the other hand use the same tools
+(and hence the expression dual use) with malicious
+
+55
+00:05:03,590 --> 00:05:07,330
+intentions.
+
+56
+00:05:07,330 --> 00:05:13,000
+It is also worth mentioning that attacks can
+be classified along different dimensions.
+
+57
+00:05:13,000 --> 00:05:17,980
+They could be differentiated between passive
+and active ones, for instance.
+
+58
+00:05:17,980 --> 00:05:24,690
+In practice, there’s no silver bullet to
+handle all security aspects. We usually end
+
+59
+00:05:24,690 --> 00:05:29,690
+up using a combination of various techniques,
+including cryptography, software hardening
+
+60
+00:05:29,690 --> 00:05:35,630
+(which we will cover later), and even more
+(Intel SGX is an interesting example of a
+
+61
+00:05:35,630 --> 00:05:41,750
+recent approach, which is currently a hot
+research topic).
+
+62
+00:05:41,750 --> 00:05:47,040
+Security practitioners usually talk of trusted
+rather than secure systems. A trusted system
+
+63
+00:05:47,040 --> 00:05:53,650
+is a system that has formally stated security
+requirements that it meets. For a system to
+
+64
+00:05:53,650 --> 00:06:00,720
+be trusted, we usually need to identify the
+Trusted Computing Base, so the portion of
+
+65
+00:06:00,720 --> 00:06:07,600
+hardware, kernel, and user processes with
+root-level access that can affect security.
+
+66
+00:06:07,600 --> 00:06:13,770
+Such portion should be kept as small as possible,
+to make it easier to maintain it.
+
+67
+00:06:13,770 --> 00:06:19,610
+Once we have our TCB, we need a model that
+specifies what should be protected, who can
+
+68
+00:06:19,610 --> 00:06:25,580
+do what, and what type of adversary we can
+deal with (his/her power, basically) and make
+
+69
+00:06:25,580 --> 00:06:31,980
+sure all system calls are checked by a so-called
+reference monitor before entering/operating
+
+70
+00:06:31,980 --> 00:06:35,350
+in the TCB.
+

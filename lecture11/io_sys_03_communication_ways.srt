@@ -1,0 +1,236 @@
+1
+00:00:05,339 --> 00:00:15,840
+now the question is we have this type of devices
+and they are connected us we just saw the
+
+2
+00:00:15,840 --> 00:00:21,970
+question is how can the processor give commands
+and data to the specific controller when it wants
+
+3
+00:00:21,970 --> 00:00:23,980
+to do I/O?
+
+4
+00:00:23,980 --> 00:00:34,230
+so there are basically two ways to go the first way
+to go here is to have basically direct communication
+
+5
+00:00:34,230 --> 00:00:42,410
+with the controllers so the CPU in this case
+is reading and writing directly into the registers
+
+6
+00:00:42,410 --> 00:00:50,379
+the small memories of the controllers with
+special instructions that allow the CPU to directly
+
+7
+00:00:50,379 --> 00:00:54,079
+communicate with the devices
+
+8
+00:00:54,079 --> 00:01:00,620
+so if the CPU wants to issue a request
+to read something from the disk then it will
+
+9
+00:01:00,620 --> 00:01:07,579
+go and read and write registers that belong
+to the controller that is the one behind which
+
+10
+00:01:07,579 --> 00:01:09,590
+you have the disks
+
+11
+00:01:09,590 --> 00:01:16,850
+the alternative way is to use and this is
+what is commonly used memory mapped I/O
+
+12
+00:01:16,850 --> 00:01:24,939
+in this case the registers of the controllers
+are mapped into the main memory so in the address
+
+13
+00:01:24,939 --> 00:01:31,079
+space of the processor that are special parts of the main
+memory that are actually mirrors
+
+14
+00:01:31,079 --> 00:01:37,979
+if you want of the registers of the different
+devices now then the CPU writes and reads only
+
+15
+00:01:37,979 --> 00:01:47,049
+main memory but when it writes or reads to specific
+portions of it what is doing is actually writing
+
+16
+00:01:47,049 --> 00:01:50,939
+and reading to the registers of specific controllers
+
+17
+00:01:50,939 --> 00:01:59,649
+you can also use at the same time both ways
+of communication depending on the devices
+
+18
+00:01:59,649 --> 00:02:08,770
+you want to communicate with so this is version
+one here the CPU has dedicated channels physically
+
+19
+00:02:08,770 --> 00:02:21,409
+wires that are used the allow the CPU to run dedicated
+instructions that can write or read specific bytes
+
+20
+00:02:21,409 --> 00:02:23,280
+in the memory of the controller
+
+21
+00:02:23,280 --> 00:02:30,730
+so in this case the CPU needs to have special
+instructions what it wants for example to
+
+22
+00:02:30,730 --> 00:02:39,099
+read or write from the disk or read and write from the 
+network card and so on the alternative is to rely on someone
+
+23
+00:02:39,099 --> 00:02:43,069
+sitting in the middle between the CPU and
+the different controllers
+
+24
+00:02:43,069 --> 00:02:50,769
+and this will be usually the motherboard to
+memory-mapped I/O so in this case parts as I said
+
+25
+00:02:50,769 --> 00:02:56,400
+of the main memory are mirrors of the registers
+of the devices and it's the motherboard that
+
+26
+00:02:56,400 --> 00:03:03,049
+takes care of keeping these copies consistent
+so that whenever the CPU writes or reads into memory
+
+27
+00:03:03,049 --> 00:03:07,980
+actually these the information that is
+being written
+
+28
+00:03:07,980 --> 00:03:14,189
+into the registers is moved also to the controller
+when the controller updates this information
+
+29
+00:03:14,189 --> 00:03:23,290
+that information is also brought back to that main memory 
+for the CPU to see that the information has changed
+
+30
+00:03:23,290 --> 00:03:28,580
+an example a classic example is
+the graphics controller
+
+31
+00:03:28,580 --> 00:03:37,230
+there is a significantly large part of the
+memory that is used to hold the screen contents
+
+32
+00:03:37,230 --> 00:03:42,769
+this is memory-mapped I/O the processor
+sends the output for the screen what you are
+
+33
+00:03:42,769 --> 00:03:47,749
+going to see on the screen right in this special
+region of the memory
+
+34
+00:03:47,749 --> 00:03:54,790
+and then the motherboard takes care of sharing
+this data with the graphics controller that translates
+
+35
+00:03:54,790 --> 00:04:01,500
+that into the thing that you actually see
+on screen and this is just an example of the
+
+36
+00:04:01,500 --> 00:04:10,110
+specific portions of memory which are reserved
+for a specific controller for example for
+
+37
+00:04:10,110 --> 00:04:17,200
+this controller and so on for the graphics controller and so on
+
+38
+00:04:17,200 --> 00:04:25,430
+now the registers you have usually are the following
+ones for the controllers you have to data in register
+
+39
+00:04:25,430 --> 00:04:32,199
+this is read by the host to get input and
+the data out register which is written by
+
+40
+00:04:32,199 --> 00:04:37,430
+the host to send output the host here would be the CPU
+
+41
+00:04:37,430 --> 00:04:47,580
+and then you have the status registers that contain bits
+that can be read by the host these are bits indicating
+
+42
+00:04:47,580 --> 00:04:53,770
+for example whether the current command has completed 
+whether a byte is available to be read or whether or a device
+
+43
+00:04:53,770 --> 00:04:58,620
+error has occurred and so it depends of course on the type
+of controller you are communicating with
+
+44
+00:04:58,620 --> 00:05:05,530
+you have control registers to start commands or to
+change the mode of a device so let's see
+
+45
+00:05:05,530 --> 00:05:11,390
+for example you can have a certain bit in
+the control register of a set of serial port to chose
+
+46
+00:05:11,390 --> 00:05:15,669
+between full duplex or only haf-duplex for the communication
+
+47
+00:05:15,669 --> 00:05:22,270
+so one direction on both directions at the
+same time or you can have bits that are set
+
+48
+00:05:22,270 --> 00:05:30,990
+by the host to specify the word length let's say to seven or
+eight bits that are supported by a specific
+
+49
+00:05:30,990 --> 00:05:31,560
+serial port
+

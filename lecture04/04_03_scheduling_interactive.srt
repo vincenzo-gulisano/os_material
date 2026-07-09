@@ -1,0 +1,382 @@
+1
+00:00:01,050 --> 00:00:04,510
+let's now move to the scheduling for interactive
+systems
+
+2
+00:00:04,510 --> 00:00:08,700
+so this is a list of scheduling strategies
+these are discussed in the book
+
+3
+00:00:08,700 --> 00:00:17,630
+we are going to go through three of them
+so let's start with round-robin
+
+4
+00:00:17,630 --> 00:00:22,470
+we begin by defining a quantum so a time interval
+during which
+
+5
+00:00:22,470 --> 00:00:28,699
+the process can run with run
+round-robin the idea is that we let each processor run
+
+6
+00:00:28,699 --> 00:00:32,119
+for a while
+and we're just going in a round-robin fashion as
+
+7
+00:00:32,119 --> 00:00:35,239
+the name suggests
+so we take process one and process to then
+
+8
+00:00:35,239 --> 00:00:37,960
+process three
+that this will take them from the queue of
+
+9
+00:00:37,960 --> 00:00:39,789
+ready processes
+we have
+
+10
+00:00:39,789 --> 00:00:43,170
+and whenever we start executing our process
+we let it run
+
+11
+00:00:43,170 --> 00:00:49,559
+for a certain period of time the quantum
+after that we stop the process and we schedule
+
+12
+00:00:49,559 --> 00:00:54,420
+the following
+one it's simple to implement just keep a list
+
+13
+00:00:54,420 --> 00:00:59,190
+of ready
+processes what is challenging here is to identify
+
+14
+00:00:59,190 --> 00:01:03,019
+the right
+length for the quantum
+
+15
+00:01:03,019 --> 00:01:07,580
+if you take quantums that are too short then
+you have high overhead
+
+16
+00:01:07,580 --> 00:01:10,620
+because you have to do a lot of context switches
+frequently
+
+17
+00:01:10,620 --> 00:01:14,750
+so you're wasting resources many times to
+switch between
+
+18
+00:01:14,750 --> 00:01:19,010
+processes instead of letting the processes
+run
+
+19
+00:01:19,010 --> 00:01:23,460
+on the other hand if you have a quantum that
+is too long
+
+20
+00:01:23,460 --> 00:01:34,490
+then you will probably affect responsiveness
+so if you take this example if you have 50
+
+21
+00:01:34,490 --> 00:01:38,630
+processes okay
+and you look at the last one and you are using
+
+22
+00:01:38,630 --> 00:01:43,920
+this round-robin
+scheduling and the quantum is 100 milliseconds
+
+23
+00:01:43,920 --> 00:01:46,270
+then
+you see that for this process to start it
+
+24
+00:01:46,270 --> 00:01:50,010
+will take five
+seconds and this of course it's not really a
+
+25
+00:01:50,010 --> 00:01:54,190
+responsive
+system if it takes five seconds before a process
+
+26
+00:01:54,190 --> 00:01:56,390
+gets assigned
+to the CPU
+
+27
+00:01:56,390 --> 00:02:00,460
+so it goes from ready to running actually
+because you don't
+
+28
+00:02:00,460 --> 00:02:03,580
+know it
+but it might be that this process is actually
+
+29
+00:02:03,580 --> 00:02:06,440
+the shortest one
+and it's I/O bound
+
+30
+00:02:06,440 --> 00:02:09,450
+so actually running it in the beginning would
+not really
+
+31
+00:02:09,450 --> 00:02:13,950
+change much for the others but it would make
+a significant
+
+32
+00:02:13,950 --> 00:02:19,580
+difference for this specific process
+something we can do is to do something a bit
+
+33
+00:02:19,580 --> 00:02:26,780
+more accurate or
+let's say to have different priorities as
+
+34
+00:02:26,780 --> 00:02:30,540
+the name suggests
+priority scheduling for the different processes
+
+35
+00:02:30,540 --> 00:02:34,530
+this is based on the assumption which is true
+in many
+
+36
+00:02:34,530 --> 00:02:38,610
+cases that not all processes are equally important
+
+37
+00:02:38,610 --> 00:02:45,370
+so we assign priorities to the processes
+this we can do it statically before they are
+
+38
+00:02:45,370 --> 00:02:47,640
+started or
+this can be also done dynamically
+
+39
+00:02:47,640 --> 00:02:53,720
+so the priorities can change during the execution
+and it can be the operating system that does
+
+40
+00:02:53,720 --> 00:02:57,510
+this or even the
+user that specifies the priority
+
+41
+00:02:57,510 --> 00:03:01,170
+and we can of course combine priority with round-robin
+
+42
+00:03:01,170 --> 00:03:08,810
+so it would look something like this
+instead of a single list of processes we can
+
+43
+00:03:08,810 --> 00:03:13,220
+keep several
+lists and each list has a certain priority level
+
+44
+00:03:13,220 --> 00:03:17,300
+here we can assume that the highest priority
+means it's more
+
+45
+00:03:17,300 --> 00:03:23,350
+so the higher value for the priority means it
+as a higher priority
+
+46
+00:03:23,350 --> 00:03:27,280
+then you can start by running for example
+in a round robin
+
+47
+00:03:27,280 --> 00:03:30,810
+fashion you can combine these two the ones
+that have priority
+
+48
+00:03:30,810 --> 00:03:33,780
+for and once all of these are done you can
+start running
+
+49
+00:03:33,780 --> 00:03:36,810
+in a round robin fashion the ones that have
+priority three
+
+50
+00:03:36,810 --> 00:03:39,530
+if everything is done here then you can move
+the priority
+
+51
+00:03:39,530 --> 00:03:45,270
+two and so on
+so if you think back at the example I made
+
+52
+00:03:45,270 --> 00:03:51,310
+about the first
+come first serve and why it's not really optimal
+
+53
+00:03:51,310 --> 00:03:59,180
+for giving
+a fair amount of resources and making all
+
+54
+00:03:59,180 --> 00:04:04,280
+processes finish
+rather soon especially if they can you can
+
+55
+00:04:04,280 --> 00:04:07,220
+see that this
+could potentially solve the problem because
+
+56
+00:04:07,220 --> 00:04:11,380
+you could put
+the processes that are I/O bound in the list that
+
+57
+00:04:11,380 --> 00:04:15,170
+has a higher
+priority and then the ones that are CPU bound
+
+58
+00:04:15,170 --> 00:04:19,400
+in the list
+that have a lower priority
+
+59
+00:04:19,400 --> 00:04:22,169
+think about this
+you will see that this would solve the previous
+
+60
+00:04:22,169 --> 00:04:26,460
+problem
+the last one is lottery scheduling
+
+61
+00:04:26,460 --> 00:04:30,180
+it's nothing different from what the name
+
+62
+00:04:30,180 --> 00:04:32,580
+is actually saying
+it's lottery scheduling
+
+63
+00:04:32,580 --> 00:04:39,240
+so it's an alternative to priority scheduling
+that allows
+
+64
+00:04:39,240 --> 00:04:42,490
+you to control better how you give resources
+to the different
+
+65
+00:04:42,490 --> 00:04:48,779
+processes each process gets assigned a set
+of lottery tickets
+
+66
+00:04:48,779 --> 00:04:52,639
+okay it's not one
+it's not a specific number
+
+67
+00:04:52,639 --> 00:04:59,250
+you just get a certain number of
+tickets
+
+68
+00:04:59,250 --> 00:05:02,400
+and to decide which is the next process that should
+run
+
+69
+00:05:02,400 --> 00:05:09,400
+the operating system will draw a random choose
+a random ticket
+
+70
+00:05:09,400 --> 00:05:13,819
+and who has the ticket is the one that gets
+access to the
+
+71
+00:05:13,819 --> 00:05:17,479
+cpu so you can imagine that if you want the
+process to run
+
+72
+00:05:17,479 --> 00:05:21,589
+50% of the time and older two processes to
+run each 25% of
+
+73
+00:05:21,589 --> 00:05:25,520
+the time then you can distribute a certain
+number of tickets
+
+74
+00:05:25,520 --> 00:05:31,629
+accordingly to these proportions
+and then on the average this is what will
+
+75
+00:05:31,629 --> 00:05:34,309
+happen when you
+use the lottery scattering
+
+76
+00:05:34,309 --> 00:05:37,520
+so it's easier to map portions of resources
+to give to a
+
+77
+00:05:37,520 --> 00:05:41,629
+process because it is basically the portion
+of tickets you give to that process
+

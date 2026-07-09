@@ -1,0 +1,129 @@
+1
+00:00:01,680 --> 00:00:06,960
+Starting with this lecture, we are going to 
+discuss classic synchronization problems. 
+
+2
+00:00:07,520 --> 00:00:11,760
+The first such problem is the 
+bounded-buffer producer/consumer problem.
+
+3
+00:00:12,640 --> 00:00:17,120
+Just a reminder: what we are trying 
+to do here is to study/discuss  
+
+4
+00:00:17,120 --> 00:00:20,000
+how we can use basic building blocks,  
+
+5
+00:00:20,640 --> 00:00:26,080
+synchronization primitives in this case, to 
+compose applications that have certain semantics.
+
+6
+00:00:27,680 --> 00:00:31,200
+So, for the bounded producer-consumer 
+buffer, it looks like this. 
+
+7
+00:00:31,920 --> 00:00:37,680
+We have one producer that wants to add items 
+in a queue and a consumer that reads them. 
+
+8
+00:00:38,720 --> 00:00:42,800
+As you can imagine, the queue itself 
+is what we need to handle with care,  
+
+9
+00:00:42,800 --> 00:00:48,480
+inside the critical section. Why is that? 
+because the producer must be sure there's  
+
+10
+00:00:48,480 --> 00:00:52,320
+space in the buffer before adding 
+an element (it is a bounded buffer),  
+
+11
+00:00:53,520 --> 00:00:57,840
+and the consumer must be sure there's 
+something in the buffer before reading it. 
+
+12
+00:00:59,120 --> 00:01:03,840
+Let’s try to find a solution for this 
+critical section using semaphores
+
+13
+00:01:05,040 --> 00:01:10,880
+A way to put down such ideas is to draw a 
+diagram like the following one. As you can see,  
+
+14
+00:01:10,880 --> 00:01:15,440
+each critical section of a thread is 
+"wrapped" in a lock (this is just what  
+
+15
+00:01:16,400 --> 00:01:22,400
+we discussed before). The unlocking of the 
+critical section of a thread precedes the locking  
+
+16
+00:01:22,400 --> 00:01:28,960
+of the critical section of any of the two threads.
+For the producer, an extra wait should precede  
+
+17
+00:01:28,960 --> 00:01:34,160
+the locking of its critical section, because 
+if the queue is full the thread has to wait. 
+
+18
+00:01:35,360 --> 00:01:38,960
+For the consumer thread, a 
+while loop should precede  
+
+19
+00:01:38,960 --> 00:01:44,400
+the locking of its critical section to make 
+sure there are actually elements in the queue. 
+
+20
+00:01:46,000 --> 00:01:52,000
+When can the producer exit the while? 
+after the consumer removed an element.  
+
+21
+00:01:52,560 --> 00:01:57,120
+This can be signaled for sure after the 
+consumer exits its critical section. 
+
+22
+00:01:57,840 --> 00:02:02,720
+When can the consumer exit the while? 
+after the producer added an element.  
+
+23
+00:02:02,720 --> 00:02:07,840
+This can be signaled for sure after the 
+producer exits its critical section.
+
+24
+00:02:09,200 --> 00:02:13,120
+If you draw such a scheme, is 
+then easier to come up with  
+
+25
+00:02:13,680 --> 00:02:18,080
+pseudocode like the following one. As 
+for the previous lecture, take a moment  
+
+26
+00:02:18,080 --> 00:02:24,720
+later on and think about how to formally 
+reason about the validity of this solution.
+

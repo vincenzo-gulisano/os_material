@@ -1,0 +1,289 @@
+1
+00:00:00,840 --> 00:00:06,140
+Let's move now to the disk structure. How
+is the physical disk organized in order to
+
+2
+00:00:06,140 --> 00:00:12,990
+maintain one or more filesystems? So before
+we start with this,
+
+3
+00:00:12,990 --> 00:00:15,500
+think about the following question:
+
+4
+00:00:15,500 --> 00:00:23,529
+You have your laptop and it's currently turned
+off. You know you have the disk. What is persisted
+
+5
+00:00:23,529 --> 00:00:28,520
+on the disk is there and you can of course
+read it and write it. And now you know that
+
+6
+00:00:28,520 --> 00:00:31,480
+you actually read and write in blocks.
+
+7
+00:00:31,480 --> 00:00:34,820
+And then you have your main memory, but that
+is volatile memory, so since the computer
+
+8
+00:00:34,820 --> 00:00:41,050
+is turned off for what we know, it's empty.
+Now you know that you turn the computer on
+
+9
+00:00:41,050 --> 00:00:47,010
+and magically your operating system starts
+and then you can run your processes and so on.
+
+10
+00:00:47,010 --> 00:00:48,710
+So the question is:
+
+11
+00:00:48,710 --> 00:00:54,879
+How do we do that? so we know that we will
+need to read for sure something from the disk
+
+12
+00:00:54,879 --> 00:01:00,010
+and bring it into memory so that we start
+the processes and the very first process that will
+
+13
+00:01:00,010 --> 00:01:05,630
+start is the one that will
+actually eventually lead to the operating
+
+14
+00:01:05,630 --> 00:01:07,789
+system
+
+15
+00:01:07,789 --> 00:01:12,329
+being the process that runs, like we saw this
+when we discussed processes with the init
+
+16
+00:01:12,329 --> 00:01:19,549
+process. But how is this actually physically
+done? Well, the answer to that is that
+
+17
+00:01:19,549 --> 00:01:26,789
+again, this is collaboration between the hardware
+and the operating system. There is an agreement
+
+18
+00:01:26,789 --> 00:01:32,450
+about how things are stored on the disk
+so that when you turn on the computer, the
+
+19
+00:01:32,450 --> 00:01:33,969
+hardware
+
+20
+00:01:33,969 --> 00:01:40,279
+can go and take from the disk things and start
+the operating system. Because as we just said,
+
+21
+00:01:40,279 --> 00:01:45,560
+when the computer is off, volatile memory /
+main memory is basically empty, so where is
+
+22
+00:01:45,560 --> 00:01:49,890
+the operating system? How does the operating
+system know what to do given that it does
+
+23
+00:01:49,890 --> 00:01:57,380
+not exist yet? So this starts based on how
+your disk is organized. There is a fixed structure
+
+24
+00:01:57,380 --> 00:02:03,969
+for the disk and the hardware is aware of that
+and it uses such knowledge to actually boot
+
+25
+00:02:03,969 --> 00:02:05,159
+your computer.
+
+26
+00:02:05,159 --> 00:02:11,349
+So this is how it looks. You have partitions
+and each partition is basically a file system
+
+27
+00:02:14,480 --> 00:02:19,180
+Inside each partition we will see you have
+
+28
+00:02:19,180 --> 00:02:24,459
+the initial part that is about the specific type
+of file system and the rest that is actually
+
+29
+00:02:24,459 --> 00:02:29,969
+dependent on what the users are doing with
+that file system.
+
+30
+00:02:29,969 --> 00:02:35,060
+But we also have something called the master
+boot record and the agreement between the hardware
+
+31
+00:02:35,060 --> 00:02:40,319
+and the operating system, and in this case
+also the disk is that
+
+32
+00:02:40,319 --> 00:02:46,549
+this exists at the very beginning of the disk.
+OK, it starts at sector 0. If you have a rotating
+
+33
+00:02:46,549 --> 00:02:50,299
+disk or at another address, but there is an
+agreement about where it starts. Let's say
+
+34
+00:02:50,299 --> 00:02:56,180
+it starts at 0 in this case, and what you
+put there is the minimal
+
+35
+00:02:56,180 --> 00:03:04,299
+set of instructions that the hardware knows
+it needs to read, put in memory and start executing,
+
+36
+00:03:04,299 --> 00:03:10,129
+and that set of instructions are going to
+be the ones that decide which file system
+
+37
+00:03:10,129 --> 00:03:16,400
+to load, so inside which partition to go,
+and based on that which files to load to actually
+
+38
+00:03:16,400 --> 00:03:19,810
+start the operating system
+
+39
+00:03:19,810 --> 00:03:24,159
+The partition table, so the information about
+all the partitions is found at the end of the
+
+40
+00:03:24,159 --> 00:03:26,459
+master
+
+41
+00:03:26,459 --> 00:03:33,459
+boot record and again it's used by the code
+that you store in the master boot record to
+
+42
+00:03:33,459 --> 00:03:37,620
+actually decide which partition to run. So
+if you have a computer and you have multiple
+
+43
+00:03:37,620 --> 00:03:41,959
+operating systems, it means that you have multiple
+most likely partitions on each partition as
+
+44
+00:03:41,959 --> 00:03:49,280
+a different file system, and what you put
+in the master boot record is a set of instructions
+
+45
+00:03:49,280 --> 00:03:54,200
+that will interact with the user asking the
+user which system do you want to start, and
+
+46
+00:03:54,200 --> 00:03:59,569
+based on that, decide into which file system
+to go and which things to load to actually
+
+47
+00:03:59,569 --> 00:04:03,150
+wake up the operating system.
+
+48
+00:04:03,150 --> 00:04:08,569
+This again, it's done in a similar way, so
+basically at the very beginning of each partition
+
+49
+00:04:08,569 --> 00:04:12,939
+you have the boot block. There you will put
+again the stuff that the hardware needs to
+
+50
+00:04:12,939 --> 00:04:18,780
+load into memory and start executing to actually
+start the operating system, so that is
+
+51
+00:04:18,780 --> 00:04:24,800
+where you will put the operating system. Maybe
+not all of it, but at least the minimum set
+
+52
+00:04:24,800 --> 00:04:28,860
+of instructions you need to wake the operating
+system up and then let the operating system
+
+53
+00:04:28,860 --> 00:04:33,240
+go on with the rest of tasks.
+
+54
+00:04:33,240 --> 00:04:38,120
+This is what I said before. After the boot
+block usually have this so called Super Block
+
+55
+00:04:38,120 --> 00:04:42,889
+which contains information that is needed
+by the operating system. But now it's specific
+
+56
+00:04:42,889 --> 00:04:46,910
+to the operating system you are trying to
+load and to the file system that you use to
+
+57
+00:04:46,910 --> 00:04:51,240
+maintain the information of the operating
+system and after that you will have extra
+
+58
+00:04:51,240 --> 00:04:58,150
+things, but these usually depend on what
+the user is storing on the
+
+59
+00:04:58,150 --> 00:05:04,020
+file system, the files, what space is free,
+which again of course is a function of what
+
+60
+00:05:04,020 --> 00:05:06,500
+the user is doing with the file system, and
+so on and so forth.
+

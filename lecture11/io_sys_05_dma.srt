@@ -1,0 +1,243 @@
+1
+00:00:02,220 --> 00:00:08,090
+let's look now at direct memory access so
+we have discussed interrupts and now we know
+
+2
+00:00:08,090 --> 00:00:14,480
+that the CPU can be working on something and let
+the controller of a device send the signal when
+
+3
+00:00:14,480 --> 00:00:20,769
+something happens like some output has been
+written disk or some input is available
+
+4
+00:00:20,769 --> 00:00:23,769
+for the CPU and so on
+
+5
+00:00:23,769 --> 00:00:32,119
+so there is an extra mechanism that also is
+supported hardware that takes away
+
+6
+00:00:32,119 --> 00:00:37,250
+even more job from the CPU when it comes to
+transferring large amounts of data to specific
+
+7
+00:00:37,250 --> 00:00:43,000
+devices and that is direct memory access
+
+8
+00:00:43,000 --> 00:00:48,710
+the idea is that if you have to transfer a big
+chunk of data from main memory to the disk
+
+9
+00:00:48,710 --> 00:01:00,190
+for example since you have to send them in
+specific chunks depending on what is the size
+
+10
+00:01:00,190 --> 00:01:04,210
+of the buffers you have at the controller
+and the device to transfer data
+
+11
+00:01:04,210 --> 00:01:10,470
+having the CPU do this job would even if it
+is optimized with interrupts it would still
+
+12
+00:01:10,470 --> 00:01:17,390
+consume time that the CPU can actually spend
+running other processes
+
+13
+00:01:17,390 --> 00:01:22,330
+so what happens in modern hardware is that you
+have a dedicated controller that is the dma
+
+14
+00:01:22,330 --> 00:01:26,080
+controller the direct memory access that
+you can just think of as
+
+15
+00:01:26,080 --> 00:01:32,310
+an extra controller that takes care of transferring
+stuff/data from memory to devices or
+
+16
+00:01:32,310 --> 00:01:39,560
+from devices to memory and then notify the
+CPU when the transfer is complete so it's an
+
+17
+00:01:39,560 --> 00:01:45,250
+extra helper if you want at the hardware level
+that takes care of transferring data from
+
+18
+00:01:45,250 --> 00:01:50,020
+the main memory to the devices in both directions
+depending of
+
+19
+00:01:50,020 --> 00:01:59,100
+course on the type of device so basically
+when you initiate when you want to initiate
+
+20
+00:01:59,100 --> 00:02:06,530
+the transfer of using direct memory access
+the host writes in a specific portion or address
+
+21
+00:02:06,530 --> 00:02:14,470
+in memory that the DMA has access specifying
+basically what information needs to be copied
+
+22
+00:02:14,470 --> 00:02:18,340
+and what is the destination and then the
+controller of the DMA takes care
+
+23
+00:02:18,340 --> 00:02:24,840
+of actually doing the copy /
+the transferring of data
+
+24
+00:02:24,840 --> 00:02:32,930
+you need of course an handshaking protocol
+routine also when you want to coordinate with
+
+25
+00:02:32,930 --> 00:02:40,150
+the DMA this is about of course
+the controllers that need to transfer data
+
+26
+00:02:40,150 --> 00:02:45,090
+using that the DMA controller for example
+a disk that wants to
+
+27
+00:02:45,090 --> 00:02:52,770
+use the DMA controller and also in this case you
+have dedicated lines for requests and acknowledgment
+
+28
+00:02:52,770 --> 00:03:03,980
+from the DMA controller so I
+think the easiest is if I show you this image
+
+29
+00:03:03,980 --> 00:03:13,200
+here so let's say the CPU is running 
+a certain process and then at a certain point
+
+30
+00:03:13,200 --> 00:03:14,739
+it needs to transfer data
+
+31
+00:03:14,739 --> 00:03:23,640
+to the disk a big chunk of data to the disk so
+this is step one what is happening in your
+
+32
+00:03:23,640 --> 00:03:35,140
+computer modern hardware is that
+the CPU will send the request to the controller
+
+33
+00:03:35,140 --> 00:03:40,950
+to transfer the desired amount of data from
+a disk to main memory
+
+34
+00:03:40,950 --> 00:03:49,269
+after that the controller of the disk will
+actually coordinate with the DMA controller
+
+35
+00:03:49,269 --> 00:03:56,970
+the direct memory access controller here
+and send the data to disk controller so basically
+
+36
+00:03:56,970 --> 00:04:04,470
+the DMA is now acting instead of the
+CPU when it comes to taking the data that
+
+37
+00:04:04,470 --> 00:04:07,819
+comes from the disk and placedthat into memory
+at a
+
+38
+00:04:07,819 --> 00:04:13,489
+specific buffer so the DMA takes care of
+this work while the CPU is able to do other
+
+39
+00:04:13,489 --> 00:04:22,060
+things run other processes it will take
+a while for the disk for the controller of
+
+40
+00:04:22,060 --> 00:04:24,950
+the disk to send the bytes to the DMA controller
+
+41
+00:04:24,950 --> 00:04:32,650
+and the controller will keep adding to the
+buffer here in the main memory until of course
+
+42
+00:04:32,650 --> 00:04:39,840
+everything has been written to memory then
+the interrupt that is sent to the CPU to say
+
+43
+00:04:39,840 --> 00:04:45,430
+the data you wanted from the disk is now
+in memory will be actually generated by the
+
+44
+00:04:45,430 --> 00:04:46,740
+DMA controller
+
+45
+00:04:46,740 --> 00:04:55,781
+so the CPU reaches the point in a process
+in which a system call says you need to transfer
+
+46
+00:04:55,781 --> 00:05:02,110
+something from the disk then the controller
+of the disk communicates with the DMA so the
+
+47
+00:05:02,110 --> 00:05:04,070
+CPU goes on doing other things
+
+48
+00:05:04,070 --> 00:05:11,500
+and the final interrupt that will create a
+context switch eventually so that the CPU can
+
+49
+00:05:11,500 --> 00:05:16,590
+go and start running again the process that
+was waiting for the data comes from the DMA
+
+50
+00:05:16,590 --> 00:05:18,500
+controller in this case
+

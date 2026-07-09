@@ -1,0 +1,58 @@
+Now that we have seen the challenges behind the scheduling, when we have multiprocessor architectures hardware, let's look at some scheduling strategies for this kind of architectures. And let's start with the time sharing.
+
+So something we can do is to share one multiprocessor detector under the time domain. So basically all processes can run, but they need to share overtime the resource.
+
+We can go for something simple, yet we can have a single system wide data structure. In this case we can have priorities and then within each priority level we could iterate using around robbing and we keep your older ready threads and whenever CPU goes idle we take the next.
+
+Already process we have in the queue with the August priority. So when this CPO four goes, either we put process a which was here.
+
+The first with the Argus priority, then CPU to outflows idol. We take big which was here the current next ready process with the August priority, and so on and so forth.
+
+It's.
+
+Either teams, it balances the load automatically 'cause after awhile all threads will be used and all.
+
+Sorry, of course will be used in all threads, can be assigned to any color.
+
+There can be of course, contain contention because you have a single infrastructure where you keep everything but you suffer from the affinity problem. The one I mentioned before about the fact that course have their own caches, and if you schedule a thread in the same corner it was running before, then there are chances that you will find the thread will find some stuff in the cash that is already valid and it will require less interaction with the main memory.
+
+So it will perform better.
+
+What you can do is to about two level scheduling algorithm when you go for a time sharing option. OK, so you could have.
+
+These data structures, or let's say, the collection of threads you have, you can have one for each CPU and you assign these threads to the CPUs at creation time.
+
+Of course it doesn't need to be straight, meaning that if a CPU has nothing to do is still better to steal some threads and or something that even if these threads are assigned to other CPUs that just let the CPU or wasted OK. But you still have a, you can still achieve achieve a balance load, but then you have also cache affinity because you will type ability, place each thread back to the Corey what so it was running before and also less contention because you have this dedicated per CPU.
+
+Lists or sets of threads.
+
+Something different you can do is then instead of timesharing to go for space sharing. So when a set of related threads OK, so a process that is multithreaded is created. The operating system, assuming there are of course, enough course enough CPUs, it will try to schedule all the threads at the same time OK, and then it lets the Trump's that writes run.
+
+Until they're done OK, here we don't care about the time dimension, so if one specific thread that belongs to a group soft red is actually requesting some input output, we don't release the CPU core to give it to another thread. We just wait for the input output to be done, and then we keep running all the threads, as are all the things that belong to the same process as a single block, and they are.
+
+Placed into the same CPU so close by, and this can also be beneficial. As we said before, for nonuniform memory architectures.
+
+Then what you can do is in practice to go for a mixture of the two, so you shall both on time and in in space. And this is what the gang scheduling is. So you see that.
+
+The problem with space sharing is that they can be inefficient 'cause we have a lot of higher bound processes, why would you?
+
+Waste course giving them to threads that are just waiting instead of reallocating them to something else, but on the other hand, if you go for time sharing, you can have situations like the following. One year. Suppose you have a seat on the A1. They're two threads. They belong to the same process and they.
+
+One is a producer and monitor consumer, so they need to communicate.
+
+You can end up scheduling that reads like this, so it's a zero that runs than a 180 and one and so here you could potentially waste a lot of time because a zero it starts running but sends a message to a one and until A1 does not reply, a zero can not.
+
+More forward so this entire quantum can go basically wasted, cause a zero is waiting for reply from a one. Then you start running a one here.
+
+It sends the reply back to zero and then it does nothing to do until 80.
+
+As you request.
+
+And this quantum is also wasted and you can see that you can end up in this kind of situations if you just try to schedule on on time. OK, So what you do is that you try to schedule groups of related threads at the same time, but also close by. So trying to take into account both time and space, OK or gang members run at once.
+
+And all gang members start under Quantum together.
+
+This is just an example of a possible execution, so you have six CPUs here, and these are the time slot. So you see that for a certain slot you run process a task 6 threads at the slot 2 you're on on the first three CPUs B, and on the last three C. Then you run the hear me and you keep running E on all the users in the next Lotus on. So you can see that there is time sharing, but then there is also groups of threads that belong to the same process that are run at the same time to maximize also.
+
+Space sharing
+

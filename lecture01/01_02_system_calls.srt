@@ -1,0 +1,387 @@
+1
+00:00:01,350 --> 00:00:09,250
+let's move to system calls so how does
+the operating system allow users and programs
+
+2
+00:00:09,250 --> 00:00:14,990
+to use an interface with the hardware and
+the resources of a computer the answer to
+
+3
+00:00:14,990 --> 00:00:24,190
+that question is system calls there is a middle
+layer which consists of all the functions
+
+4
+00:00:24,190 --> 00:00:28,500
+the operating system keeps for the applications
+to actually communicate with
+
+5
+00:00:28,500 --> 00:00:31,660
+the hardware when you want to open a file
+you
+
+6
+00:00:31,660 --> 00:00:34,670
+need to read from the disk what you do is
+
+7
+00:00:34,670 --> 00:00:41,220
+that let's say you double click on an icon
+in your desktop when you do this at a certain
+
+8
+00:00:41,220 --> 00:00:45,289
+point you would need to use a function that
+is actually reading the stuff from the disk
+
+9
+00:00:45,289 --> 00:00:46,469
+that function belongs
+
+10
+00:00:46,469 --> 00:00:50,699
+to the operating system which means that when
+you want to read a file at a certain point
+
+11
+00:00:50,699 --> 00:00:54,440
+you will enter a function that belongs to
+the operating system and the operating system
+
+12
+00:00:54,440 --> 00:01:00,729
+will take control and do the required job
+which is communicate with the hardware in
+
+13
+00:01:00,729 --> 00:01:01,729
+this
+
+14
+00:01:01,729 --> 00:01:02,729
+case
+
+15
+00:01:02,729 --> 00:01:09,561
+the disk to read or to write to a file
+when we discuss system calls we need to talk
+
+16
+00:01:09,561 --> 00:01:19,229
+about dual mode and multimodal operation
+there's a reason why we have a system
+
+17
+00:01:19,229 --> 00:01:21,109
+calls in the operating system
+
+18
+00:01:21,109 --> 00:01:23,979
+you can think of these questions or similar
+ones:
+
+19
+00:01:23,979 --> 00:01:26,100
+what if a program gets stuck in an infinite
+
+20
+00:01:26,100 --> 00:01:31,540
+loop? what if it alters the data of another
+program what if it modifies the operating
+
+21
+00:01:31,540 --> 00:01:32,939
+system?
+
+22
+00:01:32,939 --> 00:01:36,270
+you see that there are a lot of things that
+could happen that are potentially dangerous
+
+23
+00:01:36,270 --> 00:01:41,240
+so what you want is to protect the hardware
+and the operating system and the other users
+
+24
+00:01:41,240 --> 00:01:46,220
+by having this middle layer which you need
+to give control to the operating system in
+
+25
+00:01:46,220 --> 00:01:52,929
+order to do sensitive operations of course
+here I am sort of implicitly assuming that
+
+26
+00:01:52,929 --> 00:01:56,409
+we have a bug free operating system
+
+27
+00:01:56,409 --> 00:01:59,929
+it's not a malicious operating system it's
+not corrupted so we can trust the operating
+
+28
+00:01:59,929 --> 00:02:03,940
+system of course if this assumption does not
+hold what i'm saying doesn't really make sense
+
+29
+00:02:03,940 --> 00:02:07,399
+but from this course let's assume that the
+operating system is something that is working
+
+30
+00:02:07,399 --> 00:02:11,550
+correctly and that we can trust
+
+31
+00:02:11,550 --> 00:02:17,720
+so it turns out that when you want to talk
+with the hardware/whether you are allowed
+
+32
+00:02:17,720 --> 00:02:25,360
+to do that or not depends on a certain bit
+that it's set in a register of the hardware
+
+33
+00:02:25,360 --> 00:02:28,860
+this mode bit can have two values
+
+34
+00:02:28,860 --> 00:02:39,160
+let's assume it just has two values for now
+if the value is equal to zero then
+
+35
+00:02:39,160 --> 00:02:43,600
+the hardware assumes you are in kernel mode
+so it assumes that who is trying to communicate
+
+36
+00:02:43,600 --> 00:02:46,220
+with the hardware is the operating system
+
+37
+00:02:46,220 --> 00:02:51,450
+when the bit is set to one it assumes that
+two is running the command is the user or
+
+38
+00:02:51,450 --> 00:02:57,470
+the application of the user so in this case
+we're talking about user mode which is
+
+39
+00:02:57,470 --> 00:02:59,510
+the opposite to kernel mode
+
+40
+00:02:59,510 --> 00:03:05,750
+if you try to run up privileged instruction
+so to basically do an input/output
+
+41
+00:03:05,750 --> 00:03:08,690
+operation with the hardware without setting
+the
+
+42
+00:03:08,690 --> 00:03:11,710
+kernel (the mode bit to 0 without being in
+kernel
+
+43
+00:03:11,710 --> 00:03:15,230
+mode) than the hardware will create
+an interrupt
+
+44
+00:03:15,230 --> 00:03:19,610
+remember what I said before and it will wake
+up the operating system because someone is
+
+45
+00:03:19,610 --> 00:03:24,910
+trying to get some information or some interaction
+with the hardware without being allowed to
+
+46
+00:03:24,910 --> 00:03:25,910
+because
+
+47
+00:03:25,910 --> 00:03:29,340
+it is not the operating system this is what
+that I said
+
+48
+00:03:29,340 --> 00:03:37,330
+is it a privileged instruction? then it can
+only be executed in kernel mode. Are you running
+
+49
+00:03:37,330 --> 00:03:38,330
+a
+
+50
+00:03:38,330 --> 00:03:43,820
+user program or is the computer in this
+case running a user program then you switch
+
+51
+00:03:43,820 --> 00:03:49,480
+the mode bit to one and then you can run
+the code so that that code if it tries to
+
+52
+00:03:49,480 --> 00:03:51,200
+do something with the hardware that it is
+not
+
+53
+00:03:51,200 --> 00:03:56,420
+allowed to do will cause an interrupt and
+this interrupt will wake up the operating
+
+54
+00:03:56,420 --> 00:03:58,570
+system
+
+55
+00:03:58,570 --> 00:04:04,640
+in practice there are more than two modes
+to think about virtual machines for example
+
+56
+00:04:04,640 --> 00:04:09,370
+we will discuss this in a dedicated lecture
+later on
+
+57
+00:04:09,370 --> 00:04:11,560
+you know that if you are running I don't know
+a
+
+58
+00:04:11,560 --> 00:04:15,530
+Windows machine inside your Ubuntu machine
+
+59
+00:04:15,530 --> 00:04:19,730
+in principle you can trust the Windows machine
+so when the Windows machine wants to do
+
+60
+00:04:19,730 --> 00:04:25,480
+some interaction with the hardware despite
+the fact that that is not the real operating
+
+61
+00:04:25,480 --> 00:04:28,690
+system attached to the hardware it's something
+you can trust so you
+
+62
+00:04:28,690 --> 00:04:33,680
+can try to give it let's say a bit of more
+power than you would give to an external application
+
+63
+00:04:33,680 --> 00:04:43,530
+you might not trust some system has four
+multiple levels for the different privileged
+
+64
+00:04:43,530 --> 00:04:44,530
+instructions
+
+65
+00:04:44,530 --> 00:04:47,320
+you have in your hardware still the important
+thing
+
+66
+00:04:47,320 --> 00:04:50,400
+is if you try to execute the privileged instruction
+
+67
+00:04:50,400 --> 00:04:51,940
+and you don't have the privilege because you
+
+68
+00:04:51,940 --> 00:04:57,480
+are not the kernel then an interrupt
+will wake up the operating system and the
+
+69
+00:04:57,480 --> 00:04:58,480
+operating
+
+70
+00:04:58,480 --> 00:05:08,750
+system will decide what to do based on its
+own code now even if you control the access
+
+71
+00:05:08,750 --> 00:05:12,430
+to the hardware (all hardware) through a system
+call
+
+72
+00:05:12,430 --> 00:05:15,280
+there is still a question here
+
+73
+00:05:15,280 --> 00:05:21,110
+what if I run a program that never tries to
+communicate with the hardware that never goes
+
+74
+00:05:21,110 --> 00:05:26,410
+through a system call, how do I make sure
+that this will terminate? so in general can
+
+75
+00:05:26,410 --> 00:05:31,140
+I be sure that each program will generate
+an interrupt?
+
+76
+00:05:31,140 --> 00:05:38,340
+the answer to that is no so what happens
+is that there is specialized hardware in this
+
+77
+00:05:38,340 --> 00:05:44,260
+case the clock that is continuously generating
+an interrupt periodically independently of
+
+78
+00:05:44,260 --> 00:05:50,430
+what other programs are doing and thanks
+to that you know that you will always periodically
+
+79
+00:05:50,430 --> 00:05:53,010
+wake up the operating system with an interrupt
+
+80
+00:05:53,010 --> 00:05:58,120
+and when the operating system wakes up it
+can then check whether everything is ok if
+
+81
+00:05:58,120 --> 00:05:59,120
+there
+
+82
+00:05:59,120 --> 00:06:06,770
+is a program that is running for too much
+time and so on so this is what I just said
+

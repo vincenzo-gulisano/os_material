@@ -1,0 +1,405 @@
+1
+00:00:01,520 --> 00:00:07,920
+let's move now to demand paging I'm going to 
+repeat some concept because I think uh it's good  
+
+2
+00:00:07,920 --> 00:00:14,480
+for virtual memory to repeat some stuff so that 
+you can hopefully digest it better so we said that  
+
+3
+00:00:14,480 --> 00:00:20,960
+we could bring the entire process into memory 
+when we want to start the process but in practice  
+
+4
+00:00:22,240 --> 00:00:29,440
+we can be more efficient if we just bring parts of 
+it and then react when the process needs something  
+
+5
+00:00:29,440 --> 00:00:35,920
+that is not in memory and this is of course 
+beneficial because you generate less input output  
+
+6
+00:00:35,920 --> 00:00:40,880
+you need less memory which means you can run 
+more processes or allow more users to run  
+
+7
+00:00:41,520 --> 00:00:48,720
+more processes of course you need to double 
+check that if the process tries to access a page  
+
+8
+00:00:48,720 --> 00:00:55,360
+and actually that page is not loaded in any 
+frame then you take the actions needed to firstly  
+
+9
+00:00:55,360 --> 00:01:00,320
+put the page in a frame and then tell the 
+process okay now you can access the page  
+
+10
+00:01:02,320 --> 00:01:07,120
+you can go with different strategies here you 
+can go for something that is extremely easy  
+
+11
+00:01:08,080 --> 00:01:15,360
+and then basically start a process without 
+actually loading any page as soon as the process  
+
+12
+00:01:15,360 --> 00:01:22,000
+asks for the very first address or the 
+very first instruction it will immediately  
+
+13
+00:01:23,600 --> 00:01:27,920
+generate an interrupt because you need to wake 
+up the operating system and put at least the  
+
+14
+00:01:27,920 --> 00:01:35,920
+first page into the frame so of course 
+it's not practical you would start the process by  
+
+15
+00:01:35,920 --> 00:01:39,840
+putting actually some page because you already 
+know that at least the initial ones will be  
+
+16
+00:01:40,640 --> 00:01:47,280
+needed but from a theoretical perspective 
+you can even go with this lazy swapper  
+
+17
+00:01:47,280 --> 00:01:52,560
+it can be used actually even in practice so 
+let's go through some basic concepts again  
+
+18
+00:01:53,360 --> 00:01:58,160
+we have a pager that is the one that brings 
+the pages into the frames when it's needed  
+
+19
+00:01:59,200 --> 00:02:03,920
+it's more complicated than just a paging 
+system that takes all the pages and loads  
+
+20
+00:02:03,920 --> 00:02:09,440
+all of them in a frame before starting a process 
+in practice you need to have extra functionality  
+
+21
+00:02:09,440 --> 00:02:16,080
+in the memory management unit we will see as 
+always you need to pay the costs either in  
+
+22
+00:02:16,080 --> 00:02:22,560
+time or in space we will see that we pay in 
+both space and time space when it comes to the  
+
+23
+00:02:23,200 --> 00:02:28,960
+page table and time when it comes to the time it 
+actually takes to access a page if it is not there
+
+24
+00:02:31,440 --> 00:02:38,000
+of course if the page is already there fine 
+then nothing needs to be done when the  
+
+25
+00:02:38,000 --> 00:02:43,600
+page is not there then we need to detect that 
+and load the page before the process can actually  
+
+26
+00:02:45,120 --> 00:02:49,680
+access it and of course we want to do this 
+dealing with this kind of problems at the  
+
+27
+00:02:49,680 --> 00:02:53,920
+operating system level so when you write 
+a program and you run a program you don't  
+
+28
+00:02:53,920 --> 00:02:58,960
+write such a program so that is compatible 
+with a system that uses virtual memory  
+
+29
+00:02:58,960 --> 00:03:03,280
+actually your laptop is using virtual memory but 
+when you write your program you just ignore so  
+
+30
+00:03:03,280 --> 00:03:06,960
+this is all things that are done by the 
+operating system in collaboration with  
+
+31
+00:03:07,680 --> 00:03:17,120
+the hardware so the first thing here we need is to 
+know is the page that i want to access in memory  
+
+32
+00:03:17,120 --> 00:03:24,880
+or not? to do this we enrich the table putting a 
+bit in each entry which is the valid invalid bit  
+
+33
+00:03:24,880 --> 00:03:30,640
+if it's valid it means then yes then the page is 
+in the frame if it's invalid it means the page is  
+
+34
+00:03:30,640 --> 00:03:38,320
+not loaded yet so first I need to load the page 
+and then I in this case is the operating system  
+
+35
+00:03:38,320 --> 00:03:43,760
+and then you can access the page so this 
+information is actually used this valid invalid  
+
+36
+00:03:43,760 --> 00:03:49,280
+bit by the memory management unit when it does 
+the translation to check if it's valid or not  
+
+37
+00:03:49,840 --> 00:03:56,560
+if the page is in memory or not so this is 
+how it could look like right we have eight  
+
+38
+00:03:56,560 --> 00:04:03,120
+pages here but only three are in the physical 
+memory in three frames and those have the  
+
+39
+00:04:03,120 --> 00:04:08,960
+bit set to valid while all the other bits 
+all the other entries are set to invalid
+
+40
+00:04:11,120 --> 00:04:19,360
+so page fault is what we call this event 
+of trying to access a page and finding out  
+
+41
+00:04:19,360 --> 00:04:24,560
+that that page has not been loaded into a frame 
+when we say there has been a page fault this is  
+
+42
+00:04:24,560 --> 00:04:30,880
+what we are talking about when there is a 
+page fault the hardware generates an interrupt  
+
+43
+00:04:30,880 --> 00:04:37,280
+the operating system wakes up checks what's the 
+cause of the page fault and if it's about  
+
+44
+00:04:38,000 --> 00:04:43,360
+something that is not being loaded in memory 
+then it loads the missing page into a frame  
+
+45
+00:04:43,360 --> 00:04:50,800
+and tells the process that okay it can start 
+again the operating system needs to find a  
+
+46
+00:04:50,800 --> 00:04:55,520
+a frame that is free we will see that sometimes all 
+the frames might be used and the operating system  
+
+47
+00:04:55,520 --> 00:05:03,600
+also needs to take decisions when that happens 
+then it swaps the page only one page into the
+
+48
+00:05:06,000 --> 00:05:09,840
+frame and this of course is a disk 
+operation because you need to read  
+
+49
+00:05:11,200 --> 00:05:15,280
+it updates the page table saying that now 
+the reference is actually valid and then  
+
+50
+00:05:15,280 --> 00:05:22,160
+it can restart the process that is trying to 
+run and this is basically what I just said  
+
+51
+00:05:22,160 --> 00:05:26,160
+but you have the steps number here and the 
+different actions have a look at the figure
+
+52
+00:05:28,880 --> 00:05:34,560
+as I said you can go with a very lazy approach 
+you can call this it's called pure demand paging  
+
+53
+00:05:34,560 --> 00:05:40,560
+and start a process with no pages in memory 
+okay as soon as it starts requesting pages  
+
+54
+00:05:40,560 --> 00:05:45,440
+you will get page faults and it will keep 
+loading pages as needed by the process
+
+55
+00:05:47,760 --> 00:05:51,920
+I mentioned this before many times it's 
+collaboration between operating system  
+
+56
+00:05:51,920 --> 00:05:56,640
+and hardware and here you can already see the 
+collaboration now we already discussed some  
+
+57
+00:05:56,640 --> 00:06:04,880
+of it you need to enrich the page table so 
+actually what you store close to the CPU in some  
+
+58
+00:06:04,880 --> 00:06:10,320
+register to do the translation with this valid 
+invalid bit so the hardware is actually prepared  
+
+59
+00:06:10,320 --> 00:06:18,480
+to use valid invalid bits you need the ability to 
+restart an instruction you try to run something  
+
+60
+00:06:18,480 --> 00:06:25,200
+the operating system needs to wake up and replace 
+or load the page into a frame and then you need  
+
+61
+00:06:25,200 --> 00:06:30,000
+hardware support so that you can tell the process 
+try again to run the next instruction because the  
+
+62
+00:06:30,000 --> 00:06:35,680
+previous run was not successful because there 
+was no page in a frame and you can also rely  
+
+63
+00:06:35,680 --> 00:06:41,760
+on the hardware using the so-called swap space 
+basically you can take a portion of the disk  
+
+64
+00:06:41,760 --> 00:06:47,360
+and use it as if it was an extension of the memory 
+to keep only pages that you are swapping in  
+
+65
+00:06:47,360 --> 00:06:55,440
+and out when you are doing this when you react to 
+the page faults
+
+66
+00:06:58,000 --> 00:07:05,360
+it is costly this I said you need to 
+generate a trap to the operating system you need  
+
+67
+00:07:05,360 --> 00:07:11,200
+to save registers and process state there will be 
+a context switch you need to wake up the operating  
+
+68
+00:07:11,200 --> 00:07:17,120
+system the operating system needs to understand 
+why it is being wakened up so what is this interrupt  
+
+69
+00:07:17,120 --> 00:07:23,600
+about find out that it's a page fault double 
+check if it's just a matter of loading a page  
+
+70
+00:07:23,600 --> 00:07:29,200
+into a frame or if it was a page fault because the 
+process maybe was trying to access actually memory  
+
+71
+00:07:29,200 --> 00:07:36,160
+that does not belong to it it needs to issue 
+a read request from the disk and so on so  
+
+72
+00:07:36,160 --> 00:07:40,640
+just read this sequence I already mentioned it 
+what I'm trying to say here is that there are a  
+
+73
+00:07:40,640 --> 00:07:50,400
+lot of operations okay actually you can get 
+an estimate of how bad it can get right so
+
+74
+00:07:54,080 --> 00:07:58,000
+you have three major activities you need to 
+service the interrupt you need to read the page  
+
+75
+00:07:58,000 --> 00:08:05,360
+and then you need to restart the process if you 
+define p to be the page fault rate zero means  
+
+76
+00:08:05,360 --> 00:08:10,880
+there is no page fault basically it means you load 
+everything into memory so it's paging without  
+
+77
+00:08:10,880 --> 00:08:17,360
+virtual memory one it's the laziest approach means 
+every time you need a page you need to first load  
+
+78
+00:08:17,360 --> 00:08:25,680
+it because it's not in memory then you can compute 
+the effective access time as one minus p times  
+
+79
+00:08:25,680 --> 00:08:32,720
+memory access plus p the percentage the portion of 
+requests that are actually generating a page fault  
+
+80
+00:08:33,600 --> 00:08:40,320
+times the page fault overhead swap of the page out 
+so swapping of the page out if you actually need  
+
+81
+00:08:40,320 --> 00:08:50,080
+to free a frame swap in of the page 
+when you load the page that is missing
+

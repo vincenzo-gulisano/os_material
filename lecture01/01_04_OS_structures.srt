@@ -1,0 +1,256 @@
+1
+00:00:00,500 --> 00:00:09,450
+now the last part about operating systems'
+structures so if we look at the evolution
+
+2
+00:00:09,450 --> 00:00:15,960
+of operating systems over time we can observe
+that things got more and more complicated
+
+3
+00:00:15,960 --> 00:00:22,609
+over time in the beginning operating systems
+had a simple structure
+
+4
+00:00:22,609 --> 00:00:29,840
+or so-called monolithic structure there was
+no dual mode so basically all applications
+
+5
+00:00:29,840 --> 00:00:37,210
+were directly interfacing with the
+hardware for exchanging input or output of
+
+6
+00:00:37,210 --> 00:00:44,899
+course this makes everything vulnerable to
+wrong or malicious code but this was just
+
+7
+00:00:44,899 --> 00:00:46,920
+the beginning of operating systems
+
+8
+00:00:46,920 --> 00:00:58,230
+so from simple structures we then moved to
+the so-called layered approach it's a modular
+
+9
+00:00:58,230 --> 00:01:05,070
+approach in which you have these layers and
+each layer maintains some data structure
+
+10
+00:01:05,070 --> 00:01:12,770
+or set of functions and routines it makes
+it easier to debug because you
+
+11
+00:01:12,770 --> 00:01:17,100
+start having separate modules
+
+12
+00:01:17,100 --> 00:01:23,750
+the problem here is that of circular
+references so you might want to have a module
+
+13
+00:01:23,750 --> 00:01:29,310
+that contains that CPU scheduler
+and that would be above the module
+
+14
+00:01:29,310 --> 00:01:34,860
+of the processes because first you need
+to define what a process is what a running program is
+
+15
+00:01:34,860 --> 00:01:37,670
+and that you can decide how you schedule them
+
+16
+00:01:37,670 --> 00:01:42,790
+but on the other hand you might want to
+have the module about processes that stays above
+
+17
+00:01:42,790 --> 00:01:50,049
+the module about the CPU where you might have
+also the scheduler because it's the process
+
+18
+00:01:50,049 --> 00:01:53,790
+who uses the CPU not the CPU who
+uses the process
+
+19
+00:01:53,790 --> 00:01:58,710
+so it's hard to define and interconnect the
+different modules if you need to keep them
+
+20
+00:01:58,710 --> 00:02:10,670
+in this layer one on top of the other with
+exclusive competence in each layer so we then
+
+21
+00:02:10,670 --> 00:02:18,440
+moved to micro kernels the idea was to
+keep the core part of the operating system
+
+22
+00:02:18,440 --> 00:02:22,280
+as small as possible and move everything that
+is not
+
+23
+00:02:22,280 --> 00:02:31,790
+essential to the system to the user level program
+it makes it smaller so it's also more easy
+
+24
+00:02:31,790 --> 00:02:40,190
+to maintain it and if you need to frequently
+update the system / the user-level programs
+
+25
+00:02:40,190 --> 00:02:45,879
+this is also a good idea because you don't
+need to recompile the entire kernel given that this model is
+
+26
+00:02:45,879 --> 00:02:50,640
+now external to the microkernel
+
+27
+00:02:50,640 --> 00:02:57,620
+it's also more secure because you run more
+stuff in user mode so you have
+
+28
+00:02:57,620 --> 00:03:04,090
+a smaller set of portions of code that
+are the ones that can actually run privileged instructions
+
+29
+00:03:04,090 --> 00:03:06,360
+so this makes it more secure
+
+30
+00:03:06,360 --> 00:03:11,430
+but of course it might suffer in performance
+if you have to manage the file system
+
+31
+00:03:11,430 --> 00:03:14,900
+and every time you have to do something with
+the disk you need to switch mode and give
+
+32
+00:03:14,900 --> 00:03:16,050
+control of that microkernel
+
+33
+00:03:16,050 --> 00:03:28,049
+you are wasting CPU cycles and this will affect
+performance aside from microkernels you can
+
+34
+00:03:28,049 --> 00:03:37,430
+have modules the idea is similar but the difference is that you
+can load the modules inside the kernel 
+
+35
+00:03:37,430 --> 00:03:45,519
+either at boot time or on demand and this
+is what's commonly done and it's still
+
+36
+00:03:45,519 --> 00:03:48,830
+done in the major operating systems we have today
+
+37
+00:03:48,830 --> 00:03:56,489
+and you don't need to recompile the kernel
+that's the important thing and finally what
+
+38
+00:03:56,489 --> 00:04:04,239
+we actually have today is some kind of hybrid
+system in which you take all the previous
+
+39
+00:04:04,239 --> 00:04:11,769
+ones or at least you pick parts of the previous one depending
+on what let's say to try to take all the things
+
+40
+00:04:11,769 --> 00:04:15,819
+that were efficient depending on the case
+and
+
+41
+00:04:15,819 --> 00:04:23,970
+the system that was developed before here you
+just to have some examples so if you look
+
+42
+00:04:23,970 --> 00:04:31,170
+at Mac OS X you see that you have a layered
+structure and then inside each layer you
+
+43
+00:04:31,170 --> 00:04:34,500
+can have different parts different modules
+
+44
+00:04:34,500 --> 00:04:44,550
+in the case of the OS X you have parts that
+are from the unix system like sorry this one
+
+45
+00:04:44,550 --> 00:04:52,400
+and parts that have
+been developed directly for OS X the
+
+46
+00:04:52,400 --> 00:04:57,639
+nice thing here with the layered structure
+is that if you later on find out that you want
+
+47
+00:04:57,639 --> 00:05:02,410
+to reuse your operating system for example
+to port it
+
+48
+00:05:02,410 --> 00:05:07,720
+to the iPhone as it was done in the beginning
+when the first iPhone was
+
+49
+00:05:07,720 --> 00:05:13,160
+released then you can keep your core layers
+and keep adding new layers on top of it so
+
+50
+00:05:13,160 --> 00:05:19,520
+for example a new layer that has to do with touch screen
+that was not there before the iPhone
+
+51
+00:05:19,520 --> 00:05:29,750
+and again here I'm showing you the OS X case but
+if you look at the android one it looks very similar
+
+52
+00:05:29,750 --> 00:05:34,140
+you have different layers and depending on
+the layer then inside you have different
+
+53
+00:05:34,140 --> 00:05:34,659
+modules
+

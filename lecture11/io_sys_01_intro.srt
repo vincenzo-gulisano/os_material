@@ -1,0 +1,249 @@
+1
+00:00:00,780 --> 00:00:07,859
+let's start with lecture 11 which is about
+input output systems or I/O systems that you have
+
+2
+00:00:07,859 --> 00:00:13,450
+the reading instructions for that main
+book of the course and the extra facultative
+
+3
+00:00:13,450 --> 00:00:19,180
+reading as always and this is the agenda for
+today we're going to start of course with
+
+4
+00:00:19,180 --> 00:00:23,720
+the introduction
+
+5
+00:00:23,720 --> 00:00:29,750
+at this point in the course we know that the
+main job of your computer is basically to
+
+6
+00:00:29,750 --> 00:00:37,350
+process stuff crunch data and perform I/O
+and this usually depends on what the user
+
+7
+00:00:37,350 --> 00:00:41,010
+is doing / on requests from the user
+
+8
+00:00:41,010 --> 00:00:47,620
+we have the hardware and we have the operating
+system that is there to help managing and controlling
+
+9
+00:00:47,620 --> 00:00:56,000
+I/O operations and also coordinate the devices
+that we have for I/O so what we will do in this
+
+10
+00:00:56,000 --> 00:01:00,870
+lecture is discuss and explore a bit the structure
+of the part of the operating system that is
+
+11
+00:01:00,870 --> 00:01:03,479
+about I/O
+
+12
+00:01:03,479 --> 00:01:08,930
+we will see why there are as always tradeoffs
+and complexities also when it comes to that
+
+13
+00:01:08,930 --> 00:01:16,410
+part of the operating system and discuss a
+bit performance we will see why choices we
+
+14
+00:01:16,410 --> 00:01:22,469
+have / choices we make the operating system
+level and at the hardware level have an impact
+
+15
+00:01:22,469 --> 00:01:29,899
+on performance is not really something new
+because now if you
+
+16
+00:01:29,899 --> 00:01:36,750
+understand how virtual memory works for example
+you know that it is fast also because we
+
+17
+00:01:36,750 --> 00:01:42,159
+have interrupts and that is one of the many
+examples of cooperation between the operating
+
+18
+00:01:42,159 --> 00:01:49,200
+system and the hardware that i keep mentioning
+since the beginning of the course
+
+19
+00:01:49,200 --> 00:01:57,009
+so the first the main challenge from the perspective
+of I/O is to control in a good
+
+20
+00:01:57,009 --> 00:02:03,320
+way all the devices that you have connected
+to the architecture so to your computer for example
+
+21
+00:02:03,320 --> 00:02:11,860
+so why is it challenging? you have completely
+different types of devices
+
+22
+00:02:11,860 --> 00:02:19,060
+some of them are defined to give only
+input or only output some of them are bidirectional
+
+23
+00:02:19,060 --> 00:02:29,560
+so you can either write or read from
+them and when the devices fail the consequences
+
+24
+00:02:29,560 --> 00:02:36,230
+of a possible failure can go from almost unnoticeable
+to
+
+25
+00:02:36,230 --> 00:02:43,650
+disaster some of them require control
+in real time because it works only if you
+
+26
+00:02:43,650 --> 00:02:50,319
+operate on them within strict deadlines
+for others deadlines
+
+27
+00:02:50,319 --> 00:02:59,290
+are not really that important so if the computer
+is late reading a key you're pressing in your keyboard
+
+28
+00:02:59,290 --> 00:03:03,739
+by a couple of milliseconds you don't
+even notice if the
+
+29
+00:03:03,739 --> 00:03:09,849
+operating system that controls the flaps of
+a plane is late in fixing them or changing the
+
+30
+00:03:09,849 --> 00:03:18,730
+position you might as well notice that very
+well so one thing is variability but it is
+
+31
+00:03:18,730 --> 00:03:26,190
+also challenging because opposite or in
+contrast to variability you want standardization
+
+32
+00:03:27,200 --> 00:03:31,760
+if you have more and more type of devices
+on the other hand you would like to have less
+
+33
+00:03:31,760 --> 00:03:38,790
+and less types or general types of devices
+when it comes to the operating system point
+
+34
+00:03:38,790 --> 00:03:43,060
+of view you cannot really treat each different
+mouse each different keyboard as a separate
+
+35
+00:03:43,060 --> 00:03:44,060
+thing
+
+36
+00:03:44,060 --> 00:03:48,049
+you want to have the concept of a keyboard
+the concept of a mouse we want to keep it
+
+37
+00:03:48,049 --> 00:03:57,220
+simple in order for the operating system also
+to be simple and modular and so on and this is
+
+38
+00:03:57,220 --> 00:04:01,840
+what I mention before each device has its own
+
+39
+00:04:01,840 --> 00:04:14,180
+oddities think of the wing flaps
+example so to take care of I/O this is
+
+40
+00:04:14,180 --> 00:04:18,810
+what we said before the operating system has
+part of it a submodule that is in the kernel
+
+41
+00:04:18,810 --> 00:04:26,470
+and it's about input output but it also relies
+on so-called drivers so on external components
+
+42
+00:04:26,470 --> 00:04:29,650
+that basically allow to do this translation
+from
+
+43
+00:04:29,650 --> 00:04:34,960
+a generic keyboard to a specific keyboard
+that you are using or a generic disk to a
+
+44
+00:04:34,960 --> 00:04:42,520
+specific disk you're using and so on and so forth
+at this point i hope that it becomes clearer
+
+45
+00:04:42,520 --> 00:04:51,080
+why a specific brand of computers that only
+produces three types of computers and updates
+
+46
+00:04:51,080 --> 00:04:55,160
+them only once a year and delivers both the
+hardware
+
+47
+00:04:55,160 --> 00:05:00,380
+as well as the operating system has a easier
+job in claiming that their operating system
+
+48
+00:05:00,380 --> 00:05:07,850
+is stable than another company that only does
+the operating system and wants that operating
+
+49
+00:05:07,850 --> 00:05:14,290
+system to basically work on any laptop that
+is out there any type of hardware and so on
+
+50
+00:05:14,290 --> 00:05:18,950
+and so forth hopefully now you should get a better
+understanding of
+
+51
+00:05:18,950 --> 00:05:20,449
+what is happening behind
+

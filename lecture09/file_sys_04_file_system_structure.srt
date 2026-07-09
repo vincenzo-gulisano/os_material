@@ -1,0 +1,274 @@
+1
+00:00:01,010 --> 00:00:03,000
+Let's move now on to the
+
+2
+00:00:03,000 --> 00:00:07,840
+file system structure. So how is a file system
+organizing different layers.
+
+3
+00:00:07,840 --> 00:00:18,289
+The idea when you design a file system is
+to have different layers for different functionalities.
+
+4
+00:00:18,289 --> 00:00:22,230
+This is true for a file system, but I even
+mentioned this in the very beginning of the
+
+5
+00:00:22,230 --> 00:00:26,690
+course for the entire operating system that
+you can have different layers. It's good for
+
+6
+00:00:26,690 --> 00:00:28,430
+modularity and keeping
+
+7
+00:00:28,430 --> 00:00:38,420
+let's say different types of jobs in different
+levels / in different models, so these are
+
+8
+00:00:38,420 --> 00:00:41,929
+basically the different layers you can have
+
+9
+00:00:41,929 --> 00:00:47,239
+if you want to organize your file system in
+let's say different parts, so you need the
+
+10
+00:00:47,239 --> 00:00:51,270
+lowest one so the one that is very close to
+the device to be about I/O control. You
+
+11
+00:00:51,270 --> 00:00:58,929
+will need a part of the file system that is
+the one that actually
+
+12
+00:00:58,929 --> 00:01:05,199
+speaks this kind of language, which is read
+a specific drive, maybe a specific cylinder
+
+13
+00:01:05,199 --> 00:01:09,860
+and track. This is of course for a rotating
+disk, it doesn't apply to an SSD, but it's the
+
+14
+00:01:09,860 --> 00:01:16,460
+very low level IO layer that speaks basically
+the language of the device.
+
+15
+00:01:16,460 --> 00:01:24,180
+On top of that, you have the basic file system
+so called basic file system. It speaks in
+
+16
+00:01:24,180 --> 00:01:31,060
+terms of blocks, so it says retrieve a specific
+block or write to a specific block and it's
+
+17
+00:01:31,060 --> 00:01:36,110
+also the one that maintains buffers and caches,
+when you read and write to the disk, these
+
+18
+00:01:36,110 --> 00:01:41,100
+are similar in spirit to what we discussed
+also for
+
+19
+00:01:41,100 --> 00:01:44,280
+the memory.
+
+20
+00:01:44,280 --> 00:01:51,000
+You have the file organization module and
+this is about translating logical blocks into
+
+21
+00:01:51,000 --> 00:02:03,300
+physical blocks. So if you want to read the
+fifth block of a file again to simplify the
+
+22
+00:02:03,300 --> 00:02:08,030
+life of the programmer the processes and
+so on, the operating system separates between
+
+23
+00:02:08,030 --> 00:02:11,950
+logical and physical addresses, so
+
+24
+00:02:11,950 --> 00:02:19,020
+from the logical perspective, the fifth block
+is the fifth block. It starts at 0, so it
+
+25
+00:02:19,020 --> 00:02:23,790
+will be blocked #4, but in practice this *file*
+might be written in a disk in several
+
+26
+00:02:23,790 --> 00:02:28,790
+position. The disk is not going to use
+necessarily contiguous allocation, and I will
+
+27
+00:02:28,790 --> 00:02:32,680
+present this in the next video.
+
+28
+00:02:32,680 --> 00:02:38,060
+In this layer you also have the managing of
+free space, so not only the translation between
+
+29
+00:02:38,060 --> 00:02:43,480
+logical and physical, but also this is the layer
+that maintains information about where you
+
+30
+00:02:43,480 --> 00:02:47,090
+can actually write if you need to write something
+new.
+
+31
+00:02:47,090 --> 00:02:53,209
+And here, of course, you start having understanding
+of files too, not only blocks because
+
+32
+00:02:53,209 --> 00:02:55,250
+of course you need to
+
+33
+00:02:55,250 --> 00:03:00,939
+have the concept of a file in order to understand
+what is the logical block inside that file
+
+34
+00:03:00,939 --> 00:03:04,409
+and translate that into the physical one.
+
+35
+00:03:04,409 --> 00:03:12,169
+The highest one, the highest level you have just before
+actually the applications that you run,
+
+36
+00:03:12,169 --> 00:03:17,909
+is the logical file system. This is where
+we keep all the metadata I introduced before
+
+37
+00:03:19,090 --> 00:03:26,849
+And now this is what we are going to discuss
+next when we see at different ways of actually
+
+38
+00:03:26,849 --> 00:03:28,370
+maintaining
+
+39
+00:03:28,370 --> 00:03:33,079
+stuff (data/files) into the disk.
+
+40
+00:03:33,079 --> 00:03:39,200
+Before that I also want to mention that since
+you have this separation of functionalities
+
+41
+00:03:39,200 --> 00:03:45,700
+in different layers, this is what allows you
+to have virtual file systems. So in practice
+
+42
+00:03:45,700 --> 00:03:48,919
+you can have
+
+43
+00:03:48,919 --> 00:03:55,809
+different file systems that are maintained
+at the same time and they can be implemented
+
+44
+00:03:55,809 --> 00:04:00,959
+in different ways. Maybe speaking to different
+type of devices and so on. Since you have
+
+45
+00:04:00,959 --> 00:04:08,790
+the different layers you can define also a layer
+that is the virtual file system which does
+
+46
+00:04:08,790 --> 00:04:09,799
+once again
+
+47
+00:04:09,799 --> 00:04:16,430
+acts as a middleware. Stays in between the
+lower level interfaces and the higher ones,
+
+48
+00:04:16,430 --> 00:04:19,840
+the user, the processes,
+
+49
+00:04:19,840 --> 00:04:26,820
+to translate commands like open a file read a
+file and so on from the general interface,
+
+50
+00:04:26,820 --> 00:04:31,750
+the common shared interface with the user
+to the specific ones you have for each file
+
+51
+00:04:31,750 --> 00:04:34,340
+system.
+
+52
+00:04:36,940 --> 00:04:41,630
+The next thing we're going to look at in the
+next video, it's how we actually implement
+
+53
+00:04:41,630 --> 00:04:50,200
+files. How do we keep them? If we have
+a disk block n on our device,
+
+54
+00:04:50,200 --> 00:04:52,500
+how do we know
+
+55
+00:04:52,500 --> 00:05:00,420
+what is the file that is contained on that
+block? We will discuss three different
+
+56
+00:05:00,420 --> 00:05:05,950
+ways, contiguous allocation, linked list
+allocation also with the file allocation table
+
+57
+00:05:05,950 --> 00:05:12,340
+variant and I-nodes that are the ones you
+actually use, for example, in your Unix
+
+58
+00:05:12,340 --> 00:05:12,840
+systems.
+

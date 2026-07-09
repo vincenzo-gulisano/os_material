@@ -1,0 +1,148 @@
+1
+00:00:01,890 --> 00:00:09,360
+let's look now at the allocation of frames
+so let's go to the other question we had before
+
+2
+00:00:09,360 --> 00:00:12,440
+or the other subset of questions
+
+3
+00:00:12,440 --> 00:00:17,430
+this part is pretty simple so basically you
+need to define a minimum and a
+
+4
+00:00:17,430 --> 00:00:22,699
+a maximum number of frames you can give
+to each process the maximum could just be
+
+5
+00:00:22,699 --> 00:00:29,230
+all the available frames and then you can
+define an allocation scheme to be either fixed
+
+6
+00:00:29,230 --> 00:00:37,559
+or based on priorities is as simple as
+the name basically says so with fixed allocation
+
+7
+00:00:37,559 --> 00:00:41,171
+you can have equal allocation for example you
+give the same number of frames to all
+
+8
+00:00:41,171 --> 00:00:42,171
+the processes
+
+9
+00:00:42,171 --> 00:00:48,489
+or you can have a proportional allocation which
+would be based on the size of the process
+
+10
+00:00:48,489 --> 00:00:52,649
+here you have a small example so the number
+of frames you give is proportional to the
+
+11
+00:00:52,649 --> 00:00:56,879
+size of the process compared to the sizes
+of all the processes you want to run
+
+12
+00:00:56,879 --> 00:01:05,660
+otherwise you can go for priority allocation
+so you can in this case use
+
+13
+00:01:05,660 --> 00:01:10,909
+the priority of the process which might change
+overtime to take decisions on the number of
+
+14
+00:01:10,909 --> 00:01:15,170
+frames rather than the size of the process
+
+15
+00:01:15,170 --> 00:01:18,409
+the next thing you need to take into account
+when you
+
+16
+00:01:18,409 --> 00:01:25,149
+think about allocation is about whether you
+can only
+
+17
+00:01:25,149 --> 00:01:31,790
+use frames that belong to the process itself
+when we need to replace a certain frame or if
+
+18
+00:01:31,790 --> 00:01:39,159
+a process can also steal frames from other
+ones so if you have global replacement then
+
+19
+00:01:39,159 --> 00:01:48,210
+a process that requires or that needs a replacement
+can pick a frame that belongs also to other
+
+20
+00:01:48,210 --> 00:01:50,330
+processes
+
+21
+00:01:50,330 --> 00:01:55,039
+it's good because there are good chances or
+higher chances that you can find a frame but
+
+22
+00:01:55,039 --> 00:01:59,420
+on the other hand you are making the execution
+of a process dependent on the execution of
+
+23
+00:01:59,420 --> 00:02:02,530
+the other processes which still it's not really
+
+24
+00:02:02,530 --> 00:02:10,259
+a big novelty here we already know that other
+processes are also running and they can have
+
+25
+00:02:10,259 --> 00:02:17,510
+context switches they can be waiting so it doesn't
+really matter but still you make it even more
+
+26
+00:02:17,510 --> 00:02:22,510
+let's say open to what the other processes are
+doing or you can go for a local replacement
+
+27
+00:02:22,510 --> 00:02:25,340
+only so in that case
+
+28
+00:02:25,340 --> 00:02:31,010
+you can get more consistent better process
+performance but you might underutilize memory
+
+29
+00:02:31,010 --> 00:02:34,670
+if there is another process that doesn't really
+need a lot of frames and it has many of them
+
+30
+00:02:34,670 --> 00:02:40,700
+that are free you could actually steal frames
+from that process it would be better so as
+
+31
+00:02:40,700 --> 00:02:43,120
+always we have these trade offs
+

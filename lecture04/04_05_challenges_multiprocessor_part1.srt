@@ -1,0 +1,477 @@
+1
+00:00:01,589 --> 00:00:07,080
+let's now move into a discussion about why
+multiprocessor hardware
+
+2
+00:00:07,080 --> 00:00:10,720
+plays a role when it comes to scheduling and
+why it actually
+
+3
+00:00:10,720 --> 00:00:17,640
+makes it more complicated
+let's start discussing the concept / the
+
+4
+00:00:17,640 --> 00:00:24,860
+role that caches have
+it so here we have three different organizations
+
+5
+00:00:24,860 --> 00:00:26,501
+of CPU
+and memory
+
+6
+00:00:26,501 --> 00:00:29,980
+we have an initial one the first one here
+in which we just
+
+7
+00:00:29,980 --> 00:00:34,030
+have two CPUs and they have some shared memory
+they can
+
+8
+00:00:34,030 --> 00:00:39,460
+access then we have a second one in which
+we have the same
+
+9
+00:00:39,460 --> 00:00:47,760
+thing but now each CPU has also private cache
+so some smaller memory where it can keep recent
+
+10
+00:00:47,760 --> 00:00:50,260
+data that
+is accessing
+
+11
+00:00:50,260 --> 00:00:55,059
+so for example a block of instructions so that
+when you
+
+12
+00:00:55,059 --> 00:00:57,719
+need to fetch the next instruction you have
+it already there
+
+13
+00:00:57,719 --> 00:01:01,270
+instead of just going back and forth every
+time from the
+
+14
+00:01:01,270 --> 00:01:05,840
+memory but in practice you can even have something
+like
+
+15
+00:01:05,840 --> 00:01:13,240
+the third one which is even more complicated
+so you have both private memories caches that
+
+16
+00:01:13,240 --> 00:01:17,240
+are also dedicated
+to differents CPUs and then you have also
+
+17
+00:01:17,240 --> 00:01:20,770
+the shared memory
+this is actually how modern architectures
+
+18
+00:01:20,770 --> 00:01:27,459
+look like
+so if you assume we are in one of these setups
+
+19
+00:01:27,459 --> 00:01:29,649
+let say either
+b or c
+
+20
+00:01:29,649 --> 00:01:33,130
+now you can see that you might have a process
+that is running
+
+21
+00:01:33,130 --> 00:01:40,270
+on this CPU
+the second one this one it
+
+22
+00:01:40,270 --> 00:01:44,070
+issues a request
+for input output so it goes into the waiting
+
+23
+00:01:44,070 --> 00:01:50,200
+state
+now since it was the process was running here
+
+24
+00:01:50,200 --> 00:01:54,099
+he probably
+had some data in the cache
+
+25
+00:01:54,099 --> 00:01:57,620
+and if the cash was not cleared when we want
+to run the process
+
+26
+00:01:57,620 --> 00:02:00,880
+again it might actually be beneficial for
+its performance
+
+27
+00:02:00,880 --> 00:02:04,669
+to get back to the same CPU because it will
+find already
+
+28
+00:02:04,669 --> 00:02:08,420
+some things in the cash
+and since they are there there is no need
+
+29
+00:02:08,420 --> 00:02:13,340
+to go through
+the bus here and go back to the main memory
+
+30
+00:02:13,340 --> 00:02:18,850
+to fetch the
+data but of course if we reschedule the process
+
+31
+00:02:18,850 --> 00:02:22,739
+but instead
+of this CPU we send it to another CPU not a
+
+32
+00:02:22,739 --> 00:02:26,269
+big deal
+i mean it will still work but since there
+
+33
+00:02:26,269 --> 00:02:29,159
+is nothing in
+the cache from the previous execution it will
+
+34
+00:02:29,159 --> 00:02:32,209
+need to go
+to main memory and take stuff back to the
+
+35
+00:02:32,209 --> 00:02:36,269
+cache
+so you see that if you want to achieve better
+
+36
+00:02:36,269 --> 00:02:40,680
+performance
+you might want to try to replace processes
+
+37
+00:02:40,680 --> 00:02:43,769
+back to the same
+CPU they were running
+
+38
+00:02:43,769 --> 00:02:50,579
+but of course everything comes with a price
+so if you want to do something like this then
+
+39
+00:02:50,579 --> 00:02:54,209
+you need at
+least to keep additional information about
+
+40
+00:02:54,209 --> 00:02:57,800
+which process is
+being scheduled in which CPU so that you send
+
+41
+00:02:57,800 --> 00:03:00,870
+it back there
+it's also more complicated than that because
+
+42
+00:03:00,870 --> 00:03:05,430
+it might be
+that you have a lot of free CPUs but just
+
+43
+00:03:05,430 --> 00:03:08,379
+the one you
+want it's actually used by another process
+
+44
+00:03:08,379 --> 00:03:11,870
+what should you do then go to another one
+or maybe wait a
+
+45
+00:03:11,870 --> 00:03:15,760
+bit and see if it gets free and place again the
+process on the
+
+46
+00:03:15,760 --> 00:03:20,769
+same CPU not important right now how you solve
+this
+
+47
+00:03:20,769 --> 00:03:23,379
+in practice it depends on how the operating
+system is implemented
+
+48
+00:03:23,379 --> 00:03:26,720
+but what I'm trying to say here is that you
+see that as soon
+
+49
+00:03:26,720 --> 00:03:30,519
+as you bring in multicore architectures and
+their actual placement
+
+50
+00:03:30,519 --> 00:03:34,300
+of memories if you want to be efficient if
+you want your
+
+51
+00:03:34,300 --> 00:03:37,329
+scheduling to perform well then you start
+having a lot of
+
+52
+00:03:37,329 --> 00:03:43,020
+challenges you don't have with a single core
+single CPU
+
+53
+00:03:43,020 --> 00:03:50,079
+architecture let's move to the next one
+there was something more I wanted to say here
+
+54
+00:03:50,079 --> 00:03:55,170
+in fact if you are familiar with c programming
+
+55
+00:03:55,170 --> 00:03:59,439
+you know
+that you can specify when you run
+
+56
+00:03:59,439 --> 00:04:03,010
+when you start a process you can tell the
+operating system
+
+57
+00:04:03,010 --> 00:04:08,799
+that you want this process to be pinned to
+a specific core
+
+58
+00:04:08,799 --> 00:04:11,400
+in that case the operating system is only
+allowed to use
+
+59
+00:04:11,400 --> 00:04:15,540
+that core for running the process even if
+there are context
+
+60
+00:04:15,540 --> 00:04:17,859
+switches in between
+and now you can see that this is done for
+
+61
+00:04:17,859 --> 00:04:22,000
+performance because
+you know that since you always use the same
+
+62
+00:04:22,000 --> 00:04:25,630
+code you also
+have access to the same memories and caches
+
+63
+00:04:25,630 --> 00:04:28,050
+and so on
+so there are higher chances that you don't
+
+64
+00:04:28,050 --> 00:04:31,470
+have to go to
+the main memory to fetch back your data but
+
+65
+00:04:31,470 --> 00:04:35,150
+you can use
+your local cache
+
+66
+00:04:35,150 --> 00:04:38,139
+we have other types of architectures the non
+uniform memory
+
+67
+00:04:38,139 --> 00:04:43,069
+architectures so inside a computer we can
+have different
+
+68
+00:04:43,069 --> 00:04:47,130
+sockets each socket can have its own CPU and
+each CPU can
+
+69
+00:04:47,130 --> 00:04:54,380
+have multiple physical cores
+and this is what is being shown in this image
+
+70
+00:04:54,380 --> 00:04:58,479
+so we have four sockets and each of the four
+CPUs has
+
+71
+00:04:58,479 --> 00:05:02,940
+four cores
+now within each socket the CPUs can share
+
+72
+00:05:02,940 --> 00:05:10,060
+their own memory
+but they can also communicate with other CPUs
+
+73
+00:05:10,060 --> 00:05:14,160
+so this is non-uniform because as you can
+see if C1 and
+
+74
+00:05:14,160 --> 00:05:17,000
+C2 want to share some data they can do
+it through their
+
+75
+00:05:17,000 --> 00:05:20,780
+own memory
+so it's faster than if C1 here and C1
+
+76
+00:05:20,780 --> 00:05:27,770
+here need to share
+something because they need inter-socket communication
+
+77
+00:05:27,770 --> 00:05:36,960
+and this is another challenge
+so if you want to schedule two threads and
+
+78
+00:05:36,960 --> 00:05:41,009
+you know that
+these have a behavior that could resemble that
+
+79
+00:05:41,009 --> 00:05:45,030
+of a producer
+and a consumer assuming you know this then
+
+80
+00:05:45,030 --> 00:05:49,270
+it might be
+more beneficial to place these two in cores
+
+81
+00:05:49,270 --> 00:05:53,389
+that belong
+to the same socket because then the number
+
+82
+00:05:53,389 --> 00:05:57,610
+of memories they
+need to go through to communicate is smaller
+
+83
+00:05:57,610 --> 00:05:59,349
+and they
+can use their own memory
+
+84
+00:05:59,349 --> 00:06:02,889
+so like in the green case than in the red
+one
+
+85
+00:06:02,889 --> 00:06:05,819
+but again you need is extra information to
+maintain extra
+
+86
+00:06:05,819 --> 00:06:12,580
+information about the threads and the processes
+if you want to do this to improve the performance
+
+87
+00:06:12,580 --> 00:06:18,569
+achieved by your scheduling strategy
+
+88
+00:06:18,569 --> 00:06:21,349
+and of course there is an extra challenge
+here
+
+89
+00:06:21,349 --> 00:06:25,229
+that is how would you know the two threads
+are a producer and
+
+90
+00:06:25,229 --> 00:06:28,710
+a consumer?
+if it's a general system an interactive system
+
+91
+00:06:28,710 --> 00:06:31,610
+you don't
+know what is going to run might not really
+
+92
+00:06:31,610 --> 00:06:34,570
+notice there are
+specific cases in a batch  system
+
+93
+00:06:34,570 --> 00:06:36,629
+for example you might know what processes
+you are running
+
+94
+00:06:36,629 --> 00:06:39,650
+and you might know that many of them have
+this kind of relation
+
+95
+00:06:39,650 --> 00:06:41,379
+so you can take better decisions based on
+this
+
+96
+00:06:41,379 --> 00:06:43,120
+but in general you wouldn't know
+

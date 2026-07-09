@@ -1,0 +1,309 @@
+1
+00:00:00,930 --> 00:00:09,420
+We move now on to the last part of this lecture
+about file sharing and protection. So how
+
+2
+00:00:09,420 --> 00:00:16,380
+do we share and protect files among different
+users?
+
+3
+00:00:16,380 --> 00:00:21,030
+The idea is that the file system should facilitate
+
+4
+00:00:21,030 --> 00:00:29,380
+should provide mechanisms so that who create
+who owns a specific file is able to decide
+
+5
+00:00:29,380 --> 00:00:35,000
+what should be done with the file and who
+has the right to operate on that file.
+
+6
+00:00:35,000 --> 00:00:39,960
+So this kind of functionality is actually
+given by the file system.
+
+7
+00:00:39,960 --> 00:00:44,100
+And the first thing that we have to mention
+here is that each file can be accessed in
+
+8
+00:00:44,100 --> 00:00:51,040
+different ways the file system might let
+you read a file, but not modify it. It might
+
+9
+00:00:51,040 --> 00:00:56,469
+actually allow you to modify the file or to
+execute the file if it's a binary if it's
+
+10
+00:00:56,469 --> 00:01:02,719
+a program that can be executed or a script might
+allow you to append to the file or delete
+
+11
+00:01:02,719 --> 00:01:08,630
+or list all the files in a folder. So how
+you access files depends on how the operating
+
+12
+00:01:08,630 --> 00:01:10,040
+system allows you
+
+13
+00:01:10,040 --> 00:01:19,000
+to access each specific type of file
+or directory. So the common way to go
+
+14
+00:01:19,000 --> 00:01:26,900
+is to have three let's say big high level modes
+of access read, write and execute, and three
+
+15
+00:01:26,900 --> 00:01:34,299
+different classes of users. This is what you
+have in Unix systems. That is what we are
+
+16
+00:01:34,299 --> 00:01:39,909
+using mostly here for our examples, so you
+
+17
+00:01:39,909 --> 00:01:46,520
+can define this read, write and execute
+privileges for three different groups.
+
+18
+00:01:46,520 --> 00:01:52,580
+One, the first one is the owner and it
+means that it applies to 
+
+19
+00:01:52,580 --> 00:02:00,280
+(the read, write and execute permissions) apply
+to the owner of the file. Then there is the
+
+20
+00:02:00,280 --> 00:02:05,720
+group. So each file is associated to 
+
+21
+00:02:05,720 --> 00:02:10,000
+can be associated to a group and the group
+is a set of users.
+
+22
+00:02:10,000 --> 00:02:18,829
+And in that case you can specify this read
+write and execute privileges for the group.
+
+23
+00:02:18,829 --> 00:02:22,849
+And the last one is the public
+
+24
+00:02:22,849 --> 00:02:28,599
+For all the three of them, it's always the
+same. It's whether they can read, write, or
+
+25
+00:02:28,599 --> 00:02:29,599
+execute
+
+26
+00:02:29,599 --> 00:02:34,340
+the specific file.
+
+27
+00:02:34,340 --> 00:02:40,049
+Which one applies to you depends on who you
+are. If you are the owner of the file, then
+
+28
+00:02:40,049 --> 00:02:43,680
+what applies to you is the owner access.
+
+29
+00:02:43,680 --> 00:02:47,739
+If you belong to the group, you are not the
+owner, but you belong to the group that is
+
+30
+00:02:47,739 --> 00:02:50,400
+registered for the file
+
+31
+00:02:50,400 --> 00:02:55,620
+that is the set of privileges that applies
+to you. If none of the first two, then it's
+
+32
+00:02:55,620 --> 00:02:57,819
+a public one
+
+33
+00:02:57,819 --> 00:03:06,919
+Here you have a small example saying that
+the owner can read, write and execute.
+
+34
+00:03:06,919 --> 00:03:13,019
+The users that belong to the group can read
+write but not execute and the users that
+
+35
+00:03:13,019 --> 00:03:18,680
+are not the owner and do not belong to
+
+36
+00:03:18,680 --> 00:03:21,159
+the group
+
+37
+00:03:21,159 --> 00:03:27,200
+then they cannot read and write, but they
+can execute. It is just an example.
+
+38
+00:03:27,200 --> 00:03:29,809
+One clarification here:
+
+39
+00:03:29,809 --> 00:03:34,840
+In practice, in Unix systems, what you can
+do with the files usually depends on the permissions
+
+40
+00:03:34,840 --> 00:03:41,249
+you set on the directory that contains the
+files. OK, but I don't expect now you
+
+41
+00:03:41,249 --> 00:03:47,989
+to be too specific about these things. If I ask
+something. If there are exercises about permissions
+
+42
+00:03:47,989 --> 00:03:49,969
+and I show you the
+
+43
+00:03:49,969 --> 00:03:56,089
+different privileges for a file. If you are
+assuming something on the folder that contains
+
+44
+00:03:56,089 --> 00:04:01,959
+the file and so on, then say it. But otherwise,
+let's just assume that for each file, what
+
+45
+00:04:01,959 --> 00:04:04,349
+is applied is
+
+46
+00:04:04,349 --> 00:04:08,809
+the set of permissions you see for the file,
+which again in Unix system might not always
+
+47
+00:04:08,809 --> 00:04:12,650
+be the case because there are rules about
+
+48
+00:04:12,650 --> 00:04:17,519
+permissions set on the folder and what applies
+to all the files in the
+
+49
+00:04:17,519 --> 00:04:18,959
+in such folder
+
+50
+00:04:18,959 --> 00:04:29,099
+Here you have an example of the same thing
+but under Windows so just to show you that
+
+51
+00:04:29,099 --> 00:04:35,110
+this is not just something that happens in
+Unix systems.
+
+52
+00:04:35,110 --> 00:04:38,610
+And this is
+
+53
+00:04:38,610 --> 00:04:42,460
+the content of a folder. So here you see that
+now you have this
+
+54
+00:04:42,460 --> 00:04:50,060
+there are 10 entries here let's for a moment,
+ignore the first one so you are left with
+
+55
+00:04:50,060 --> 00:04:58,610
+nine and here the first three are the owner,
+then the second group of three is the group
+
+56
+00:04:58,610 --> 00:05:05,689
+and the last group of three is the public,
+and when they are set it means that that privilege
+
+57
+00:05:05,689 --> 00:05:12,380
+is granted, and when they're not it means
+that it is not. So. For example, if you take
+
+58
+00:05:12,380 --> 00:05:13,430
+this file
+
+59
+00:05:13,430 --> 00:05:18,050
+it's basically saying that the owner can do
+everything read write and execute while both group
+
+60
+00:05:18,050 --> 00:05:22,680
+and public can only read and execute, but
+they cannot modify the file.
+
+61
+00:05:22,680 --> 00:05:28,180
+The first bit here, it specifies whether
+it's a file or a directory. If it's not
+
+62
+00:05:28,180 --> 00:05:34,780
+set, it's a file. If you see a d, that
+is a directory. So open your Unix system,
+
+63
+00:05:34,780 --> 00:05:40,620
+that in principle we are using to test a bit
+what we discuss in the course, and list
+
+64
+00:05:40,620 --> 00:05:44,970
+the files that we have in a folder and you
+will see that you can see all these permissions
+
+65
+00:05:44,970 --> 00:05:46,169
+for each
+
+66
+00:05:46,169 --> 00:05:48,070
+individual file
+

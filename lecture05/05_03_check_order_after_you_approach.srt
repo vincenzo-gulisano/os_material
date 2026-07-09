@@ -1,0 +1,139 @@
+1
+00:00:00,960 --> 00:00:05,460
+Let's look together at a second 
+example: the check-order one. 
+
+2
+00:00:05,460 --> 00:00:12,540
+In this case, we have only one shared variable 
+called turn. Its value represents which thread  
+
+3
+00:00:12,540 --> 00:00:18,060
+is allowed to enter the critical section.
+The entry section of each thread does a  
+
+4
+00:00:18,060 --> 00:00:22,440
+busywait loop until it does not 
+see its id in the variable turn. 
+
+5
+00:00:23,460 --> 00:00:30,300
+Once it completes its critical section, each 
+thread sets the value of the other thread into  
+
+6
+00:00:30,300 --> 00:00:37,380
+the variable turn. When A is done it allows B 
+to enter the critical section and vice-versa. 
+
+7
+00:00:37,380 --> 00:00:40,680
+Is this a valid solution to 
+the critical section problem?
+
+8
+00:00:41,520 --> 00:00:47,940
+Let's start by checking the mutual exclusion 
+property, in the same case we were looking  
+
+9
+00:00:47,940 --> 00:00:54,060
+at before, that of A entering its critical 
+section while B is in its critical section. 
+
+10
+00:00:55,260 --> 00:01:00,420
+Before entering its critical section, 
+A must see that turn's value is A. 
+
+11
+00:01:01,440 --> 00:01:06,660
+Can B see the value of turn 
+being "B" during this period? 
+
+12
+00:01:07,440 --> 00:01:13,260
+The answer is no because A will set it 
+to B only after the critical section.
+
+13
+00:01:15,060 --> 00:01:21,120
+Notice that if you think it could because you 
+are considering the case in which the period  
+
+14
+00:01:21,780 --> 00:01:28,500
+in which A's critical section happens is here, 
+then you are considering a portion of time during  
+
+15
+00:01:28,500 --> 00:01:35,340
+which the execution is valid, but the case we are 
+looking at needs still to be explored assuming A  
+
+16
+00:01:35,340 --> 00:01:44,400
+sees turn value being A after B completes line 4.
+Now that we know that A cannot enter its critical  
+
+17
+00:01:44,400 --> 00:01:51,480
+section while B is in it, we need to check if B 
+can enter its critical section while A is in it. 
+
+18
+00:01:51,480 --> 00:01:56,100
+If you think about this, you can immediately 
+conclude that this can be shown with the same  
+
+19
+00:01:56,100 --> 00:01:59,580
+example, by switching A with 
+B, so the answer is still no.
+
+20
+00:02:00,960 --> 00:02:06,420
+Good, we have proven we cannot find an 
+example that breaks mutual exclusion. 
+
+21
+00:02:06,420 --> 00:02:12,780
+Let's check the progress property now.
+Can one of the threads be willing to enter the  
+
+22
+00:02:12,780 --> 00:02:18,900
+critical section but unable to do that while the 
+other thread is also outside its critical section? 
+
+23
+00:02:19,620 --> 00:02:25,320
+For instance, let's say A is in its 
+waiting loop because turn's value is B. 
+
+24
+00:02:25,320 --> 00:02:31,620
+Can it happen that B does not put turn 
+value to A in a bounded time? Yes,  
+
+25
+00:02:31,620 --> 00:02:38,040
+B can be in its remainder section and, as we 
+said, the duration of the reminder section  
+
+26
+00:02:38,040 --> 00:02:42,120
+is arbitrarily long, which means 
+the progress property is violated.
+
+27
+00:02:45,360 --> 00:02:50,820
+We can then conclude this code is not a valid 
+solution to the critical section problem,  
+
+28
+00:02:50,820 --> 00:02:53,580
+because it breaks the progress property.
+

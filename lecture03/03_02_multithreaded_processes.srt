@@ -1,0 +1,324 @@
+1
+00:00:01,420 --> 00:00:10,500
+so let's start now discussing about processes
+and threads if you think about the reasons 
+
+2
+00:00:10,500 --> 00:00:18,190
+why you would like to have processes being
+executed as multiple threads a very simple
+
+3
+00:00:18,190 --> 00:00:24,470
+example we can start with is that of the word
+editor when you use a complicated piece of
+
+4
+00:00:24,470 --> 00:00:31,720
+software like Microsoft Word in this example
+you do different things you are typing characters
+
+5
+00:00:31,720 --> 00:00:37,219
+while you type these characters they appear
+on the screen but you know that there is more
+
+6
+00:00:37,219 --> 00:00:45,920
+stuff happening in the back the spell checker 
+might be continuously checking whether what
+
+7
+00:00:45,920 --> 00:00:52,800
+you type is correct or not you might be printing
+a document in parallel and so on now the question
+
+8
+00:00:52,800 --> 00:01:08,110
+here would be if only one process
+can be running at each CPU core at one specific
+
+9
+00:01:08,110 --> 00:01:17,060
+point in time because we have context switches
+why do we have multiple cores? and also how
+
+10
+00:01:17,060 --> 00:01:23,140
+is it possible that while the spell checker
+is running I can still type characters instead
+
+11
+00:01:23,140 --> 00:01:29,530
+of being just blocked because the process
+is doing something else for instance checking
+
+12
+00:01:29,530 --> 00:01:34,590
+what I type or printing a document and/or
+checking if there are updates to download
+
+13
+00:01:34,590 --> 00:01:45,710
+and so on this is solved because we have multiple
+threads that are executing the same process
+
+14
+00:01:45,710 --> 00:01:55,990
+don't think about threads like something that
+is different from a process in fact what I
+
+15
+00:01:55,990 --> 00:02:04,259
+said during the last lecture about processes
+is not let's say orthogonal to this discussion
+
+16
+00:02:04,259 --> 00:02:11,770
+what we discussed so far it's basically executions
+in which there is a mapping between one process
+
+17
+00:02:11,770 --> 00:02:22,459
+and one thread a thread is just the sequence
+of instructions that belong to a program and
+
+18
+00:02:22,459 --> 00:02:26,959
+that you running one after the other so if
+you assume that one process has only one thread
+
+19
+00:02:26,959 --> 00:02:32,939
+it means that when you execute this process
+you can only run one instruction at the time
+
+20
+00:02:32,939 --> 00:02:38,250
+and which one you run depends of course on
+the text section and how the code is organized
+
+21
+00:02:38,250 --> 00:02:48,390
+when you have a multi-threaded execution it
+means that you can run multiple lines of code
+
+22
+00:02:48,390 --> 00:02:56,010
+that belong to the same process at the same
+time in parallel at different cores notice
+
+23
+00:02:56,010 --> 00:03:02,230
+that it also means that you can context switch
+between one thread and another thread when
+
+24
+00:03:02,230 --> 00:03:09,379
+these two threads belong to the same process
+so you can run instructions that are about
+
+25
+00:03:09,379 --> 00:03:15,390
+the spell-checker of Word but then do a context
+switch and run instructions that are about
+
+26
+00:03:15,390 --> 00:03:20,299
+the feature of Word that checks for updates
+or the one that is reading your characters
+
+27
+00:03:20,299 --> 00:03:29,540
+and printing them to the screen simply put
+you have multiple program counters and each
+
+28
+00:03:29,540 --> 00:03:40,740
+one is referring to the next instruction that
+will be run for the same process this I mentioned
+
+29
+00:03:40,740 --> 00:03:46,370
+the very first time you have trade-offs in
+space and time complexity and when you improve
+
+30
+00:03:46,370 --> 00:03:52,370
+one you usually pay higher price in the other
+if each process is single-threaded then the
+
+31
+00:03:52,370 --> 00:03:58,290
+entire information that you keep for the process
+and about the process at the operating system
+
+32
+00:03:58,290 --> 00:04:06,030
+level it's unique if you have multiple threads
+that can run the same process then some information
+
+33
+00:04:06,030 --> 00:04:13,959
+that is specific to the thread needs to be
+duplicated as I am showing here with for example
+
+34
+00:04:13,959 --> 00:04:21,170
+dedicated registers or dedicated stacks for
+the variables of the functions you are running
+
+35
+00:04:21,170 --> 00:04:28,430
+or the next function that should be run and
+so on in practice most modern applications
+
+36
+00:04:28,430 --> 00:04:35,050
+are multi-threaded and multiple threads run
+within each application here you have some
+
+37
+00:04:35,050 --> 00:04:40,530
+examples again about Microsoft Word but you
+can make examples with many other programs
+
+38
+00:04:40,530 --> 00:04:48,510
+the reason why we use multiple threads is
+because it takes less time it's lighter to
+
+39
+00:04:48,510 --> 00:04:54,130
+create a new thread that belongs to a certain
+process then it is to create a process because
+
+40
+00:04:54,130 --> 00:04:57,610
+when you create a new process you need to
+create all the information about the process
+
+41
+00:04:57,610 --> 00:05:02,670
+since threads share information they don't
+need dedicated information about the entire
+
+42
+00:05:02,670 --> 00:05:07,560
+process when you create a thread it takes
+less time so it's more efficient and this
+
+43
+00:05:07,560 --> 00:05:16,290
+can simplify code and increase efficiency
+the common example you have here is that of
+
+44
+00:05:16,290 --> 00:05:22,200
+a multi-threaded server architecture if you
+write a server that is listening for requests
+
+45
+00:05:22,200 --> 00:05:29,210
+basically it is waiting for someone to connect
+and then ask for something you can implement
+
+46
+00:05:29,210 --> 00:05:33,580
+this with multiple threads you can have a
+thread that is listening and whenever someone
+
+47
+00:05:33,580 --> 00:05:39,380
+connects to ask something to the server then
+you can spawn a new thread and tell to that
+
+48
+00:05:39,380 --> 00:05:44,480
+thread to execute the portions of code that
+are related to how you check for the answer
+
+49
+00:05:44,480 --> 00:05:51,240
+how you produce the answer and have the listening
+thread going back to listening again for the
+
+50
+00:05:51,240 --> 00:05:57,380
+next request this allows for responsiveness
+because the listening thread is always listening
+
+51
+00:05:57,380 --> 00:06:04,970
+it takes very little time to start a new thread
+to answer while going back to the next question
+
+52
+00:06:04,970 --> 00:06:10,220
+and if you look at the benefits of multi-threaded
+applications you have responsiveness resource
+
+53
+00:06:10,220 --> 00:06:22,590
+sharing economy and scalability and they are
+described in this slide 
+
+54
+00:06:22,590 --> 00:06:28,450
+you do'nt need a multicore architecture to
+justify the existence of threads even if you
+
+55
+00:06:28,450 --> 00:06:34,720
+have a computer with a single core you might
+still want to have threads so that while a
+
+56
+00:06:34,720 --> 00:06:39,850
+certain part of the process is waiting because
+it has to do something with the disk you can
+
+57
+00:06:39,850 --> 00:06:45,840
+run another part of the process that might
+interact with the user for example the second
+
+58
+00:06:45,840 --> 00:06:53,430
+thing is that if you want to use a multicore
+architecture you don't necessarily need threads
+
+59
+00:06:53,430 --> 00:06:58,860
+you can have single-threaded processes and
+I am not talking here about the fact that
+
+60
+00:06:58,860 --> 00:07:05,250
+you can run different processes like Word
+on one core and Spotify on another core you
+
+61
+00:07:05,250 --> 00:07:11,610
+can actually write programs like the example
+I made last time for Google Chrome in which
+
+62
+00:07:11,610 --> 00:07:17,490
+you spawn several processes and then you have
+these processes communicating with inter-process
+
+63
+00:07:17,490 --> 00:07:22,490
+communication since they are different processes
+they can use different cores so is not that
+
+64
+00:07:22,490 --> 00:07:31,430
+if you want to take advantage of a multi-core
+architecture you need to have threads or multi-threaded
+
+65
+00:07:31,430 --> 00:07:31,930
+processes
+

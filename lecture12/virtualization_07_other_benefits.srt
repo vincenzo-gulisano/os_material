@@ -1,0 +1,200 @@
+1
+00:00:00,960 --> 00:00:08,880
+let's discuss now some other benefits 
+of virtualization one interesting thing  
+
+2
+00:00:08,880 --> 00:00:16,960
+is that once you are able to virtualize your 
+hardware and through an hypervisor run several  
+
+3
+00:00:18,720 --> 00:00:25,840
+guest operating systems and processes within each 
+guest operating system you can do something you  
+
+4
+00:00:25,840 --> 00:00:33,760
+could not really do before and it is 
+related to multi-core CPUs or architectures  
+
+5
+00:00:33,760 --> 00:00:40,640
+in which you have actually multiple 
+CPUs what you can do is that you can  
+
+6
+00:00:43,200 --> 00:00:51,840
+dedicate a specific subset of the cores of one 
+cpu or maybe a subset of the CPUs to a specific  
+
+7
+00:00:53,120 --> 00:01:00,880
+guest operating system and that has an interesting 
+implication that is something that did not really  
+
+8
+00:01:00,880 --> 00:01:07,600
+exist before virtualization you might end up in 
+situations in which the program you're writing and  
+
+9
+00:01:07,600 --> 00:01:11,840
+later executing as a either a set 
+of processes that are communicating  
+
+10
+00:01:12,400 --> 00:01:20,480
+with inter-process communication at the OS level 
+or most likely a multi-threaded process can have  
+
+11
+00:01:20,480 --> 00:01:26,400
+a parallelism degree that is actually fitting 
+the number of physical cores you have in your  
+
+12
+00:01:28,320 --> 00:01:36,240
+virtual machine so in that case you might be able 
+to do some optimization at the code level that  
+
+13
+00:01:36,240 --> 00:01:40,880
+is very specific to the number of cores you are 
+going to use because now you know how many cores  
+
+14
+00:01:40,880 --> 00:01:46,720
+you are going to use it's for a specific a virtual 
+machine that will run on a specific hardware  
+
+15
+00:01:46,720 --> 00:01:52,560
+if you think about large industries like google 
+where they have a lot of servers and they might  
+
+16
+00:01:52,560 --> 00:01:56,800
+have some specific applications that are running 
+then they can make versions of these applications  
+
+17
+00:01:57,440 --> 00:02:03,840
+that are really taking advantage of the 
+let's say optimal level of the resources  
+
+18
+00:02:03,840 --> 00:02:11,280
+of each virtual machine once they associate a 
+specific number of cores and/or cpus to that  
+
+19
+00:02:12,400 --> 00:02:17,920
+virtual machine the other nice 
+property of virtualization is that of  
+
+20
+00:02:18,800 --> 00:02:26,080
+deduplication deduplication is something 
+you usually do for the file system I'm not  
+
+21
+00:02:26,080 --> 00:02:32,800
+describing it now in too much detail but 
+the basic idea is that you can create a  
+
+22
+00:02:33,920 --> 00:02:41,040
+sort of middleware or a layer in your file system 
+that before writing each block checks whether that  
+
+23
+00:02:41,040 --> 00:02:48,800
+specific block is already stored maybe it belongs 
+to a different file but it's already stored on the  
+
+24
+00:02:48,800 --> 00:02:59,360
+disk okay you do this basically using hash 
+functions so if you keep for each block it's  
+
+25
+00:02:59,360 --> 00:03:05,600
+hash and you have a registry of all the hashes when 
+you're trying to write a block and you already see  
+
+26
+00:03:05,600 --> 00:03:11,280
+that it's hash is registered because it has 
+already been written as part of another file  
+
+27
+00:03:13,040 --> 00:03:15,440
+then instead of actually 
+writing the block you just  
+
+28
+00:03:16,320 --> 00:03:22,480
+keep track of the fact that that specific block 
+of that specific file is actually found somewhere  
+
+29
+00:03:22,480 --> 00:03:27,600
+else now this kind of  deduplication 
+now you can do it even at the memory level  
+
+30
+00:03:28,960 --> 00:03:35,040
+it's not really surprising if you 
+think back at virtual memory and  
+
+31
+00:03:36,240 --> 00:03:41,520
+copy-on-write mechanisms at this point it 
+should be clear why you really want to decouple  
+
+32
+00:03:41,520 --> 00:03:48,320
+the logical representation of memory from the 
+physical one the example here is that of a  
+
+33
+00:03:48,320 --> 00:03:54,160
+hypervisor running a set of operating systems if 
+you think that all these operating systems might  
+
+34
+00:03:54,160 --> 00:04:03,360
+be actually the same operating system it means 
+that all the text portion of the processes that  
+
+35
+00:04:03,360 --> 00:04:08,640
+belong to these operating systems the 
+ones of the operating systems not the user process  
+
+36
+00:04:09,200 --> 00:04:13,040
+they will all be the same because it's always 
+the same operating system so you can play this  
+
+37
+00:04:13,040 --> 00:04:20,560
+deduplication at the memory keeping only one 
+copy in the physical memory of in this example the  
+
+38
+00:04:20,560 --> 00:04:26,320
+parts that belong to the operating system while 
+letting believe each operating system that it has  
+
+39
+00:04:26,320 --> 00:04:32,320
+actually its own copy of the memory so it's exactly 
+what you do with the processes when you do CoW  
+
+40
+00:04:32,320 --> 00:04:39,520
+now you can do for entire operating 
+systems with deduplication of the memory
+

@@ -1,0 +1,307 @@
+1
+00:00:00,440 --> 00:00:08,599
+this is the first part of the first
+lecture this is what you should read from
+
+2
+00:00:08,599 --> 00:00:16,660
+the book these are parts of chapter one
+this is the agenda we will go through
+
+3
+00:00:16,660 --> 00:00:20,420
+the different points notice that some of them
+are marked as
+
+4
+00:00:20,420 --> 00:00:28,570
+self-reading so that is for you to read
+on your own let's start with what is an operating
+
+5
+00:00:28,570 --> 00:00:36,530
+system so there are different layers that
+you can think of when you think about a
+
+6
+00:00:36,530 --> 00:00:44,629
+system or a computer together with the
+users that are working with it
+
+7
+00:00:44,629 --> 00:00:51,999
+so you have the hardware you have the operating
+system you have the set of applications that
+
+8
+00:00:51,999 --> 00:00:58,239
+are being run on the operating system and
+then you have the different users as I
+
+9
+00:00:58,239 --> 00:01:05,860
+said before the operating systems stays in between
+the hardware and the users here you see that it's
+
+10
+00:01:05,860 --> 00:01:10,970
+actually between the hardware and the different
+applications/processes/
+
+11
+00:01:10,970 --> 00:01:23,140
+programs (we will see what is the right term
+for them) that the users are interested in
+
+12
+00:01:23,140 --> 00:01:33,660
+now what defines an operating system is of
+course in part related to the hardware that
+
+13
+00:01:33,660 --> 00:01:37,590
+is being used below the operating system
+
+14
+00:01:37,590 --> 00:01:45,600
+if you use an iPad if you use smart washing
+machine you might need to have modules in
+
+15
+00:01:45,600 --> 00:01:52,950
+your operating system that allow 
+to use fingers to give input to the
+
+16
+00:01:52,950 --> 00:01:59,730
+hardware on the other hand on your desktop you
+might have just mouse and keyboard
+
+17
+00:01:59,730 --> 00:02:00,730
+and you don't need to have a
+
+18
+00:02:00,730 --> 00:02:06,840
+touch screen so your operating system does
+not need to have a module for that so the
+
+19
+00:02:06,840 --> 00:02:11,640
+first point here to take into account is that
+we would see this many times hardware and
+
+20
+00:02:11,640 --> 00:02:23,810
+operating systems are thightly connected and
+again this you already saw last time the operating
+
+21
+00:02:23,810 --> 00:02:28,790
+system as we said sits between the hardware and
+the applications on
+
+22
+00:02:28,790 --> 00:02:36,560
+the one hand to sort of provide an easier or more
+beautiful interface if you want when you want
+
+23
+00:02:36,560 --> 00:02:43,440
+to communicate with the hardware for input and
+output to shield the user from the hardware
+
+24
+00:02:43,440 --> 00:02:49,190
+but at the same time the hardware from the user
+or if you want a certain user from another
+
+25
+00:02:49,190 --> 00:02:51,890
+user when these two or more users
+
+26
+00:02:51,890 --> 00:03:00,349
+are using the same hardware but it also acts as
+a resource manager for the different computational
+
+27
+00:03:00,349 --> 00:03:07,950
+units you have in your computer so the
+CPU the memory and the other devices now what
+
+28
+00:03:07,950 --> 00:03:13,150
+is the normal life cycle of a computer?
+
+29
+00:03:13,150 --> 00:03:21,459
+so put in another way how does the operating
+system manages devices and users this is what
+
+30
+00:03:21,459 --> 00:03:29,380
+I showed you last time and we saw that
+you have a very fast brain in your machine but
+
+31
+00:03:29,380 --> 00:03:33,620
+it's pretty ``stupid'' it just takes the next
+instruction and runs it
+
+32
+00:03:33,620 --> 00:03:40,360
+but you know that in practice of a lot
+of devices they are different from printers
+
+33
+00:03:40,360 --> 00:03:46,330
+to monitors to keyboards, disks and
+so on so the question is how do you use such
+
+34
+00:03:46,330 --> 00:03:49,650
+a brain to control all these things?
+
+35
+00:03:49,650 --> 00:03:57,910
+well the answer to that is events or interrupts
+which are the entities the things that
+
+36
+00:03:57,910 --> 00:04:05,910
+are marking the cycles of the operating
+system so the figure I showed you it's sort
+
+37
+00:04:05,910 --> 00:04:09,640
+of lying meaning that is not giving you the
+complete picture
+
+38
+00:04:09,640 --> 00:04:15,300
+this one is the correct one so what the brain
+does (the CPU) is to take the next instruction
+
+39
+00:04:15,300 --> 00:04:21,130
+and run it but it can
+also decide after running an
+
+40
+00:04:21,130 --> 00:04:28,650
+instruction whether to take the next instruction
+and run it or to check if something has happened
+
+41
+00:04:28,650 --> 00:04:34,730
+if there was an interrupt and based on that
+go back fetching the next instruction but in
+
+42
+00:04:34,730 --> 00:04:40,500
+this case a different next instruction we
+will discuss several times what this means
+
+43
+00:04:40,500 --> 00:04:47,970
+so you don't have to worry too much right now
+but so that you start getting into the mood
+
+44
+00:04:47,970 --> 00:04:49,530
+of these things
+
+45
+00:04:49,530 --> 00:04:55,190
+you have to assume that the operating system
+is doing some work it's running Spotify there is an interrupt
+
+46
+00:04:55,190 --> 00:05:00,550
+something happens might be the disk
+that tells the operating system that a certain
+
+47
+00:05:00,550 --> 00:05:05,350
+file has been copied from the main memory
+to the disk
+
+48
+00:05:05,350 --> 00:05:11,460
+this is an interrupt the CPU once it's done
+with the current instruction that belongs
+
+49
+00:05:11,460 --> 00:05:17,160
+to Spotify will check what is happening and
+depending on the case for example if the disk
+
+50
+00:05:17,160 --> 00:05:23,720
+has completed transferring something from
+memory will decide what is the next instruction
+
+51
+00:05:23,720 --> 00:05:25,600
+that will be executed
+
+52
+00:05:25,600 --> 00:05:32,139
+in this sample it's a keystroke need
+to print a character on the screen then it takes
+
+53
+00:05:32,139 --> 00:05:38,140
+the important instruction to do that the relevant
+instruction and it does that one it is finished if there
+
+54
+00:05:38,140 --> 00:05:43,100
+is nothing more to do then it goes back to
+the running Spotify
+
+55
+00:05:43,100 --> 00:05:47,870
+there is another interrupt the operating
+system checks what is happening now
+
+56
+00:05:47,870 --> 00:05:55,220
+it's the disk that has done something then I will tell
+the disk to copy something else I will
+
+57
+00:05:55,220 --> 00:06:00,940
+get another interrupt and so on I mentioned
+before that you have the feeling that many
+
+58
+00:06:00,940 --> 00:06:04,210
+things are being run at the same time while
+in practice it's
+
+59
+00:06:04,210 --> 00:06:09,480
+only one thing that is being run sometimes
+(this is not necessarily true we will
+
+60
+00:06:09,480 --> 00:06:14,800
+see this) the thing is that as I said since
+the brain it's extremely fast you have the
+
+61
+00:06:14,800 --> 00:06:19,100
+feeling that they're running at the same time
+what is happening is that the operating system
+
+62
+00:06:19,100 --> 00:06:22,190
+is continuously switching and deciding what
+is the next instruction I
+
+63
+00:06:22,190 --> 00:06:25,289
+should run based on the interrupts it gets
+

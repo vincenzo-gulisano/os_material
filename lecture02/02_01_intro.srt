@@ -1,0 +1,284 @@
+1
+00:00:00,640 --> 00:00:06,640
+okay lecture two processes
+
+2
+00:00:04,000 --> 00:00:08,400
+uh here you have the instructions for
+
+3
+00:00:06,640 --> 00:00:11,440
+what you need to read from the book
+
+4
+00:00:08,400 --> 00:00:13,679
+um and you also have the extra
+
+5
+00:00:11,440 --> 00:00:16,800
+faculty reading from the other book the
+
+6
+00:00:13,679 --> 00:00:21,279
+silvershots operating system concepts
+
+7
+00:00:16,800 --> 00:00:23,760
+if you want of course it's not mandatory
+
+8
+00:00:21,279 --> 00:00:25,519
+so the objective for this lecture is to
+
+9
+00:00:23,760 --> 00:00:27,680
+introduce the notion
+
+10
+00:00:25,519 --> 00:00:28,960
+of a process okay so a programming
+
+11
+00:00:27,680 --> 00:00:32,079
+execution
+
+12
+00:00:28,960 --> 00:00:33,440
+will describe the various features of
+
+13
+00:00:32,079 --> 00:00:35,600
+processes
+
+14
+00:00:33,440 --> 00:00:37,520
+we will start discussing a bit
+
+15
+00:00:35,600 --> 00:00:39,760
+scheduling too
+
+16
+00:00:37,520 --> 00:00:42,320
+and we will also explore inter-process
+
+17
+00:00:39,760 --> 00:00:44,239
+communication
+
+18
+00:00:42,320 --> 00:00:47,120
+so let's start with an introduction
+
+19
+00:00:44,239 --> 00:00:47,120
+about processes
+
+20
+00:00:48,559 --> 00:00:56,640
+i will start this lecture by
+
+21
+00:00:52,079 --> 00:00:59,520
+showing you two sentences and
+
+22
+00:00:56,640 --> 00:01:01,039
+telling you why both sentences are not
+
+23
+00:00:59,520 --> 00:01:03,680
+really correct okay
+
+24
+00:01:01,039 --> 00:01:05,600
+this is something we will uh discuss
+
+25
+00:01:03,680 --> 00:01:07,520
+during this lecture and the next one so
+
+26
+00:01:05,600 --> 00:01:12,000
+hopefully by the end of the
+
+27
+00:01:07,520 --> 00:01:14,560
+lecture about threads the next one
+
+28
+00:01:12,000 --> 00:01:15,600
+it should be clear why are these two
+
+29
+00:01:14,560 --> 00:01:18,479
+sentences
+
+30
+00:01:15,600 --> 00:01:19,600
+are not really correct so it's not
+
+31
+00:01:18,479 --> 00:01:22,159
+really true
+
+32
+00:01:19,600 --> 00:01:24,320
+that we run several programs at the same
+
+33
+00:01:22,159 --> 00:01:26,880
+time
+
+34
+00:01:24,320 --> 00:01:27,439
+we do but most of the times what is
+
+35
+00:01:26,880 --> 00:01:30,960
+happening
+
+36
+00:01:27,439 --> 00:01:34,320
+is that there is only one program
+
+37
+00:01:30,960 --> 00:01:36,880
+being run but which program is run
+
+38
+00:01:34,320 --> 00:01:37,680
+changes continuously and the change is
+
+39
+00:01:36,880 --> 00:01:41,439
+so fast
+
+40
+00:01:37,680 --> 00:01:42,799
+that you don't really perceive
+
+41
+00:01:41,439 --> 00:01:44,720
+the change yourself so you have the
+
+42
+00:01:42,799 --> 00:01:46,640
+feeling that program a and b are running
+
+43
+00:01:44,720 --> 00:01:49,200
+at the same time but actually it's
+
+44
+00:01:46,640 --> 00:01:51,280
+a then it's b then it's a and it's b the
+
+45
+00:01:49,200 --> 00:01:53,119
+change is so fast that for you it looks
+
+46
+00:01:51,280 --> 00:01:55,840
+like they are happening both at the same
+
+47
+00:01:53,119 --> 00:01:55,840
+time
+
+48
+00:01:56,719 --> 00:02:00,000
+in that sense it would be more correct
+
+49
+00:01:58,479 --> 00:02:02,560
+to say that there is
+
+50
+00:02:00,000 --> 00:02:03,759
+only one program that is being run by
+
+51
+00:02:02,560 --> 00:02:07,439
+each
+
+52
+00:02:03,759 --> 00:02:09,039
+cpu this is also not really true because
+
+53
+00:02:07,439 --> 00:02:11,120
+as we will discuss more in the next
+
+54
+00:02:09,039 --> 00:02:14,480
+lecture
+
+55
+00:02:11,120 --> 00:02:15,520
+what can actually run only one program
+
+56
+00:02:14,480 --> 00:02:18,640
+at the time
+
+57
+00:02:15,520 --> 00:02:20,959
+it's actually a cpu core okay and modern
+
+58
+00:02:18,640 --> 00:02:23,520
+cpus have multiple cores
+
+59
+00:02:20,959 --> 00:02:25,200
+so they could actually run several
+
+60
+00:02:23,520 --> 00:02:28,959
+things at the same time
+
+61
+00:02:25,200 --> 00:02:31,120
+okay uh so
+
+62
+00:02:28,959 --> 00:02:32,480
+if we want to be a bit more precise we
+
+63
+00:02:31,120 --> 00:02:34,879
+should say that we feel
+
+64
+00:02:32,480 --> 00:02:36,480
+many times that several programs run at
+
+65
+00:02:34,879 --> 00:02:40,319
+the same time
+
+66
+00:02:36,480 --> 00:02:44,239
+but it is indeed true that each cpu core
+
+67
+00:02:40,319 --> 00:02:45,519
+okay so sorry that one cpu can run
+
+68
+00:02:44,239 --> 00:02:48,160
+several
+
+69
+00:02:45,519 --> 00:02:50,000
+programs at the same time but only one
+
+70
+00:02:48,160 --> 00:02:53,920
+program at the time can be run by
+
+71
+00:02:50,000 --> 00:02:53,920
+each cpu core
+

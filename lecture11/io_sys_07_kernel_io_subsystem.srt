@@ -1,0 +1,389 @@
+1
+00:00:00,849 --> 00:00:11,110
+we move now to the part of the kernel
+that it's the I/O subsystem we are going
+
+2
+00:00:11,110 --> 00:00:16,930
+to look at some specific aspects and things
+that are done at this level in the kernel
+
+3
+00:00:16,930 --> 00:00:22,770
+so the services we are going to look or the
+things we're going to discuss here it's the
+
+4
+00:00:22,770 --> 00:00:25,370
+scheduling of input and output we will
+
+5
+00:00:25,370 --> 00:00:34,219
+see buffering caching and spooling mechanisms
+we will discuss also a bit of types
+
+6
+00:00:34,219 --> 00:00:42,890
+of errors we can handle and different ways
+to handle them and also we will discuss
+
+7
+00:00:42,890 --> 00:00:50,449
+rapidly why there are also needs for protecting
+specific parts of the memory and that is also
+
+8
+00:00:50,449 --> 00:00:54,129
+part of what the I/O subsystem does
+
+9
+00:00:54,129 --> 00:01:01,379
+so scheduling we discussed many times I made
+many examples of processes that need to write
+
+10
+00:01:01,379 --> 00:01:06,560
+something on disk and then they go into
+the waiting state and so on so it turns out
+
+11
+00:01:06,560 --> 00:01:14,049
+that the requests that are made by many processes
+are not necessarily executed in the same order
+
+12
+00:01:14,049 --> 00:01:15,750
+they are made
+
+13
+00:01:15,750 --> 00:01:26,119
+the operating system the I/O part
+of the kernel subsystem can
+
+14
+00:01:26,119 --> 00:01:31,409
+optimize and change the order in which it
+serves the different requests depending on
+
+15
+00:01:31,409 --> 00:01:39,619
+the hardware is interacting with the example
+here would be for a rotating disk
+
+16
+00:01:39,619 --> 00:01:46,840
+so if let's say you have three applications
+one two and three one wants to read or write
+
+17
+00:01:46,840 --> 00:01:51,399
+something at the end of the disk the second
+one wants something at the beginning of the
+
+18
+00:01:51,399 --> 00:01:53,850
+disk and the third one needs a block
+
+19
+00:01:53,850 --> 00:01:59,770
+near the middle of the disk then you
+see that if you're just going in this order then
+
+20
+00:01:59,770 --> 00:02:04,270
+you have to go to the end of the disk then
+back to the beginning of the disk and then
+
+21
+00:02:04,270 --> 00:02:09,020
+go to the middle of the disk
+
+22
+00:02:09,020 --> 00:02:15,430
+if you have the ability of shuffle
+the order and go in a different order it might
+
+23
+00:02:15,430 --> 00:02:21,370
+be that it's actually better to execute this
+requests in the order two three and one you
+
+24
+00:02:21,370 --> 00:02:24,300
+can start from the beginning of the disk especially
+if you are already there
+
+25
+00:02:24,300 --> 00:02:29,270
+read what you need to read then go to the
+middle go and then go to the end of course
+
+26
+00:02:29,270 --> 00:02:33,870
+it is specific to the hardware this is a rotating
+disk an SSD disk doesn't really
+
+27
+00:02:33,870 --> 00:02:40,870
+incur different times depending on how far you
+need to go in the disk
+
+28
+00:02:40,870 --> 00:02:48,000
+so this kind of optimization wouldn't really
+make sense now as always tradeoffs this is
+
+29
+00:02:48,000 --> 00:02:54,070
+an optimization that can increase performance
+so the scheduling requests in specific orders
+
+30
+00:02:54,070 --> 00:03:00,370
+depending on the hardware but then you will
+need to keep extra information
+
+31
+00:03:00,370 --> 00:03:07,750
+so basically it is no longer true that as
+soon as you get something from the disk that
+
+32
+00:03:07,750 --> 00:03:13,770
+is information that is for the first process
+or for the process control block that is
+
+33
+00:03:13,770 --> 00:03:20,310
+first in the queue of processes waiting for
+the disk because you are no longer serving
+
+34
+00:03:20,310 --> 00:03:23,740
+requests in order somehow you need to add
+extra information
+
+35
+00:03:23,740 --> 00:03:29,470
+in each process control block to keep track
+of what it is that they are waiting for and
+
+36
+00:03:29,470 --> 00:03:37,950
+when you get something from the disk then
+you can find out which one is the process
+
+37
+00:03:37,950 --> 00:03:44,270
+control block that you can move back to the
+writing queue the operating system the kernel
+
+38
+00:03:44,270 --> 00:03:48,260
+will also use buffers
+
+39
+00:03:48,260 --> 00:03:56,430
+so when you are accumulating data that will
+later be sent to the disk or to the network
+
+40
+00:03:56,430 --> 00:04:01,960
+you actually keep it that the memory you keep
+accumulating that in memory that's a buffer
+
+41
+00:04:01,960 --> 00:04:06,930
+and once the buffer is full then you transfer
+the data to the device
+
+42
+00:04:06,930 --> 00:04:13,950
+now you actually need two buffers is the double
+buffer mechanism because once one buffer is
+
+43
+00:04:13,950 --> 00:04:19,160
+full and you start transferring the content
+of the buffer to disk for example that will
+
+44
+00:04:19,160 --> 00:04:22,980
+take a certain amount of time and you cannot
+keep adding stuff to the buffer in that amount
+
+45
+00:04:22,980 --> 00:04:23,980
+of time
+
+46
+00:04:23,980 --> 00:04:28,430
+so what you do is that you write that buffer
+and you start using a second buffer to feed stuff
+
+47
+00:04:28,430 --> 00:04:32,590
+and then you keep switching between the two
+every time one is full you stop using the other
+
+48
+00:04:32,590 --> 00:04:40,280
+and you write the first to disk or to whatever
+device you're interacting with
+
+49
+00:04:40,280 --> 00:04:47,880
+this is also done because of the different
+speeds with which the devices can read
+
+50
+00:04:47,880 --> 00:04:56,500
+and write data here you have just some example
+number this is the old slide but it still shows
+
+51
+00:04:56,500 --> 00:05:05,290
+what I'm trying to say here and there
+is a second mechanism that is used by the
+
+52
+00:05:05,290 --> 00:05:10,250
+kernel which is caching and that
+
+53
+00:05:10,250 --> 00:05:15,910
+is similar to what we discussed already when
+we were discussing caches at the hardware level
+
+54
+00:05:15,910 --> 00:05:21,691
+for the memories so there are copies that
+are kept at the operating system in memory
+
+55
+00:05:21,691 --> 00:05:26,170
+at the memory by the operating system
+
+56
+00:05:26,170 --> 00:05:32,100
+so that if you try to access that thing again in
+the immediate future you already have that
+
+57
+00:05:32,100 --> 00:05:41,600
+in memory you don't need to interact again with
+the device and also the kernel will take
+
+58
+00:05:41,600 --> 00:05:49,550
+care of creating a queue and keep and holding up
+the output for specific devices if these devices
+
+59
+00:05:49,550 --> 00:05:51,830
+can only serve one request at the time
+
+60
+00:05:51,830 --> 00:05:59,200
+so this is handled automatically by the operating
+system and this is the spooling mechanism when
+
+61
+00:05:59,200 --> 00:06:05,840
+it comes to errors as you can imagine the
+kernel will have several routines several
+
+62
+00:06:05,840 --> 00:06:11,710
+parts that are dedicated to handle errors
+and here you can distinguish between permanent
+
+63
+00:06:11,710 --> 00:06:14,760
+and transient errors
+
+64
+00:06:14,760 --> 00:06:20,389
+maybe you have experienced this yourself if you use
+a rotating disk (but also
+
+65
+00:06:20,389 --> 00:06:26,210
+SSD disks) rotating disks they tend to
+fail after a while and some sectors some parts
+
+66
+00:06:26,210 --> 00:06:29,090
+of it they stop working
+
+67
+00:06:29,090 --> 00:06:37,520
+so you can still use the disk but some portions
+of it will become unusable so when that starts
+
+68
+00:06:37,520 --> 00:06:42,430
+happening in your machine eventually that
+hard disk will just be corrupted so it's a
+
+69
+00:06:42,430 --> 00:06:43,860
+sign that it's time to change
+
+70
+00:06:43,860 --> 00:06:50,310
+the disk still the operating system has a
+routine to find out that some sectors might
+
+71
+00:06:50,310 --> 00:06:56,840
+be damaged and it will still try to operate
+with the remaining ones so all these things
+
+72
+00:06:56,840 --> 00:07:04,490
+are part of the handling off or they are supported
+by the fact that there are components in the
+
+73
+00:07:04,490 --> 00:07:06,960
+kernel that are about handling errors for
+
+74
+00:07:06,960 --> 00:07:14,570
+input or output operations and then of
+course that is the part about protection this
+
+75
+00:07:14,570 --> 00:07:18,610
+we discussed basically since the beginning
+of the course I think I'm not saying anything
+
+76
+00:07:18,610 --> 00:07:24,100
+new at this point the very first thing we
+discussed was system calls
+
+77
+00:07:24,100 --> 00:07:31,560
+and now at this point you can probably understand
+how a system call is a complicated thing that
+
+78
+00:07:31,560 --> 00:07:35,370
+requires interaction with many parts of the
+operating system and everything is done in
+
+79
+00:07:35,370 --> 00:07:43,610
+the spirit of protection so that you basically
+protect the users from the hardware but most likely the hardware
+
+80
+00:07:43,610 --> 00:07:46,780
+from the user and from the different processes
+
+81
+00:07:46,780 --> 00:07:50,450
+here you have some example of protection mechanisms
+

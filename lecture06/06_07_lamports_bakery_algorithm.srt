@@ -1,0 +1,170 @@
+1
+00:00:01,840 --> 00:00:05,120
+At this point we have seen that 
+the critical section problem can  
+
+2
+00:00:05,120 --> 00:00:08,480
+be solved in several different 
+ways. We are going to look into  
+
+3
+00:00:08,480 --> 00:00:13,360
+one more solution which has some extra nice 
+property: the Lamport's Bakery algorithm.
+
+4
+00:00:13,360 --> 00:00:18,160
+Lamport is one of the recipients of the Turing 
+award and came up with the following idea.  
+
+5
+00:00:18,160 --> 00:00:24,160
+Simply put: all the threads who want to enter a 
+critical section need to get a number. The thread  
+
+6
+00:00:24,160 --> 00:00:30,080
+with the smallest number is the one that can 
+enter. Imagine a take-a-number system, basically.
+
+7
+00:00:30,080 --> 00:00:34,160
+We assume the numbers given by the 
+take-a-number system are non-decreasing.  
+
+8
+00:00:34,160 --> 00:00:37,760
+Non-decreasing means that two or more 
+consecutive numbers can be the same.  
+
+9
+00:00:38,480 --> 00:00:43,200
+If we also assume each thread has a unique 
+id, we can break ties saying that if two or  
+
+10
+00:00:43,200 --> 00:00:48,400
+more threads have the same number, the one with 
+the smallest id can enter its critical section.
+
+11
+00:00:49,680 --> 00:00:54,720
+Let's look at the complete example.
+We have two shared arrays each with n  
+
+12
+00:00:54,720 --> 00:00:59,120
+elements (n is the number of threads).
+The first array, choosing, contains  
+
+13
+00:00:59,120 --> 00:01:02,880
+booleans initialized to false.
+The second array, number,  
+
+14
+00:01:02,880 --> 00:01:09,280
+contains integers initialized to 0.
+In its entry section, thread i starts  
+
+15
+00:01:09,280 --> 00:01:15,360
+by setting true to its entry in choosing.
+Then, it computes the max value for all entries in  
+
+16
+00:01:15,360 --> 00:01:22,240
+number plus 1 and stores it in its number entry.
+Finally, it sets false to its entry in choosing. 
+
+17
+00:01:23,360 --> 00:01:29,280
+Then, it does a complete pass over the 
+n entries of the arrays, but it spins on  
+
+18
+00:01:29,280 --> 00:01:36,800
+each entry j if such an entry is choosing or if 
+such an entry has a lower number,j combination  
+
+19
+00:01:36,800 --> 00:01:42,080
+but the number is not 0 (number,j combination 
+because we use threads' ids to break ties). 
+
+20
+00:01:43,120 --> 00:01:47,760
+Then it enters the section.
+Once the critical section is over,  
+
+21
+00:01:47,760 --> 00:01:53,920
+the thread simply sets its number back to 0.
+Before discussing why this solution is valid,  
+
+22
+00:01:53,920 --> 00:01:58,400
+please notice that each thread is only 
+modifying its own entry in the array.
+
+23
+00:01:59,680 --> 00:02:03,600
+I ask you to formally reason 
+about why this solution is valid,  
+
+24
+00:02:03,600 --> 00:02:09,440
+I am only doing a rapid discussion. For mutual 
+exclusion, you can conclude that if a thread  
+
+25
+00:02:09,440 --> 00:02:14,800
+enters its critical section, then that thread 
+is sure no other thread has a lower number.  
+
+26
+00:02:15,520 --> 00:02:21,200
+When the thread is in, can another thread obtain 
+a lower number and enter the critical section?  
+
+27
+00:02:21,200 --> 00:02:24,480
+No, beacuse the number is always 
+the max of all threads + 1,  
+
+28
+00:02:25,120 --> 00:02:30,000
+so it will be at least +1 compared to the 
+thread that is running its critical section. 
+
+29
+00:02:30,880 --> 00:02:34,560
+When it comes to progress, the thread with 
+the smallest number can always proceed. 
+
+30
+00:02:35,200 --> 00:02:40,320
+When it comes to fairness, notice that once a 
+thread starts waiting and another enters its  
+
+31
+00:02:40,320 --> 00:02:45,920
+critical section, the next number the latter will 
+get is higher than that of the waiting thread.
+
+32
+00:02:46,880 --> 00:02:51,360
+Now going back to what I said in the beginning, 
+about the nice property of this algorithm,  
+
+33
+00:02:52,320 --> 00:02:58,160
+is that it works also with primitives that 
+are weaker than atomic read/write. In fact,  
+
+34
+00:02:58,160 --> 00:03:03,840
+this is one of the algorithms that gave rise 
+to research in lock-free synchronization.
+

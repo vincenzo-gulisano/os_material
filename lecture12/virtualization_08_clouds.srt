@@ -1,0 +1,499 @@
+1
+00:00:00,880 --> 00:00:09,280
+let's now move to the final part and let's talk 
+about cloud let's talk a bit about clouds  
+
+2
+00:00:09,840 --> 00:00:20,320
+so everyone or let's say a lot of people uses this 
+term cloud computing and it's a bit of a mess in  
+
+3
+00:00:20,320 --> 00:00:25,120
+the sense that there are a lot of variations 
+and a lot of understandings about what this  
+
+4
+00:00:25,680 --> 00:00:29,840
+is i'm not trying to cover all of 
+them here or to give an exhaustive
+
+5
+00:00:32,240 --> 00:00:41,120
+taxonomy of the thing especially because nowadays 
+it's not only about cloud computing you probably  
+
+6
+00:00:41,120 --> 00:00:48,480
+have heard terms about IoT internet of things 
+edge computing fog computing and all these  
+
+7
+00:00:48,480 --> 00:00:53,600
+things they share some similarity but they also 
+have different aspects and so on but if we just  
+
+8
+00:00:53,600 --> 00:01:02,160
+focus for a moment on cloud architectures if 
+you put it in a very simple way the idea is that  
+
+9
+00:01:04,000 --> 00:01:11,840
+you have a set of physical machines of servers 
+each of them uses virtualization to run several
+
+10
+00:01:14,080 --> 00:01:21,280
+guest operating systems and processes within 
+each guest operating system so that  
+
+11
+00:01:22,080 --> 00:01:29,680
+companies can rely on third-party companies 
+that provide such virtual machines to run their  
+
+12
+00:01:29,680 --> 00:01:35,520
+services maintain their data run their code and 
+so on and so forth you have of course a lot of  
+
+13
+00:01:36,400 --> 00:01:42,560
+variations here because you can think about public 
+cloud infrastructures so basically  
+
+14
+00:01:42,560 --> 00:01:50,080
+something that is what Google offers for example 
+or Microsoft too or private cloud infrastructures  
+
+15
+00:01:50,880 --> 00:01:54,480
+you can have big companies that have 
+their own servers and they use their own  
+
+16
+00:01:54,480 --> 00:02:00,800
+hypervisors and their own guest operating systems 
+to virtualize all the services they provide so  
+
+17
+00:02:01,440 --> 00:02:06,880
+everything stays within the company but it's still 
+a cloud infrastructure then you have of course  
+
+18
+00:02:06,880 --> 00:02:12,320
+different levels at which you can offer 
+services and we are going to look at this in 
+
+19
+00:02:13,680 --> 00:02:18,320
+detail in the next slide you have 
+differences sometimes you hear talking about  
+
+20
+00:02:18,320 --> 00:02:24,560
+big machines and small machines if you were 
+to let's say define a set of characteristics that  
+
+21
+00:02:25,200 --> 00:02:31,200
+you are interested in of course 
+you want on-demand and self-service  
+
+22
+00:02:32,480 --> 00:02:38,960
+provisioning of resources right so when you 
+need a machine you can connect and use that  
+
+23
+00:02:38,960 --> 00:02:46,880
+machine it doesn't need to be always on always 
+accessible it's when you want it  
+
+24
+00:02:46,880 --> 00:02:52,000
+(here always accessible I don't mean that you 
+cannot connect to it when you want what I mean is  
+
+25
+00:02:52,000 --> 00:02:57,600
+that it doesn't need to be on and waiting for you 
+all the time it gets instantiated when you want)  
+
+26
+00:02:59,360 --> 00:03:05,360
+you want broad network access right so you 
+want to be available via network with standard  
+
+27
+00:03:05,360 --> 00:03:10,400
+mechanisms you don't need special hardware or 
+special software to connect to it you want to  
+
+28
+00:03:10,400 --> 00:03:16,640
+create pools of resources so that you can keep 
+them depending on the demand you want elasticity  
+
+29
+00:03:17,760 --> 00:03:21,840
+which is a complicated topic that we are 
+not covering here but the idea is that  
+
+30
+00:03:21,840 --> 00:03:24,800
+in principle if you're running 
+for example certain analysis and  
+
+31
+00:03:26,240 --> 00:03:33,200
+one core it's not enough then you should be able 
+to scale up the analysis by adding additional  
+
+32
+00:03:33,200 --> 00:03:38,880
+core and increasing the parallelist degree maybe 
+for a while because you are observing a spike of  
+
+33
+00:03:39,920 --> 00:03:45,840
+volume of data so you need more computational 
+power but then if the data goes down again in  
+
+34
+00:03:45,840 --> 00:03:51,040
+size then maybe you can decommission some of 
+the cores you don't need and go back to using  
+
+35
+00:03:51,040 --> 00:03:58,880
+less cores because it costs less and of course 
+you need to have a good measuring of what your  
+
+36
+00:03:58,880 --> 00:04:04,000
+users are actually consuming what resources you are 
+using how much you use them because you pay only  
+
+37
+00:04:04,000 --> 00:04:10,000
+for what you actually consume not just to keep 
+the machine always there and always running as  
+
+38
+00:04:10,000 --> 00:04:14,960
+you would do probably with a traditional physical 
+machine that you use for a specific purpose  
+
+39
+00:04:15,920 --> 00:04:22,080
+now these are the different type of services 
+you can offer so you can have the so-called  
+
+40
+00:04:22,080 --> 00:04:27,600
+infrastructure as a service so here the idea 
+is that you provide the entire virtual machine  
+
+41
+00:04:27,600 --> 00:04:33,440
+and then you connect to it remotely and 
+you use it it can be an ssh connection  
+
+42
+00:04:33,440 --> 00:04:37,280
+and you just use the terminal to operate on 
+it or you can have a graphical user interface  
+
+43
+00:04:38,400 --> 00:04:43,920
+you are basically connected to your computer 
+that is remotely maintained and run by a  
+
+44
+00:04:43,920 --> 00:04:52,560
+hypervisor somewhere else you can have a service 
+that is the platform as a service here it's  
+
+45
+00:04:52,560 --> 00:04:57,520
+not just connecting to a virtual machine but it's 
+connecting to a specific environment so you  
+
+46
+00:04:57,520 --> 00:05:03,200
+can connect and use a specific operating system 
+you have a specific database installed there so  
+
+47
+00:05:04,240 --> 00:05:09,040
+if you want to maintain data you already have 
+everything in store and a set of functionalities  
+
+48
+00:05:09,040 --> 00:05:13,680
+that allow you to maintain the data you can make 
+similar examples with web servers if you want  
+
+49
+00:05:14,640 --> 00:05:19,680
+and then you have software as a service so 
+in that case you are connecting to a virtual  
+
+50
+00:05:19,680 --> 00:05:25,200
+machine but what you are using the virtual 
+machine for is only to execute a specific  
+
+51
+00:05:25,200 --> 00:05:31,600
+software and this is what you are actually seeing 
+so you're not allowed to operate on the entire  
+
+52
+00:05:31,600 --> 00:05:36,080
+virtual machine or go and change something in 
+the file system if it's about files that are  
+
+53
+00:05:36,080 --> 00:05:42,160
+not managed by that software you just get there 
+to operate on a specific piece of software  
+
+54
+00:05:43,920 --> 00:05:49,840
+now something that is a must when you 
+go into the cloud infrastructure that I think  
+
+55
+00:05:49,840 --> 00:05:57,680
+it's interesting mentioning here is that of 
+the virtual machine migration so we said in  
+
+56
+00:05:57,680 --> 00:06:04,160
+the very beginning of this lecture that one of the 
+benefits of virtualization is that if you need to  
+
+57
+00:06:05,120 --> 00:06:13,360
+let's say do some maintenance work on your 
+physical server you can suspend the execution  
+
+58
+00:06:13,360 --> 00:06:20,800
+of a virtual machine store its state and then turn 
+it on again start it again once you are done with  
+
+59
+00:06:20,800 --> 00:06:26,080
+the maintenance of course you can also take the 
+entire virtual machine and move it to a different  
+
+60
+00:06:27,840 --> 00:06:32,080
+piece of hardware and give it to another 
+hypervisor and then ask that supervisor to  
+
+61
+00:06:32,720 --> 00:06:40,400
+execute it now the idea is simple the 
+problem is that of course if you are offering  
+
+62
+00:06:40,400 --> 00:06:48,160
+a service and customers are paying only for the 
+amount of time or amount of resources they use  
+
+63
+00:06:48,160 --> 00:06:53,520
+you cannot penalize them and you cannot disrupt 
+the service by actually turning off the machine  
+
+64
+00:06:53,520 --> 00:06:57,280
+copying the data somewhere else and turning 
+on the machine again if the virtual machine  
+
+65
+00:06:57,280 --> 00:07:03,520
+is very big that might take even minutes and 
+you know of course it's not really nice to  
+
+66
+00:07:03,520 --> 00:07:10,880
+offer a service in which all of a sudden your 
+machine might be turned off and can be  
+
+67
+00:07:12,720 --> 00:07:17,040
+unaccessible for a certain amount of time 
+especially because you might not really know  
+
+68
+00:07:17,680 --> 00:07:26,000
+when that is going to happen and that might affect 
+your business so research here is conducted to  
+
+69
+00:07:26,000 --> 00:07:34,400
+perform what is called as live migration so to 
+provide mechanisms that allow to transfer one  
+
+70
+00:07:34,400 --> 00:07:40,960
+virtual machine from a certain hypervisor running 
+on a certain hardware to another one in a seamless  
+
+71
+00:07:42,800 --> 00:07:47,840
+fashion the goal is that the 
+transition is happening but you as a user  
+
+72
+00:07:47,840 --> 00:07:54,560
+cannot really experience or observe that this is 
+happening which is something that is also close  
+
+73
+00:07:54,560 --> 00:08:00,640
+in spirit to for tolerance this is also what research on full tolerant solutions is  
+
+74
+00:08:00,640 --> 00:08:06,880
+about many times you want to be able to tolerate 
+faults but without the user being affected by them  
+
+75
+00:08:06,880 --> 00:08:12,560
+or not significantly affected by them so 
+now the question is how do you do this for a
+
+76
+00:08:16,480 --> 00:08:24,160
+virtual machine something interesting here 
+is the concept of checkpointing and snapshotting  
+
+77
+00:08:24,160 --> 00:08:34,720
+so in a very simple way the idea 
+is that you continuously keep track of  
+
+78
+00:08:34,720 --> 00:08:40,480
+what is changing in your virtual machine so 
+you have the memory and you have control of  
+
+79
+00:08:40,480 --> 00:08:46,000
+the pages in the memory because the hypervisor is 
+the one that actually intercepts the request of  
+
+80
+00:08:46,000 --> 00:08:51,920
+the guest operating system and allocates 
+frames on the physical memory then you  
+
+81
+00:08:51,920 --> 00:08:57,280
+have the file system and as we said this can 
+actually be a file that is maintained by the  
+
+82
+00:08:58,160 --> 00:09:04,000
+hypervisor so with checkpointing and 
+snapshotting the idea is that since the very  
+
+83
+00:09:04,560 --> 00:09:12,160
+beginning of the execution of a new virtual 
+machine you start building an incremental
+
+84
+00:09:14,400 --> 00:09:20,400
+backup of all the information that is 
+about this virtual machine the initial  
+
+85
+00:09:20,400 --> 00:09:24,320
+one can just be the base one because you 
+create a virtual machine that is let's say  
+
+86
+00:09:24,320 --> 00:09:30,400
+the virtual machine that runs ubuntu 16 you 
+have an image so you can already have that as a  
+
+87
+00:09:31,120 --> 00:09:34,880
+backup if you want to turn on a new 
+or create a new virtual machine with  
+
+88
+00:09:34,880 --> 00:09:38,560
+that operating system you don't have to install 
+the operating system from scratch you can just  
+
+89
+00:09:38,560 --> 00:09:45,360
+take the copy and consider that as the starting 
+point and then keep track of whatever is being  
+
+90
+00:09:46,080 --> 00:09:52,960
+updated during the execution and 
+periodically perform updates on your backup  
+
+91
+00:09:54,160 --> 00:10:01,440
+so that when you have to migrate something you 
+can start from the latest backup and only update  
+
+92
+00:10:02,000 --> 00:10:06,880
+what was changed since the time you created 
+the backup to the time you are actually
+
+93
+00:10:08,960 --> 00:10:13,200
+performing a migration of a virtual 
+machine so now you need to combine
+
+94
+00:10:15,520 --> 00:10:18,880
+a mechanism that keeps track of 
+what is being modified in memory  
+
+95
+00:10:18,880 --> 00:10:23,040
+so that you can replicate that and 
+apply those changes to the latest backup  
+
+96
+00:10:23,040 --> 00:10:29,280
+but you can make everything more smooth in 
+the transition because you can take the last  
+
+97
+00:10:30,240 --> 00:10:34,800
+checkpoint snapshot and move it to a different 
+virtual machine without really interrupting  
+
+98
+00:10:34,800 --> 00:10:39,600
+the execution of the current virtual machine 
+and if you are able in a lightweight manner  
+
+99
+00:10:40,480 --> 00:10:46,160
+to keep always incremental snapshots 
+with a fine-grained resolution then this  
+
+100
+00:10:46,160 --> 00:10:53,360
+is basically the mechanism that allows 
+you to achieve seamless live migrations
+

@@ -1,0 +1,85 @@
+1
+00:00:01,440 --> 00:00:06,400
+In this video, we are going to look at 
+another synchronization primitive: semaphores. 
+
+2
+00:00:07,120 --> 00:00:12,240
+A semaphore is a special variable/data 
+object that can be used for signaling. 
+
+3
+00:00:12,880 --> 00:00:16,960
+It is handled via 2 atomic 
+operations: wait and signal.  
+
+4
+00:00:17,600 --> 00:00:22,640
+If a thread is waiting for a signal, it will 
+remain blocked until that signal is sent. 
+
+5
+00:00:23,520 --> 00:00:28,640
+We have seen such a behavior in the lecture 
+about multi-threaded processes and pthreads. 
+
+6
+00:00:29,600 --> 00:00:33,200
+Here we have the description 
+of how signal and wait work. 
+
+7
+00:00:34,400 --> 00:00:40,240
+When invoking signal on variable S, 
+the variable is atomically incremented. 
+
+8
+00:00:40,240 --> 00:00:44,800
+When invoking wait on S, the thread 
+invoking the function will loop or  
+
+9
+00:00:44,800 --> 00:00:51,920
+remain blocked until S value is 0. After that, 
+it will exit after decreasing the value of S. 
+
+10
+00:00:53,600 --> 00:00:58,000
+S can take only values 0 and 
+1 if it is a binary semaphore  
+
+11
+00:00:58,000 --> 00:01:00,960
+or also greater than one if 
+it is a counting semaphore.
+
+12
+00:01:03,280 --> 00:01:08,880
+At this point, you can hopefully see semaphores 
+can be used as shown in this pseudocode to  
+
+13
+00:01:08,880 --> 00:01:13,280
+handle the critical section problem (but 
+please try to reason formally by yourself!)
+
+14
+00:01:14,960 --> 00:01:20,480
+Something worth noticing about semaphores 
+is that they can be used to create an order  
+
+15
+00:01:20,480 --> 00:01:27,520
+in the execution of two threads. If we 
+want to execute code segment opB from TB  
+
+16
+00:01:27,520 --> 00:01:35,600
+only after code segment opA has been executed 
+in Ta, we can do it as shown in the slide. Since  
+
+17
+00:01:35,600 --> 00:01:45,520
+B waits for a signal from A, and A sends a signal 
+after opA, then opB will be executed after opA.
+

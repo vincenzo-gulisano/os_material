@@ -1,0 +1,664 @@
+1
+00:00:01,150 --> 00:00:08,380
+Let's start now with lecture number 10 and
+this is about file systems.
+
+2
+00:00:08,380 --> 00:00:09,380
+So
+
+3
+00:00:09,380 --> 00:00:15,709
+You have the written instructions here. As
+always from the book we use in the course
+
+4
+00:00:15,709 --> 00:00:21,769
+and also the extra facultative reading
+if you want to have a look.
+
+5
+00:00:21,769 --> 00:00:26,850
+So this lecture is about file systems and
+I guess
+
+6
+00:00:26,850 --> 00:00:32,640
+at least some of the concepts we will discuss
+here, you should be pretty familiar with
+
+7
+00:00:32,640 --> 00:00:37,750
+them. There are two things that are very
+
+8
+00:00:37,750 --> 00:00:45,740
+connected to the file system that you see
+and use every day and that would be files and
+
+9
+00:00:45,740 --> 00:00:49,460
+directories, so I think this lecture is sort
+of
+
+10
+00:00:49,460 --> 00:00:50,660
+easier than others because
+
+11
+00:00:50,660 --> 00:00:57,320
+some of the concepts you should be very familiar
+with them, but nonetheless the objectives
+
+12
+00:00:57,320 --> 00:01:00,640
+of this lecture
+
+13
+00:01:00,640 --> 00:01:08,100
+are to explain the function of file systems
+and also which interfaces we have.
+
+14
+00:01:08,100 --> 00:01:13,900
+We will discuss of course trade offs. As always
+when it comes to how we manage the file system,
+
+15
+00:01:13,900 --> 00:01:21,990
+maintain the information and so on, we will
+discuss protection mechanisms that are defined
+
+16
+00:01:21,990 --> 00:01:28,500
+in the file system and also different ways
+in which you can actually allocate the information
+
+17
+00:01:28,500 --> 00:01:32,171
+on disk and also keep track of which parts
+of the disk are free. If you have to write
+
+18
+00:01:32,171 --> 00:01:37,830
+something new and which are already taken.
+
+19
+00:01:37,830 --> 00:01:45,049
+This is the agenda. Let's go one step at the
+time. So let's start with the first part here:
+
+20
+00:01:45,049 --> 00:01:47,070
+file concept.
+
+21
+00:01:47,070 --> 00:01:52,800
+So what extra information, what overheads, 
+interfaces does the operating system
+
+22
+00:01:52,800 --> 00:01:54,280
+needs to
+
+23
+00:01:54,280 --> 00:01:55,580
+provide
+
+24
+00:01:55,580 --> 00:02:03,530
+In order to provide files and directories,
+such type of abstractions to the users and
+
+25
+00:02:03,530 --> 00:02:08,160
+let me say something before we start. So now
+we have discussed memory,
+
+26
+00:02:08,160 --> 00:02:14,310
+different allocation schemes and also virtual
+memory and all these concepts in the last
+
+27
+00:02:14,310 --> 00:02:18,739
+two lectures. So you will see that there are
+parallelisms between what we discussed in
+
+28
+00:02:18,739 --> 00:02:21,879
+those lectures and what we're going to discuss
+today.
+
+29
+00:02:21,879 --> 00:02:29,050
+But there are also aspects that are very specific
+to the file system.
+
+30
+00:02:29,050 --> 00:02:31,269
+So,
+
+31
+00:02:31,269 --> 00:02:36,739
+a file if you want to give a definition for
+it, it's the minimum allocation unit for the
+
+32
+00:02:36,739 --> 00:02:42,540
+user when the user decides to store something
+on the disk, the minimum it can store is a
+
+33
+00:02:42,540 --> 00:02:43,799
+file.
+
+34
+00:02:43,799 --> 00:02:49,920
+This is the abstraction that is introduced by the
+operating system and the idea here is to give
+
+35
+00:02:49,920 --> 00:02:56,780
+this high-level abstraction that
+is the file so that the operating system under
+
+36
+00:02:56,780 --> 00:02:59,840
+the hood takes care of all the
+
+37
+00:02:59,840 --> 00:03:03,900
+extra steps and interactions with the hardware,
+you know this we mentioned from the very
+
+38
+00:03:03,900 --> 00:03:08,120
+beginning of the course of this ugly interfaces
+that you don't really want to talk to directly,
+
+39
+00:03:08,120 --> 00:03:13,440
+but you can just interact with through
+
+40
+00:03:13,440 --> 00:03:14,650
+the operating system.
+
+41
+00:03:14,650 --> 00:03:20,749
+Again, there is a separation between logical
+and physical representation, and this is again
+
+42
+00:03:20,749 --> 00:03:25,569
+thanks to this abstraction that is the file
+and similarly the abstraction that is
+
+43
+00:03:25,569 --> 00:03:28,670
+the directory.
+
+44
+00:03:28,670 --> 00:03:31,249
+And you already know that
+
+45
+00:03:31,249 --> 00:03:37,529
+it's not just an abstraction, the file. Actually
+each file comes with meta data that is both
+
+46
+00:03:37,529 --> 00:03:41,430
+for the sake of the operating system, but
+also for the sake of the user. OK, you have
+
+47
+00:03:41,430 --> 00:03:44,939
+different types of files, some are
+
+48
+00:03:44,939 --> 00:03:51,370
+text file so you can have binary files. Some
+are about programs that can be run and so.
+
+49
+00:03:51,370 --> 00:03:57,049
+Now, one thing that is important to understand
+here is that for the majority of files, what
+
+50
+00:03:57,049 --> 00:04:04,639
+the file is and what the computer should do
+to interact with such a file is actually defined
+
+51
+00:04:04,639 --> 00:04:07,489
+by who creates the file.
+
+52
+00:04:07,489 --> 00:04:16,199
+So if you double click a text file and Microsoft
+Word opens up and you can text on it, it's
+
+53
+00:04:16,199 --> 00:04:19,320
+because there is a
+
+54
+00:04:19,320 --> 00:04:27,979
+quite complicated complex series of steps
+in between and these are these exist becauses
+
+55
+00:04:27,979 --> 00:04:33,240
+some of the metadata associated to the file
+says this is a text file and the operating
+
+56
+00:04:33,240 --> 00:04:38,870
+system associate's text files with specific
+programs so that actually when you want to
+
+57
+00:04:38,870 --> 00:04:43,479
+open a file what you do is not just opening
+the file but rather telling the operating
+
+58
+00:04:43,479 --> 00:04:50,139
+system to start a specific process and then
+pass that file to that process because
+
+59
+00:04:50,139 --> 00:04:55,199
+somehow it has been registered at the operating
+system level that this specific file, let's
+
+60
+00:04:55,199 --> 00:04:57,860
+say a text file,
+
+61
+00:04:57,860 --> 00:05:05,740
+is usually managed, read written modified
+with a specific program that needs to be into
+
+62
+00:05:05,740 --> 00:05:11,710
+execution in needs to be brought up into execution
+before you actually access the file.
+
+63
+00:05:11,710 --> 00:05:15,860
+Some of these things are done with this metadata
+that we have in the files that are the attributes
+
+64
+00:05:15,860 --> 00:05:23,361
+of the file. Of course you have the name.
+I'm saying simple stuff. Here we have identifiers.
+
+65
+00:05:23,361 --> 00:05:27,919
+Here different types for each file you need
+to keep the location, so actually some information
+
+66
+00:05:27,919 --> 00:05:32,629
+that allows the operating system to go and
+read in the specific position in the disk
+
+67
+00:05:32,629 --> 00:05:35,110
+where the file is
+
+68
+00:05:35,110 --> 00:05:39,570
+stored you have the size you have different
+protection levels in might read the file or
+
+69
+00:05:39,570 --> 00:05:45,120
+execute the file depending on what attributes
+or how the protection attributes are set.
+
+70
+00:05:45,120 --> 00:05:53,860
+And you have time, date and other identification.
+So again, pretty simple what I'm saying
+
+71
+00:05:53,860 --> 00:05:56,500
+I don't think I'm saying anything
+
+72
+00:05:56,500 --> 00:06:04,650
+too complex here, but if you think, for example
+at the process of compiling a lot of
+
+73
+00:06:05,850 --> 00:06:11,659
+C files so that you create a binary. You
+probably know that when you compile your project,
+
+74
+00:06:11,659 --> 00:06:17,699
+you don't necessarily recompile all the files,
+but you might compile only the ones that have
+
+75
+00:06:17,699 --> 00:06:24,560
+changed since the last time you compiled.
+This is a good thing because it requires less
+
+76
+00:06:24,560 --> 00:06:31,139
+time for you to compile something,
+but now you probably see that if you have
+
+77
+00:06:31,139 --> 00:06:35,470
+such a feature is because of the attributes
+you add in the file, so you have
+
+78
+00:06:35,470 --> 00:06:43,960
+an attribute time and the process you run
+to deal with text files that contain instructions
+
+79
+00:06:43,960 --> 00:06:49,990
+when you want to make them into a binary can
+also use these attributes like the time so
+
+80
+00:06:49,990 --> 00:06:56,020
+that they can check what is the time at which
+the last binary was or the last compiled version
+
+81
+00:06:56,020 --> 00:07:00,400
+of the file was created. You can check what
+was the time it was modified last and depending
+
+82
+00:07:00,400 --> 00:07:03,850
+on this it can decide whether it's
+
+83
+00:07:03,850 --> 00:07:07,770
+the case that the source file needs to be
+compiled again or not so you can see there
+
+84
+00:07:07,770 --> 00:07:10,550
+are a lot of things happening thanks to the
+
+85
+00:07:10,550 --> 00:07:14,470
+metadata the attributes you have for each
+file.
+
+86
+00:07:14,470 --> 00:07:21,719
+Here you have a list. I don't think I need
+to go through it. It's pretty simple, but
+
+87
+00:07:21,719 --> 00:07:27,030
+basically is what I said before, that each
+file has an extension and the operating system
+
+88
+00:07:27,030 --> 00:07:33,469
+knows what to do with each file. Also based
+on the extension you have so it can associate
+
+89
+00:07:33,469 --> 00:07:40,919
+different processes that should be started
+before you actually operate on the file.
+
+90
+00:07:40,919 --> 00:07:45,009
+Now the operating system gives you a lot of
+functionality to operate with files. It's
+
+91
+00:07:45,009 --> 00:07:50,620
+not just the abstraction per-se.
+
+92
+00:07:50,620 --> 00:07:58,819
+The operating system of course needs to maintain
+extra information as always to allow for this
+
+93
+00:07:58,819 --> 00:08:05,249
+functionality and as we saw when we started
+discussing processes some information
+
+94
+00:08:05,249 --> 00:08:11,610
+is specific to individual files or individual
+processes, while other information is global.
+
+95
+00:08:11,610 --> 00:08:17,439
+It applies to the entire system. The operating
+system keeps an open file table which tracks
+
+96
+00:08:17,439 --> 00:08:22,719
+which files are open. Pointers for each file,
+so that if you are doing a sequential read,
+
+97
+00:08:22,719 --> 00:08:27,360
+for example, it can keep track of the last
+thing that was read or written to specific
+
+98
+00:08:27,360 --> 00:08:28,759
+file.
+
+99
+00:08:28,759 --> 00:08:34,000
+It needs to keep a counter for each file.
+Imagine different processes are reading from
+
+100
+00:08:34,000 --> 00:08:38,430
+the same file. Then the operating system might
+read the file only once from disk and then
+
+101
+00:08:38,430 --> 00:08:43,410
+give this to several processes. But if one
+of the processes closes the file, it doesn't
+
+102
+00:08:43,410 --> 00:08:47,920
+mean that the file should be removed from the
+memory. There could be other processes that
+
+103
+00:08:47,920 --> 00:08:52,540
+are still reading the file and this is why
+the operating system must also account for
+
+104
+00:08:52,540 --> 00:08:58,710
+each file. It keeps the location on the disk.
+This is clear the access right and
+
+105
+00:08:58,710 --> 00:09:04,780
+several other things we will see now during
+the lecture. So again, in summary, we need
+
+106
+00:09:04,780 --> 00:09:07,850
+extra information. Some is specific
+
+107
+00:09:07,850 --> 00:09:15,680
+to the file or to the process that you are
+using to interact with the file. You in this
+
+108
+00:09:15,680 --> 00:09:19,460
+case is the user or the programmer.
+
+109
+00:09:19,460 --> 00:09:25,190
+And then some information is global and
+it applies to the entire system.
+
+110
+00:09:25,190 --> 00:09:31,070
+It gives you, of course, also functionality
+to operate on files. You can create /
+
+111
+00:09:31,070 --> 00:09:36,930
+write files at specific locations. You
+can read files you can reposition within files.
+
+112
+00:09:36,930 --> 00:09:41,180
+You can go at different offsets inside the
+file, you can delete files, truncate files and
+
+113
+00:09:41,180 --> 00:09:49,230
+so on. And everything looks pretty simple.
+I don't think I'm saying anything too fancy
+
+114
+00:09:49,230 --> 00:09:51,530
+that is too fancy here, but again
+
+115
+00:09:51,530 --> 00:09:57,390
+at this point, you should probably have this
+feeling that actually opening a file requires
+
+116
+00:09:57,390 --> 00:10:02,730
+a decent amount of steps you need to interact
+with the disk that will be system calls. You
+
+117
+00:10:02,730 --> 00:10:08,120
+need to locate where the file is on disk.
+You need to read something and associate with
+
+118
+00:10:08,120 --> 00:10:12,710
+the process. That process might be in waiting
+state. So you need a mechanism to decide where
+
+119
+00:10:12,710 --> 00:10:17,010
+to put what you're reading. You might
+be swapping out processes, and if you swap
+
+120
+00:10:17,010 --> 00:10:21,650
+out processes that are waiting for stuff from
+the disk, then you should keep these things
+
+121
+00:10:21,650 --> 00:10:22,650
+that are being
+
+122
+00:10:22,650 --> 00:10:25,770
+read from the disk in
+
+123
+00:10:25,770 --> 00:10:30,400
+a specific location so that it doesn't affect
+they are not affected by the fact that you
+
+124
+00:10:30,400 --> 00:10:34,260
+are swapping out processes and so on.
+
+125
+00:10:34,260 --> 00:10:39,070
+Here we can just look at a very simple
+example.
+
+126
+00:10:39,070 --> 00:10:45,630
+This is a program that copies a file. You
+give the input file and you specify where
+
+127
+00:10:45,630 --> 00:10:50,430
+it should be, or the destination where you
+want to copy the file. I ask you to go through
+
+128
+00:10:50,430 --> 00:10:52,780
+this code and
+
+129
+00:10:52,780 --> 00:10:58,080
+basically check it. It's not complicated,
+but what I'm trying to say here is that you
+
+130
+00:10:58,080 --> 00:10:59,080
+see
+
+131
+00:10:59,080 --> 00:11:00,980
+When I say open
+
+132
+00:11:00,980 --> 00:11:02,720
+read-only
+
+133
+00:11:02,720 --> 00:11:08,060
+and you specify here, for example, the location
+where the file is,
+
+134
+00:11:08,060 --> 00:11:13,060
+this is actually resulting in a long and complicated
+series of steps, and all these things are
+
+135
+00:11:13,060 --> 00:11:17,680
+done by the operating system and they simplify
+your life because it's not you who has to
+
+136
+00:11:17,680 --> 00:11:21,830
+interact directly with the disk to
+
+137
+00:11:21,830 --> 00:11:28,060
+specify in which blocks (we will see what these
+are) the file is stored whether it is contiguous
+
+138
+00:11:28,060 --> 00:11:33,910
+blocks, whether it's scattered around the disk,
+and so on and so forth. I am not going now through the
+
+139
+00:11:33,910 --> 00:11:39,630
+pseudocode, have a look at this point
+it should be
+
+140
+00:11:39,630 --> 00:11:43,820
+pretty clear. Here you have this read,
+write, close the file and so on.
+

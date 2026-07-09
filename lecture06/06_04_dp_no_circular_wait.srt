@@ -1,0 +1,108 @@
+1
+00:00:01,760 --> 00:00:07,280
+So, let's try then to modify our 
+solution so that we can avoid deadlocks. 
+
+2
+00:00:08,000 --> 00:00:12,800
+As we discussed before, as long as we make 
+sure one of the following things cannot happen:  
+
+3
+00:00:12,800 --> 00:00:16,960
+hold and wait, no preemption or 
+circular wait (I am of course  
+
+4
+00:00:16,960 --> 00:00:20,720
+excluding mutual exclusion!) then we are done.
+
+5
+00:00:21,280 --> 00:00:23,600
+Can we prevent circular wait from happening? 
+
+6
+00:00:24,640 --> 00:00:29,680
+This is not difficult, let's look at a 
+solution we call the request-resource-in-order. 
+
+7
+00:00:30,320 --> 00:00:36,160
+The idea is simple, we only change the code 
+executed by the last philosopher, so that he/she  
+
+8
+00:00:39,040 --> 00:00:44,800
+tries to take the right chopstick first 
+and the left chopstick after that. 
+
+9
+00:00:45,360 --> 00:00:48,720
+Let's argument why we cannot have 
+a circular wait in this case.
+
+10
+00:00:49,840 --> 00:00:55,280
+I am for simplicity assuming we only have 
+2 philosophers here, but you can extend  
+
+11
+00:00:55,280 --> 00:01:00,880
+this reasoning to 3 or more philosophers.
+Philosopher 0 takes chopstick 0 and then 1,  
+
+12
+00:01:00,880 --> 00:01:07,520
+Philosopher 1 takes chopstick 0 and then 1.
+Let's say Philosopher 0 waits for chopstick 0,  
+
+13
+00:01:07,520 --> 00:01:13,440
+because philosopher 1 has it. If 
+philosopher 1 has chopstick 0 and  
+
+14
+00:01:13,440 --> 00:01:20,080
+Philosopher 0 also waits for chopstick 0, then 
+Philosopher 1 can get chopstick 1 and eat.
+
+15
+00:01:21,920 --> 00:01:32,000
+Let's say Philosopher 1 waits for chopstick 1, 
+then it managed to get chopstick 0. But if it  
+
+16
+00:01:32,000 --> 00:01:38,400
+has chopstick 0 then philosopher 1 cannot have 
+chopstick 1, which means philosopher 1 can eat.
+
+17
+00:01:39,760 --> 00:01:42,720
+Once we have proven this solution 
+cannot lead to a deadlock,  
+
+18
+00:01:42,720 --> 00:01:47,840
+the next step is to reason about fairness.
+Here, it is probably easy to see that the  
+
+19
+00:01:47,840 --> 00:01:52,240
+solution might lead to the same philosopher 
+being the one that manages to get both  
+
+20
+00:01:52,240 --> 00:01:57,200
+chopsticks over and over... (as before, 
+try to reason formally about this!).  
+
+21
+00:01:58,080 --> 00:02:03,280
+A solution to this problem could be given by 
+having the semaphores implementing some fairness  
+
+22
+00:02:03,280 --> 00:02:07,840
+mechanism, delivering the 
+signals to both philosophers.
+

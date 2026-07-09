@@ -1,0 +1,305 @@
+1
+00:00:01,030 --> 00:00:07,210
+ok so this is probably one of the most important
+slides of this lecture, for sure, but also
+
+2
+00:00:07,210 --> 00:00:13,169
+of the course so let us spend some time on
+it and before we actually start looking at
+
+3
+00:00:13,169 --> 00:00:18,860
+this slide let us first reason a bit together.
+So I just said that you have one CPU core
+
+4
+00:00:18,860 --> 00:00:25,270
+and that it is all the time changing the program
+it runs. Now the way it does this is not really
+
+5
+00:00:25,270 --> 00:00:31,380
+that different from the way we do things in
+our lives so if I am preparing dinner let us
+
+6
+00:00:31,380 --> 00:00:36,690
+say I want to cook some pasta so I have a
+set of instructions that I need to follow
+
+7
+00:00:36,690 --> 00:00:42,070
+and I am going to run one instruction after
+the other so first you put the water then
+
+8
+00:00:42,070 --> 00:00:47,679
+you warm the water until it boils then you
+put the salt then you put the pasta and blah
+
+9
+00:00:47,679 --> 00:00:54,609
+blah blah I am going to do one thing at the
+time and let us assume this is what I am doing
+
+10
+00:00:54,609 --> 00:01:00,749
+and I might get interrupted let us say my daughter
+she needs something so she calls for me and
+
+11
+00:01:00,749 --> 00:01:05,979
+I stop paying attention to what I am doing
+and I start paying attention to her before
+
+12
+00:01:05,979 --> 00:01:12,219
+I do that I will store somehow information about 
+what is the last thing or the last instruction
+
+13
+00:01:12,219 --> 00:01:18,410
+I executed about preparing dinner so I will
+memorize for example that the water is warming
+
+14
+00:01:18,410 --> 00:01:27,020
+up but I have not yet put the salt in it before
+also talking with my daughter I will also
+
+15
+00:01:27,020 --> 00:01:37,299
+switch to the relevant context for my daughter
+I will probably check what she has in her
+
+16
+00:01:37,299 --> 00:01:44,240
+hands or something like this so I will stop
+preparing dinner and start taking care of
+
+17
+00:01:44,240 --> 00:01:50,939
+my daughter I will do whatever I need to do
+with her at a certain point I will be done
+
+18
+00:01:50,939 --> 00:01:54,740
+I might need to maintain some information
+about what I just said to my daughter because
+
+19
+00:01:54,740 --> 00:01:58,899
+maybe I said her to go pick up something and
+I need to remember what that something is
+
+20
+00:01:58,899 --> 00:02:03,659
+and then I will load back information about
+where I was with the pasta the next thing
+
+21
+00:02:03,659 --> 00:02:11,340
+to do was to put the salt what I described
+it is called in operating systems a context
+
+22
+00:02:11,340 --> 00:02:17,599
+switch and this is what is happening all the
+time in each CPU core so now let us look at
+
+23
+00:02:17,599 --> 00:02:22,560
+the slide there are lots of terms here and
+they will be introduced in the next video
+
+24
+00:02:22,560 --> 00:02:31,879
+but it is simple at the end of the day here
+we have two processes and they are called
+
+25
+00:02:31,879 --> 00:02:36,519
+processes not programs because these are running
+and you can run the same program multiple
+
+26
+00:02:36,519 --> 00:02:46,129
+times and each one is a different process
+you see that interrupts and system calls appear
+
+27
+00:02:46,129 --> 00:02:55,480
+here too and you see that there is this PCB
+which stands for process control block and
+
+28
+00:02:55,480 --> 00:03:00,870
+each process has its own process control block
+we have process 0 and we have process control
+
+29
+00:03:00,870 --> 00:03:08,370
+block 0 we have process 1 and there is process
+control block 1 what is happening here is
+
+30
+00:03:08,370 --> 00:03:14,569
+that you are executing or the CPU cores are
+executing process P0 at a certain point something
+
+31
+00:03:14,569 --> 00:03:21,120
+happens can be a system call or an interrupt
+this is my daughter that calls for me and
+
+32
+00:03:21,120 --> 00:03:28,270
+what the operating system does is that it
+saves the context the state of process P0
+
+33
+00:03:28,270 --> 00:03:34,319
+and loads the one of process P1 it does a
+switch in the context to move from process
+
+34
+00:03:34,319 --> 00:03:42,989
+P0 to process P1 then it starts executing
+process P1 and when it is done it stores the
+
+35
+00:03:42,989 --> 00:03:50,530
+information about process P1 loads the information
+about P0 and then starts executing process
+
+36
+00:03:50,530 --> 00:03:58,120
+P0 again there are important things here you
+can already see each process can be in a different
+
+37
+00:03:58,120 --> 00:04:05,230
+state sometimes the process is executing sometimes
+the process is not so it could be in a idle
+
+38
+00:04:05,230 --> 00:04:14,599
+state also you see that there are periods
+of time during which no process is running
+
+39
+00:04:14,599 --> 00:04:19,500
+this is the time it takes to store the process
+control block and to reload the process control
+
+40
+00:04:19,500 --> 00:04:29,110
+block of another process as you can imagine
+here these times need to be minimized if you
+
+41
+00:04:29,110 --> 00:04:35,590
+spend most of the time doing this load/unload
+of PCBs then most of your CPU time is just
+
+42
+00:04:35,590 --> 00:04:42,039
+wasted doing context switches as we will discuss
+during the course there is a very tight connection
+
+43
+00:04:42,039 --> 00:04:47,471
+and cooperation between the operating system
+and the hardware and that is why they (context
+
+44
+00:04:47,471 --> 00:04:52,360
+switches) can happen extremely fast so fast
+that you do not actually perceive them and
+
+45
+00:04:52,360 --> 00:04:57,830
+you have this feeling of several processes
+running at the same time when they are not
+
+46
+00:04:57,830 --> 00:05:05,940
+really running at the same time there is one
+more important thing here that might sound
+
+47
+00:05:05,940 --> 00:05:11,800
+strange now but it is important I am talking
+about the operating system as the one that
+
+48
+00:05:11,800 --> 00:05:18,979
+decides that it is time to stop running process
+P0 and start running process P1 and do this
+
+49
+00:05:18,979 --> 00:05:25,270
+king of things the problem here is that I
+am simplifying a bit stuff because the operating
+
+50
+00:05:25,270 --> 00:05:30,740
+system is not an oracle or an entity that
+lives outside your computer at the end of
+
+51
+00:05:30,740 --> 00:05:36,669
+the day it is a bunch of instructions that
+you execute as you execute any other process
+
+52
+00:05:36,669 --> 00:05:43,240
+so if you look at this image here where do
+you see the operating system? what does it
+
+53
+00:05:43,240 --> 00:05:51,350
+mean the operating system decides that it
+is time to stop running process P0 and run
+
+54
+00:05:51,350 --> 00:05:57,010
+process P1 if process P0 is being run it means
+that the CPU core is running process P0 if
+
+55
+00:05:57,010 --> 00:06:01,810
+you assume that you have only one CPU core
+(because you had operating systems even when
+
+56
+00:06:01,810 --> 00:06:07,680
+you had computers with a single CPU core)
+how does the operating system take a decision
+
+57
+00:06:07,680 --> 00:06:15,590
+about switching a process? well as I will
+explain one of these two processes or even
+
+58
+00:06:15,590 --> 00:06:21,710
+both processes might actually belong to the
+operating system so you might be running process
+
+59
+00:06:21,710 --> 00:06:27,560
+P0 and you want to read something from the
+disk then you do a system call the hardware
+
+60
+00:06:27,560 --> 00:06:32,880
+puts your process to sleep and wakes up the
+process that belongs to the operating system
+
+61
+00:06:32,880 --> 00:06:36,439
+and is the process that it is about reading
+something from the hard disk
+

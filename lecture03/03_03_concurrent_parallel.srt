@@ -1,0 +1,175 @@
+1
+00:00:01,920 --> 00:00:12,800
+so now what I will show you next and this will 
+be discussed in several points during the course  
+
+2
+00:00:12,800 --> 00:00:19,200
+is that writing multi-threaded 
+processes is challenging
+
+3
+00:00:21,280 --> 00:00:25,280
+writing code that can be 
+executed by multiple threads  
+
+4
+00:00:25,280 --> 00:00:30,000
+puts a lot of pressure on programmers because 
+of several challenges you have some of them  
+
+5
+00:00:30,560 --> 00:00:37,040
+here but before we look into these challenges we 
+need to understand the difference between parallel  
+
+6
+00:00:37,040 --> 00:00:45,440
+execution and concurrent execution this is 
+extremely important parallelism implies that the system  
+
+7
+00:00:45,440 --> 00:00:53,200
+can perform more than one task simultaneously 
+concurrency supports more than one task making  
+
+8
+00:00:53,200 --> 00:00:57,680
+progress at the same time so the operating 
+system your computer together with operating  
+
+9
+00:00:57,680 --> 00:01:04,080
+system can have several threads that are 
+making progress during a certain period of time  
+
+10
+00:01:05,600 --> 00:01:13,040
+to show you what this means let's have a look 
+at this so here we have four threads in the  
+
+11
+00:01:13,040 --> 00:01:19,600
+first case we have a single core and we see that 
+over time the four threads are all being executed  
+
+12
+00:01:21,520 --> 00:01:28,560
+this is a concurrent execution if you freeze time 
+and you look inside the core you will find one  
+
+13
+00:01:28,560 --> 00:01:35,360
+thread executing so running one line of code 
+from one process there is only one thread  
+
+14
+00:01:35,360 --> 00:01:41,040
+at the time and so one process at the time that 
+is being executed the execution is concurrent  
+
+15
+00:01:41,600 --> 00:01:46,880
+the execution of the different threads when we 
+talk about parallel execution on the other hand  
+
+16
+00:01:46,880 --> 00:01:53,040
+we are talking about a system in which we have 
+multiple cores and at the same instant of time so  
+
+17
+00:01:53,040 --> 00:01:58,720
+if we freeze time and we start looking inside the 
+cores we can find more than one instruction that  
+
+18
+00:01:58,720 --> 00:02:06,480
+is being executed at the same time in this 
+case here you can see that thread 1 and thread 2  
+
+19
+00:02:06,480 --> 00:02:13,680
+are being executed in parallel while here thread 1 
+and thread 2 are being executed concurrently
+
+20
+00:02:16,960 --> 00:02:26,640
+now when we have parallel execution of 
+multi-threaded processes we can go in two  
+
+21
+00:02:26,640 --> 00:02:33,600
+ways usually one is to take advantage of 
+multiple threads to perform data parallelism  
+
+22
+00:02:33,600 --> 00:02:40,160
+in this case we might for instance i 
+don't know look for an element inside an array  
+
+23
+00:02:40,160 --> 00:02:45,040
+and instead of having one thread that 
+searches the entire array have two  
+
+24
+00:02:45,040 --> 00:02:52,080
+threads each searching one half of the array in 
+this case it might be that two distinct threads  
+
+25
+00:02:52,080 --> 00:02:57,600
+are actually running the same lines of code 
+from the same process and this I mentioned  
+
+26
+00:02:57,600 --> 00:03:03,840
+in some video before multithreading doesn't 
+mean that you are executing different parts of  
+
+27
+00:03:05,040 --> 00:03:12,000
+the process you might be executing the same 
+part but on different data an alternative to data  
+
+28
+00:03:12,000 --> 00:03:18,240
+parallelism is task parallelism so in that case you 
+distribute different tasks to different threads so  
+
+29
+00:03:18,240 --> 00:03:23,520
+you can have a thread checking for updates another 
+running the spell checker and another one printing  
+
+30
+00:03:23,520 --> 00:03:34,640
+documents and so on if we go back to our example 
+about Microsoft Word as we will see CPUs  
+
+31
+00:03:35,680 --> 00:03:41,600
+have cores as well as hardware threads 
+there is architectural support  
+
+32
+00:03:44,080 --> 00:03:48,240
+for threading you have mechanisms 
+such as hyper trading and so on so  
+
+33
+00:03:48,800 --> 00:03:54,800
+this I'm mentioning because as I said in the 
+beginning and I will repeat several times there  
+
+34
+00:03:54,800 --> 00:04:00,320
+is a tight connection between the operating 
+system and the hardware that is designed  
+
+35
+00:04:00,320 --> 00:04:05,840
+to be compatible and in line 
+with modern operating systems
+

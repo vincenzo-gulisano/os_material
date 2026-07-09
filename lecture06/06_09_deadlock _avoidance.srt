@@ -1,0 +1,299 @@
+1
+00:00:02,320 --> 00:00:06,880
+In this last part of the lecture, 
+let's focus on how the OS itself can  
+
+2
+00:00:06,880 --> 00:00:09,440
+act as an arbitrator to avoid deadlocks. 
+
+3
+00:00:10,080 --> 00:00:14,800
+In the examples we have seen so far, all the 
+threads trying to access shared resources sort  
+
+4
+00:00:14,800 --> 00:00:20,480
+of know each other, they share variables, they 
+have clear roles (e.g., readers and writers),  
+
+5
+00:00:20,480 --> 00:00:24,560
+and so on. But the threads accessing 
+resources on a computer might be  
+
+6
+00:00:24,560 --> 00:00:29,840
+unaware of which other threads are running, what 
+resources the latter want to access, and so on...
+
+7
+00:00:30,400 --> 00:00:34,800
+In this sense, the OS needs to monitor 
+everything that is happening and,  
+
+8
+00:00:34,800 --> 00:00:38,400
+if it detects that the requests of 
+a thread could lead to a deadlock,  
+
+9
+00:00:39,360 --> 00:00:43,040
+do something about it, for instance, 
+decide to schedule the execution of  
+
+10
+00:00:43,040 --> 00:00:46,160
+such a thread for later on.
+We are going to introduce a  
+
+11
+00:00:46,160 --> 00:00:51,360
+model for this setup and also mention the 
+Banker's algorithm (introduced by Dijkstra).
+
+12
+00:00:52,560 --> 00:00:56,800
+Let's begin with the system model, 
+which in this case relies on a graph. 
+
+13
+00:00:57,440 --> 00:01:01,920
+In this graph, we have two types of 
+vertexes: resources and processes  
+
+14
+00:01:01,920 --> 00:01:05,840
+(this is a bipartite graph).
+A resource can refer to CPU,  
+
+15
+00:01:05,840 --> 00:01:12,320
+memory, I/O devices, and so on.
+Each resource Ri has Wi instances
+
+16
+00:01:13,280 --> 00:01:19,040
+Since this is a graph, we also have edges. 
+Each edge connects a Resource with a Process.  
+
+17
+00:01:19,040 --> 00:01:25,040
+If the edge/arrow starts at the process and 
+ends at a Resource, it means the process is  
+
+18
+00:01:25,600 --> 00:01:32,080
+requesting the resource. If the edge/arrow starts 
+at a resource and ends at a process, it means the  
+
+19
+00:01:32,080 --> 00:01:37,680
+resource is assigned to the process.
+In the case of a request edge,  
+
+20
+00:01:37,680 --> 00:01:42,240
+we use a dashed line to differentiate an 
+actual request from a potential request  
+
+21
+00:01:43,280 --> 00:01:48,240
+(i.e., a dashed line implies the process might 
+request the resource but has not done yet).
+
+22
+00:01:49,120 --> 00:01:54,720
+In our model, besides knowing which resources and 
+processes we have, and how many instances we have,  
+
+23
+00:01:54,720 --> 00:01:59,440
+we also know the maximum number of instances 
+each process may need for a given resource.
+
+24
+00:02:01,440 --> 00:02:08,000
+When it comes to the OS, the idea is that the OS 
+should be able to distinguish which portion of its  
+
+25
+00:02:08,000 --> 00:02:14,400
+decision space is safe and which is not (in other 
+words, which decisions might lead to a deadlock).  
+
+26
+00:02:15,520 --> 00:02:20,000
+If, by deciding to give control to 
+a certain process, the OS allows  
+
+27
+00:02:20,000 --> 00:02:25,120
+for such a process to request a resource 
+instance that can lead to a deadlock,  
+
+28
+00:02:25,120 --> 00:02:30,960
+then what the OS can do is to instead suspend 
+such a process, until enough resources are freed.
+
+29
+00:02:32,640 --> 00:02:38,720
+Suppose for instance we are in this situation: 
+processes P1 and P2 could be executed next.  
+
+30
+00:02:38,720 --> 00:02:46,640
+Currently, R1 has been given to P1 and P2 
+has requested R1. The OS also knows that  
+
+31
+00:02:46,640 --> 00:02:53,280
+both P1 and P2 might request R2. Which 
+process is safe to run next? P1 or P2? 
+
+32
+00:02:54,800 --> 00:03:00,480
+If the OS decides to run P1, 
+P1 might request and get R2,  
+
+33
+00:03:00,480 --> 00:03:06,560
+which is not leading to any deadlock (so from a 
+safe state the OS switches to another safe state). 
+
+34
+00:03:08,320 --> 00:03:14,720
+If the OS decides to run P2, P2 might 
+request and get R2, which in this case  
+
+35
+00:03:14,720 --> 00:03:19,920
+creates a circular loop, and this might 
+mean deadlock (so from a safe state the  
+
+36
+00:03:19,920 --> 00:03:24,240
+OS switches to an unsafe state)
+Based on these observations,  
+
+37
+00:03:24,240 --> 00:03:31,840
+the OS can decide to run P1 and maybe suspend 
+P2 until such a situation can no longer happen.
+
+38
+00:03:33,120 --> 00:03:36,960
+For the model we introduced, Dijkstra 
+introduced an algorithm for resource  
+
+39
+00:03:36,960 --> 00:03:41,760
+allocation that can avoid deadlocks.
+The idea is to maintain three data structures: 
+
+40
+00:03:41,760 --> 00:03:47,520
+a matrix called max, that in each position 
+i j contains the maximum number of instances  
+
+41
+00:03:47,520 --> 00:03:54,000
+process i can request for resource j
+a matrix called allocation, that in each  
+
+42
+00:03:54,000 --> 00:03:59,840
+position i j contains the number of instances 
+already allocated to process i of resource j 
+
+43
+00:04:01,280 --> 00:04:06,720
+an array called available, that in position 
+j contains the number of instances that are  
+
+44
+00:04:06,720 --> 00:04:11,520
+still available for resource j.
+As mentioned before, the idea is  
+
+45
+00:04:11,520 --> 00:04:15,600
+to check whether potentially satisfying 
+a request can lead to an unsafe state.  
+
+46
+00:04:16,160 --> 00:04:21,360
+How is the check done? By checking whether, by 
+satisfying a request, the other processes can  
+
+47
+00:04:21,360 --> 00:04:26,560
+still obtain all the resources they might request 
+or not. If that is the case, the request can be  
+
+48
+00:04:26,560 --> 00:04:31,840
+satisfied, otherwise, the requesting process is 
+suspended until enough resources are free-ed.
+
+49
+00:04:34,000 --> 00:04:39,040
+Please notice that the OS has an alternative 
+to prevent a deadlock from happening:  
+
+50
+00:04:39,040 --> 00:04:43,280
+that of being able to detect a deadlock 
+as happened and then resolve it.  
+
+51
+00:04:44,240 --> 00:04:48,720
+In other words, the OS can decide to 
+be reactive rather than proactive.
+
+52
+00:04:49,600 --> 00:04:54,480
+In that case, there can be two ways out. 
+The first one is to terminate the process  
+
+53
+00:04:54,480 --> 00:04:59,520
+that has caused a deadlock. Eventually, 
+once one or more processes are terminated,  
+
+54
+00:05:00,080 --> 00:05:04,400
+enough resources will be available and the 
+remaining processes will be able to continue.
+
+55
+00:05:05,440 --> 00:05:10,000
+The second option is to select victim 
+processes and rollback their execution,  
+
+56
+00:05:10,000 --> 00:05:15,680
+basically go back in their execution to a point 
+in which the requests made by them did not result  
+
+57
+00:05:15,680 --> 00:05:20,160
+in a deadlock and start again their execution 
+later on when more resources are available.
+
+58
+00:05:21,280 --> 00:05:27,040
+Usually, process recovery is a costly operation, 
+which should be avoided to the extent possible.  
+
+59
+00:05:27,040 --> 00:05:31,280
+As always, nonetheless, the exact costs 
+of each alternative (including both  
+
+60
+00:05:31,280 --> 00:05:37,440
+proactive and reactive ones) will depend 
+on the specific case taken into account!
+

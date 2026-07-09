@@ -1,0 +1,378 @@
+1
+00:00:01,920 --> 00:00:07,200
+let's move now to pipes
+so this is the last part for today and we're
+
+2
+00:00:07,200 --> 00:00:11,800
+going to
+see an example of a specific way in which
+
+3
+00:00:11,800 --> 00:00:16,010
+the processes can
+communicate as we will see now we have two
+
+4
+00:00:16,010 --> 00:00:19,570
+types of pipes
+ordinary and named ones
+
+5
+00:00:19,570 --> 00:00:23,170
+ordinary pipes are communication channels
+that can only be
+
+6
+00:00:23,170 --> 00:00:31,490
+accessed by the process that creates them
+and the child named pipes on the other hand
+
+7
+00:00:31,490 --> 00:00:35,969
+can be used without
+by two processes that do not need to have
+
+8
+00:00:35,969 --> 00:00:44,839
+a parent-child
+relationship so the ordinary pipes in other
+
+9
+00:00:44,839 --> 00:00:50,329
+words are
+let's say standard producer consumer queues
+
+10
+00:00:50,329 --> 00:00:55,359
+they are unidirectional
+and in fact before two processes can use them
+
+11
+00:00:55,359 --> 00:00:58,800
+a parent
+and a child they need to specify who is going
+
+12
+00:00:58,800 --> 00:01:02,510
+to be the
+writer and who is going to be the reader
+
+13
+00:01:02,510 --> 00:01:06,950
+we're going to see this in a piece of code
+in the next slides
+
+14
+00:01:06,950 --> 00:01:13,100
+in Windows
+these are called anonymous pipes named pipes
+
+15
+00:01:13,100 --> 00:01:18,579
+as I said before they are more powerful in
+the sense that
+
+16
+00:01:18,579 --> 00:01:24,320
+they can be used by two processes
+even if these two processes are not parent and
+
+17
+00:01:24,320 --> 00:01:28,979
+child actually
+they can be used by even more than two processes
+
+18
+00:01:28,979 --> 00:01:32,520
+they allow for
+bidirectional communication
+
+19
+00:01:32,520 --> 00:01:36,930
+and well notice that you can also create two
+ordinary pipes
+
+20
+00:01:36,930 --> 00:01:39,130
+and use them in different direction between
+the parent and
+
+21
+00:01:39,130 --> 00:01:42,509
+the child
+so you can still achieve bidirectional communication
+
+22
+00:01:42,509 --> 00:01:49,189
+but named pipes one named pipe allows for bidirectional communication
+and
+
+23
+00:01:49,189 --> 00:01:51,700
+also in this case you can find them both in
+Unix systems
+
+24
+00:01:51,700 --> 00:01:56,920
+and Windows systems
+in fact you might have been using pipes even
+
+25
+00:01:56,920 --> 00:01:59,420
+if you didn't
+really know that
+
+26
+00:01:59,420 --> 00:02:05,640
+but if you run this command this thing here
+is a pipe is
+
+27
+00:02:05,640 --> 00:02:11,890
+what I just said
+what you basically do when you run this
+
+28
+00:02:11,890 --> 00:02:14,040
+command is to
+tell the operating system that you actually
+
+29
+00:02:14,040 --> 00:02:18,590
+want to run two
+different processes one that lists the files
+
+30
+00:02:18,590 --> 00:02:22,900
+of a folder
+and one that searches inside the text for
+
+31
+00:02:22,900 --> 00:02:27,870
+specific patterns
+but you want to create them with a pipe in
+
+32
+00:02:27,870 --> 00:02:33,680
+between and actually
+send all the output of the first as the input
+
+33
+00:02:33,680 --> 00:02:37,650
+of the second
+okay
+
+34
+00:02:37,650 --> 00:02:41,480
+so if you just run the list command you get
+a list of what
+
+35
+00:02:41,480 --> 00:02:43,849
+you have inside a certain folder
+
+36
+00:02:43,849 --> 00:02:47,590
+if you put the pipe and then another process
+with
+
+37
+00:02:47,590 --> 00:02:51,340
+this pipe you are feeding the output of the
+first command
+
+38
+00:02:51,340 --> 00:02:55,540
+as input to of the second command
+and in this case you are going to keep only
+
+39
+00:02:55,540 --> 00:03:01,030
+the entries
+that have this pattern on the month of April
+
+40
+00:03:01,030 --> 00:03:08,500
+so let's look at an example now
+and by the way if the example with fork is
+
+41
+00:03:08,500 --> 00:03:12,380
+not clear go
+back and try it yourself because this builds
+
+42
+00:03:12,380 --> 00:03:15,680
+on that example
+we have three macros here
+
+43
+00:03:15,680 --> 00:03:19,829
+we create the buffer size 25 and we put two
+numbers 0 and 1 for
+
+44
+00:03:19,829 --> 00:03:25,290
+the read end and the write
+end we're going to use this with the pipe
+
+45
+00:03:25,290 --> 00:03:30,769
+so we create two arrays of characters
+write
+
+46
+00:03:30,769 --> 00:03:35,969
+and read message
+and in the write message we store greetings
+
+47
+00:03:35,969 --> 00:03:39,450
+we create a
+process id and we create an array with two
+
+48
+00:03:39,450 --> 00:03:43,340
+integers
+this is the file descriptor
+
+49
+00:03:43,340 --> 00:03:51,939
+it's the id of the pipe
+now we call pipe to say to the operating system
+
+50
+00:03:51,939 --> 00:03:55,469
+that we want
+a communication channel that will be used
+
+51
+00:03:55,469 --> 00:03:59,420
+between a parent
+and a child process
+
+52
+00:03:59,420 --> 00:04:06,140
+now this file descriptor here will store once
+we call pipe the
+
+53
+00:04:06,140 --> 00:04:08,760
+values of the two ends the write and the read
+end of the
+
+54
+00:04:08,760 --> 00:04:17,630
+pipe this check here this if statement
+is run if there
+
+55
+00:04:17,630 --> 00:04:22,660
+is a problem when we run pipe otherwise this
+is just skipped
+
+56
+00:04:22,660 --> 00:04:27,330
+but still you call pipe and you store in the
+file descriptor
+
+57
+00:04:27,330 --> 00:04:30,980
+the write and the read end and then we call
+fork
+
+58
+00:04:30,980 --> 00:04:35,040
+this is the important part fork as we said
+is going to
+
+59
+00:04:35,040 --> 00:04:40,540
+create a copy of the process
+now you create a copy of the process
+
+60
+00:04:40,540 --> 00:04:44,480
+so everything you have done until you have
+called fork will
+
+61
+00:04:44,480 --> 00:04:48,910
+be reflected also in the copy which means
+the copy will
+
+62
+00:04:48,910 --> 00:04:52,880
+have also a file descriptor and the values
+of this file
+
+63
+00:04:52,880 --> 00:04:56,601
+descriptor will be the ones that have been
+stored when the
+
+64
+00:04:56,601 --> 00:05:03,110
+original process called pipe
+this is why you are calling pipe before you
+
+65
+00:05:03,110 --> 00:05:07,030
+call fork
+if you were to call pipe after fork the two
+
+66
+00:05:07,030 --> 00:05:10,880
+processes each
+would create a different pipe and they would
+
+67
+00:05:10,880 --> 00:05:16,470
+have different
+file descriptors after that
+
+68
+00:05:16,470 --> 00:05:21,320
+it's similar to what we saw before we checked
+if there was a problem with fork and if that
+
+69
+00:05:21,320 --> 00:05:26,220
+is not the case
+then we run different code depending on whether
+
+70
+00:05:26,220 --> 00:05:28,880
+we are the
+parent or the child process
+
+71
+00:05:28,880 --> 00:05:34,960
+the parent process closest the read end and writes
+to the write
+
+72
+00:05:34,960 --> 00:05:39,300
+end the message
+and then it closes also the write end
+
+73
+00:05:39,300 --> 00:05:48,880
+so basically close both ends of
+the pipe and the child process does the opposite
+
+74
+00:05:48,880 --> 00:05:55,530
+it closes the write end  it reads the read end
+prints to screen
+
+75
+00:05:55,530 --> 00:05:59,470
+what it just read which is greetings in this
+case
+
+76
+00:05:59,470 --> 00:06:09,440
+and then it closes the read end of the pipe
+

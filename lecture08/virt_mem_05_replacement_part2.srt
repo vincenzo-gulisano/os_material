@@ -1,0 +1,553 @@
+1
+00:00:01,770 --> 00:00:07,770
+let's start with the first one the first
+in first out algorithm so this is simple as the
+
+2
+00:00:07,770 --> 00:00:08,770
+name
+
+3
+00:00:08,770 --> 00:00:16,869
+suggests if all the frames are used then
+you free the one that contains the page that
+
+4
+00:00:16,869 --> 00:00:24,340
+was loaded more time ago so here we have
+our reference string let's say we have 3 frames
+
+5
+00:00:24,340 --> 00:00:29,810
+in total for the process so we can only load
+up to three pages at a time for the process
+
+6
+00:00:29,810 --> 00:00:36,690
+let's go through the example it's simple so
+we start here
+
+7
+00:00:36,690 --> 00:00:41,210
+initially all the frames are free we didn't
+load anything yet
+
+8
+00:00:41,210 --> 00:00:50,040
+so we need page 7 is it in one of the frames?
+no then we have one page fault and we put
+
+9
+00:00:50,040 --> 00:00:55,899
+seven here then we need zero do we have it?
+no two page faults and we store 0 and then
+
+10
+00:00:55,899 --> 00:00:58,989
+we go for one
+
+11
+00:00:58,989 --> 00:01:02,820
+which results in the third
+
+12
+00:01:02,820 --> 00:01:11,250
+page fault and we store 1 now we need page
+2 we are here so we ask ourselves is it there?
+
+13
+00:01:11,250 --> 00:01:16,880
+no we have a free frame? in this case the answer
+is no so in that case we need to substitute
+
+14
+00:01:16,880 --> 00:01:21,009
+the page that was loaded more time ago this
+case would be 7
+
+15
+00:01:21,009 --> 00:01:27,520
+so we have one page fault and now 2 will be placed
+in the position where we had 7 now we need
+
+16
+00:01:27,520 --> 00:01:30,329
+zero it's there so it's fine
+
+17
+00:01:30,329 --> 00:01:35,299
+an so on and so forth so if you do the entire
+if you go through the entire reference string
+
+18
+00:01:35,299 --> 00:01:40,889
+you will see that at the end we will have
+15 page faults
+
+19
+00:01:40,889 --> 00:01:45,409
+of course we change the reference string
+you will get a different number of page faults
+
+20
+00:01:45,409 --> 00:01:51,299
+something that is interesting about this algorithm
+is that it can suffer for this from this anomaly
+
+21
+00:01:51,299 --> 00:01:58,289
+the Belady's anomaly which basically means
+that actually having more frames might result
+
+22
+00:01:58,289 --> 00:02:05,749
+in having more page faults the global tendency
+is the same the more frames you have the better
+
+23
+00:02:05,749 --> 00:02:11,000
+but for specific changes going from n to n plus
+one frames might actually increase the number
+
+24
+00:02:11,000 --> 00:02:12,330
+of page faults
+
+25
+00:02:12,330 --> 00:02:14,250
+ 
+
+26
+00:02:14,250 --> 00:02:22,860
+and it's simple to implement because you basically
+use a FIFO queue and then you always take the
+
+27
+00:02:22,860 --> 00:02:29,340
+oldest you had in this first in first out
+queue to select which is the victim frame if you
+
+28
+00:02:29,340 --> 00:02:30,340
+need to
+
+29
+00:02:30,340 --> 00:02:32,700
+swap out a page
+
+30
+00:02:32,700 --> 00:02:38,660
+and this is an example of these Belady's 
+anomaly and you can try it out by yourself
+
+31
+00:02:38,660 --> 00:02:44,070
+so you see that the tendency is it goes down
+but actually there can be some spikes here
+
+32
+00:02:44,070 --> 00:02:49,990
+so when you go from 3 to 4 frames actually
+you might experience more page faults than in this
+
+33
+00:02:49,990 --> 00:02:57,130
+case when you add less frames which with
+3 will be 9 in this example
+
+34
+00:02:57,130 --> 00:03:06,120
+no one can ask ok we got 15 page faults
+with a FIFO algorithm what is the optimal?
+
+35
+00:03:06,120 --> 00:03:14,310
+what is the actual minimum number of page
+faults we can get? well it turns out that
+
+36
+00:03:14,310 --> 00:03:21,000
+there is an optimal algorithm and the idea is
+simple if you have to replace a page then
+
+37
+00:03:21,000 --> 00:03:27,280
+you should replace the one that will not be
+used for the longest period of time
+
+38
+00:03:27,280 --> 00:03:32,390
+and if you do this for our reference string
+you will see that 9
+
+39
+00:03:32,390 --> 00:03:37,020
+is the lowest number of page faults you can
+get for this reference string if you have
+
+40
+00:03:37,020 --> 00:03:40,410
+3
+
+41
+00:03:40,410 --> 00:03:44,510
+frames that you can use for the process
+now the problem is that you cannot really
+
+42
+00:03:44,510 --> 00:03:49,780
+implement the optimal algorithm because in
+practice you don't know which will be the
+
+43
+00:03:49,780 --> 00:03:55,020
+page that will not be used for the longest
+period of time knowing that would basically mean
+
+44
+00:03:55,020 --> 00:04:02,520
+know/reading the future for generic processing
+a generic execution with many other processes
+
+45
+00:04:02,520 --> 00:04:11,100
+but still you can use it at least as a means
+to understand how close you get with your
+
+46
+00:04:11,100 --> 00:04:21,430
+algorithm to the optimal number so you see
+that 15 versus 9 is actually not that good
+
+47
+00:04:21,430 --> 00:04:25,960
+this is just the execution you can try it
+out by yourself and you see that nine it's
+
+48
+00:04:25,960 --> 00:04:28,650
+the total number of page faults we would get
+in this case
+
+49
+00:04:28,650 --> 00:04:37,009
+an algorithm that is used in practice that
+gets closer to the optimal one is the
+
+50
+00:04:37,009 --> 00:04:43,150
+least recently used so when you have to select
+a victim frame instead of picking the one
+
+51
+00:04:43,150 --> 00:04:47,979
+that will not be used for the longest period
+of time you pick the one that has not been
+
+52
+00:04:47,979 --> 00:04:53,680
+used for the longest period of time the idea
+is that more or less this should be the same
+
+53
+00:04:53,680 --> 00:04:58,659
+if it is a lot of time I'm not using a certain
+frame then most likely I will also not really
+
+54
+00:04:58,659 --> 00:05:00,520
+use it a lot in the future
+
+55
+00:05:00,520 --> 00:05:06,379
+and this connects back to the concept of locality
+we already mentioned before
+
+56
+00:05:06,379 --> 00:05:11,059
+so this is what I just said you replace the
+page that has not been used in the most amount
+
+57
+00:05:11,059 --> 00:05:15,939
+of time looking of course at the past not
+the future
+
+58
+00:05:15,939 --> 00:05:21,389
+so you can keep track of the time at
+which you access each page and then when you
+
+59
+00:05:21,389 --> 00:05:26,000
+have to select the victim frame you pick the
+one that was not accessed for the longest
+
+60
+00:05:26,000 --> 00:05:31,849
+time so let's try to look here for example
+here you need page 2 you need to select a
+
+61
+00:05:31,849 --> 00:05:41,680
+victim frame so which one do you pick here?
+well the one that you have used
+
+62
+00:05:41,680 --> 00:05:47,380
+that you have not been using sorry in the longest
+amount of time in this case it would be 7 so
+
+63
+00:05:47,380 --> 00:05:52,840
+you pick seven you can try this example
+try please all these examples by yourself
+
+64
+00:05:52,840 --> 00:05:53,900
+and check that
+
+65
+00:05:53,900 --> 00:06:00,800
+your numbers match with these ones and here you
+can see that you end up with 12 faults at
+
+66
+00:06:00,800 --> 00:06:06,610
+the end of the day which means in this case
+it's performing better than the first in first
+
+67
+00:06:06,610 --> 00:06:13,150
+out algorithm now there are different ways
+in which you can implement this
+
+68
+00:06:13,150 --> 00:06:19,110
+again as always different implementations
+means different tradeoffs different costs
+
+69
+00:06:19,110 --> 00:06:24,979
+you can go with a counter implementation
+so basically you keep the value of the clock
+
+70
+00:06:24,979 --> 00:06:29,849
+one for each page and you update it whenever
+you access the page when you have to select
+
+71
+00:06:29,849 --> 00:06:33,729
+which is the victim frame you take the one
+with the lowest value for the clock that is
+
+72
+00:06:33,729 --> 00:06:34,729
+the oldest one
+
+73
+00:06:34,729 --> 00:06:41,900
+problem of this is pretty simple but you need
+to search through all the table to keep track
+
+74
+00:06:41,900 --> 00:06:54,430
+to find what is the smallest clock value because
+the table is not necessarily sorted on
+
+75
+00:06:54,430 --> 00:06:58,740
+the clock values so to update the table
+it's O(1) time it you just store the value
+
+76
+00:06:58,740 --> 00:07:03,400
+of the clock but to find the victim frame
+its O(n) where n is the size of the page table
+
+77
+00:07:03,400 --> 00:07:08,839
+otherwise you can keep an additional data
+structure in this case a stack
+
+78
+00:07:08,839 --> 00:07:15,430
+and whenever you reference a page you go
+in the stack you find where that page is and
+
+79
+00:07:15,430 --> 00:07:20,921
+you move it to the top in this case updating
+each entry takes a bit more because we have
+
+80
+00:07:20,921 --> 00:07:26,630
+to search inside the stack and put it up put
+the entry up at the top but on the other hand
+
+81
+00:07:26,630 --> 00:07:31,819
+we have to find the victim frame that becomes
+O(1) time is fast because you know that what
+
+82
+00:07:31,819 --> 00:07:36,699
+you have at the bottom of the stack is the
+page that you did not use for the longest
+
+83
+00:07:36,699 --> 00:07:38,169
+amount of time
+
+84
+00:07:38,169 --> 00:07:43,479
+this is just an example so if you are before
+here 7
+
+85
+00:07:43,479 --> 00:07:47,349
+this is the situation with the stack you see
+that two it's on top because you just
+
+86
+00:07:47,349 --> 00:07:51,869
+used it and 4 it's at the bottom because
+it's the one that has not been used for the
+
+87
+00:07:51,869 --> 00:07:56,930
+longest period of time now if you want to
+access 7
+
+88
+00:07:56,930 --> 00:08:01,939
+you do that you have it already but then
+you pick it and you move it up to the top and
+
+89
+00:08:01,939 --> 00:08:07,149
+you see at the bottom if you want to know
+which is the victim frame to choose
+
+90
+00:08:07,149 --> 00:08:09,689
+when you need that it's the one that is at
+the end at the
+
+91
+00:08:09,689 --> 00:08:12,129
+bottom of the stack
+
+92
+00:08:12,129 --> 00:08:15,969
+you can also write approximate versions of
+this
+
+93
+00:08:15,969 --> 00:08:22,749
+algorithm one is to use simply a reference
+bit when you load the page that is zero and
+
+94
+00:08:22,749 --> 00:08:26,580
+when you reference the page the bit is set
+to 1 now
+
+95
+00:08:26,580 --> 00:08:31,169
+you only have two values zero and one so it's
+not really accurate it's a very coarse grained
+
+96
+00:08:31,169 --> 00:08:35,210
+approximation but if you have to select a
+bit in frame you can select one that has bit
+
+97
+00:08:35,210 --> 00:08:39,830
+0 because you know that at least the ones
+with bit 0 have been
+
+98
+00:08:39,830 --> 00:08:43,020
+used before the ones that have bit one
+
+99
+00:08:43,020 --> 00:08:49,690
+alternatively you can go for the second chance
+alright here we have a description but
+
+100
+00:08:49,690 --> 00:08:55,900
+I think it's easier if I just show you how
+it works so basically you have an extra bit
+
+101
+00:08:55,900 --> 00:09:02,520
+for each entry and you keep a circular queue
+of the pages
+
+102
+00:09:02,520 --> 00:09:10,620
+so let's say that this is the page you are
+currently pointing out as the next victim
+
+103
+00:09:10,620 --> 00:09:16,530
+if you see one then you don't pick this as
+a victim but you set it to zero and you move to
+
+104
+00:09:16,530 --> 00:09:21,260
+the next one so you keep moving until you
+find one that has 0
+
+105
+00:09:21,260 --> 00:09:27,600
+as soon as you find 0 then that is the victim
+frame so what is happening here is that
+
+106
+00:09:27,600 --> 00:09:33,080
+if this is one it means that this page has
+been used you put this to zero before moving
+
+107
+00:09:33,080 --> 00:09:35,830
+to the next page
+
+108
+00:09:35,830 --> 00:09:39,690
+which means you are giving a second chance
+to that page
+
+109
+00:09:39,690 --> 00:09:45,440
+to be not selected as a victim frame because
+it will keep looking at the other pages if
+
+110
+00:09:45,440 --> 00:09:52,010
+all the other pages have also the reference
+bit set to 1 then you will get back to this
+
+111
+00:09:52,010 --> 00:09:58,940
+page an if it is still zero it means well
+then it's not really being used so I will
+
+112
+00:09:58,940 --> 00:10:05,550
+select it as a victim frame if it went back
+to one cause the process was actually using
+
+113
+00:10:05,550 --> 00:10:11,960
+the page then it will get again a second chance
+before being selected this is why it's called
+
+114
+00:10:11,960 --> 00:10:13,550
+second-chance page replacement algorithm
+

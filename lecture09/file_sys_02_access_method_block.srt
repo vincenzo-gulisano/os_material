@@ -1,0 +1,395 @@
+1
+00:00:00,570 --> 00:00:08,800
+Let's move now to access methods. So how to
+access files and which is the minimum unit
+
+2
+00:00:08,800 --> 00:00:16,420
+we can read or write from secondary storage
+or the disk so we can go in two ways here one is
+
+3
+00:00:16,420 --> 00:00:18,039
+sequential access.
+
+4
+00:00:18,039 --> 00:00:19,240
+So the idea is that
+
+5
+00:00:19,240 --> 00:00:24,580
+we start reading a file from the very beginning
+and then we have functionality that allows
+
+6
+00:00:24,580 --> 00:00:26,769
+us to
+
+7
+00:00:26,769 --> 00:00:30,099
+take the next
+
+8
+00:00:30,099 --> 00:00:36,170
+let's say piece of information in the file,
+we will see this is called block, or to go
+
+9
+00:00:36,170 --> 00:00:42,390
+back. So it's like scanning a file. This could
+be a way to access the information in a file
+
+10
+00:00:42,390 --> 00:00:46,390
+and the operating system can give you
+
+11
+00:00:46,390 --> 00:00:48,430
+functionality to do this sequential read.
+
+12
+00:00:48,430 --> 00:00:55,840
+But we can also have direct access, so we
+might want functionality that allows us to
+
+13
+00:00:55,840 --> 00:00:59,539
+read or write at specific offsets in the file, so that
+
+14
+00:00:59,539 --> 00:01:04,320
+we can rapidly go where we want instead of
+just scanning everything it depends on the
+
+15
+00:01:04,320 --> 00:01:05,320
+type of file. If you have to
+
+16
+00:01:05,320 --> 00:01:11,140
+listen to a song that is in a file, then most
+likely you are going to scan everything because
+
+17
+00:01:11,140 --> 00:01:17,170
+you have to read the entire file in order.
+If you are accessing a data file and you only
+
+18
+00:01:17,170 --> 00:01:21,360
+need to take some specific data values and
+you know how the file is organized like a
+
+19
+00:01:21,360 --> 00:01:26,500
+matrix, maybe then you can go in a specific
+offset and read the stuff.
+
+20
+00:01:26,500 --> 00:01:33,170
+Now, independently of which one of the two
+we use,
+
+21
+00:01:33,170 --> 00:01:38,860
+the operating system reasons in terms of blocks.
+
+22
+00:01:38,860 --> 00:01:44,490
+So whether we read one thing after the other or
+we access something at a specific position,
+
+23
+00:01:44,490 --> 00:01:51,479
+the minimum unit we can use to interact with
+the disk is called block, which is a group
+
+24
+00:01:51,479 --> 00:01:52,800
+of or
+
+25
+00:01:52,800 --> 00:01:59,479
+a certain amount of bytes, as you can imagine. So why
+do we read blocks instead of just bites? Why
+
+26
+00:01:59,479 --> 00:02:04,910
+don't we go "give me the next byte" or "give
+me / go to a specific byte"? Remember
+
+27
+00:02:04,910 --> 00:02:09,330
+this is not inside the memory. This is when
+we actually want to read something from the
+
+28
+00:02:09,330 --> 00:02:10,330
+disk.
+
+29
+00:02:10,330 --> 00:02:17,500
+Well, you remember this. We saw some lectures
+ago that whenever you have to read or write
+
+30
+00:02:17,500 --> 00:02:24,860
+something from the disk, the CPU cannot directly
+communicate with the disk, it needs to go through
+
+31
+00:02:24,860 --> 00:02:31,630
+several cycles because as we said, the CPU
+only reaches main memory directly, which means
+
+32
+00:02:31,630 --> 00:02:36,450
+we will have system calls, context switches,
+we have to move processes in a waiting
+
+33
+00:02:36,450 --> 00:02:37,450
+queue
+
+34
+00:02:37,450 --> 00:02:42,100
+we need to wait for the input output of the
+disk, interrupts and so on, so you can imagine
+
+35
+00:02:42,100 --> 00:02:47,300
+that pay all this price every time you need
+a byte and you have to read a very large file it
+
+36
+00:02:47,300 --> 00:02:51,800
+doesn't really make sense, right? it's
+too much overhead.
+
+37
+00:02:51,800 --> 00:02:57,760
+So instead what we do is that if we read or
+write something, then we take a chunk of the
+
+38
+00:02:57,760 --> 00:03:05,050
+file, because similar in spirit to the concept
+of locality. You know that if you need a certain
+
+39
+00:03:05,050 --> 00:03:12,370
+byte most likely you also need bites that are
+around that one.
+
+40
+00:03:12,370 --> 00:03:14,630
+So now the question is:
+
+41
+00:03:14,630 --> 00:03:21,120
+fine, let's use blocks instead of bytes, how
+big should a block be?
+
+42
+00:03:21,120 --> 00:03:25,840
+If the minimum unit, the block, is all you
+can read or write and you choose a very large
+
+43
+00:03:25,840 --> 00:03:31,560
+block. The good thing is that you don't need
+to read or write a lot of blocks when you
+
+44
+00:03:31,560 --> 00:03:36,950
+have to store or read something, on the other
+end, if a block is let's say 1 megabyte and
+
+45
+00:03:36,950 --> 00:03:39,990
+you want only to write a file that takes a
+couple of bites,
+
+46
+00:03:39,990 --> 00:03:47,370
+then you're going to waste a big chunk
+of that block because you can only write blocks.
+
+47
+00:03:47,370 --> 00:03:53,430
+On the other hand, if you use small blocks,
+you can better utilize the disk because you
+
+48
+00:03:53,430 --> 00:03:58,810
+waste less space, but then you need to read
+or write or access in general more blocks
+
+49
+00:03:58,810 --> 00:04:02,180
+when you have to do something with a file.
+
+50
+00:04:02,180 --> 00:04:09,590
+And actually, you can see that, as always,
+this tradeoffs
+
+51
+00:04:09,590 --> 00:04:17,690
+result in different behaviors. So in this
+graph here you have different block sizes
+
+52
+00:04:17,690 --> 00:04:21,790
+from one kilobyte to 1 megabyte, and then
+you have to lines. The solid one is the disk
+
+53
+00:04:21,790 --> 00:04:22,790
+space.
+
+54
+00:04:22,790 --> 00:04:29,241
+and the dashed one is the data rate. So what are we seeing
+here? If you look at the data rate, which
+
+55
+00:04:29,241 --> 00:04:30,710
+is the
+
+56
+00:04:30,710 --> 00:04:34,050
+dashed one you see that
+
+57
+00:04:34,050 --> 00:04:37,540
+the larger the block
+
+58
+00:04:37,540 --> 00:04:42,460
+the higher the data rate.
+
+59
+00:04:42,460 --> 00:04:50,770
+So basically you can go up to 60 megabytes
+per second if you have blocks of 1 megabyte.
+
+60
+00:04:50,770 --> 00:04:56,700
+Depends of course on what disk you use its own
+speed and so on, but the idea is that this
+
+61
+00:04:56,700 --> 00:05:02,020
+will grow, but on the other hand, if you have
+small blocks, and need to read a lot of them,
+
+62
+00:05:02,020 --> 00:05:06,841
+then the data rate will decrease because you
+have to do more context switches and so, on
+
+63
+00:05:06,841 --> 00:05:10,560
+the other hand, if you look at the disk space,
+which is the solid one, you see that if you
+
+64
+00:05:10,560 --> 00:05:12,000
+have very small blocks
+
+65
+00:05:12,000 --> 00:05:17,030
+which means you don't waste blocks when you
+have to write small amounts of bytes,
+
+66
+00:05:17,030 --> 00:05:23,470
+you can use almost the entire disk to
+actually store the information you want, but
+
+67
+00:05:23,470 --> 00:05:29,100
+if you start having large blocks,
+then there are good chances that you will
+
+68
+00:05:29,100 --> 00:05:35,340
+waste space in these blocks and the total
+disk utilization will go rapidly through towards
+
+69
+00:05:35,340 --> 00:05:36,390
+the 0%.
+
+70
+00:05:36,390 --> 00:05:42,770
+Don't get confused here. You are utilizing the disk at 100%, if you
+
+71
+00:05:42,770 --> 00:05:48,730
+write all the blocks but you are not really
+utilizing 100% of the disk because many of these
+
+72
+00:05:48,730 --> 00:05:55,680
+blocks do not really contain or their content
+is not completely related to what you're writing
+
+73
+00:05:55,680 --> 00:06:01,211
+is just wasted space because you have to write
+a MB despite the fact that you actually just
+
+74
+00:06:01,211 --> 00:06:05,440
+need a couple of bites for that.
+
+75
+00:06:05,440 --> 00:06:10,830
+So tradeoffs as always and one of the complicated
+things here, we already mentioned this also
+
+76
+00:06:10,830 --> 00:06:14,860
+for memories that if you know
+
+77
+00:06:14,860 --> 00:06:19,270
+what is the average size of your file, then
+you can probably take the best decision to
+
+78
+00:06:19,270 --> 00:06:24,650
+maximize space utilization while having still
+a good data rate, but you cannot really take
+
+79
+00:06:24,650 --> 00:06:28,460
+such a decision in advance because when you
+design the file system you don't know yet
+
+80
+00:06:28,460 --> 00:06:31,530
+what files will be stored. That depends on
+the user and how he uses the computer, and
+
+81
+00:06:31,530 --> 00:06:37,000
+so on and so forth, which of course complicates
+even more the
+
+82
+00:06:37,000 --> 00:06:38,080
+matter here.
+
+83
+00:06:38,080 --> 00:06:44,740
+This is just a question I just answered.
+So why is it challenging to choose the right
+
+84
+00:06:44,740 --> 00:06:50,030
+block size? Because you don't know in advance
+what the user will actually store on the disk.
+

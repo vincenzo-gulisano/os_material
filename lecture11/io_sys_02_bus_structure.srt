@@ -1,0 +1,196 @@
+1
+00:00:00,989 --> 00:00:11,269
+let's move now to the I/O hardware so let's
+now focus on a normal computer / a laptop  so no flaps
+
+2
+00:00:11,269 --> 00:00:20,080
+we know that we have different types of hardware
+that are usually available in a computer we have disks
+
+3
+00:00:20,080 --> 00:00:23,800
+or storage devices we have transmission devices
+like network cards
+
+4
+00:00:23,800 --> 00:00:31,560
+and we have a human interface devices which
+will be a screen keyboard and mouse mostly
+
+5
+00:00:31,560 --> 00:00:41,110
+and they exchange information basically by
+sending signals for us it's mainly through
+
+6
+00:00:41,110 --> 00:00:46,780
+cables ok we don't really discuss wireless to much but 
+of course we also have wireless communication
+
+7
+00:00:46,780 --> 00:00:51,750
+so the question here is physically how are these
+things connected how do they reach the CPU
+
+8
+00:00:51,750 --> 00:00:59,330
+how do they get access to the CPU and share their
+I/O with the CPU? let's go through
+
+9
+00:00:59,330 --> 00:01:06,280
+some common concepts here so we have ports
+these are the physical connection points that
+
+10
+00:01:06,280 --> 00:01:09,500
+allow to connect a device
+
+11
+00:01:09,500 --> 00:01:19,259
+we have the bus this is a set of basically wires plus a 
+protocol that specifies the type of messages that can
+
+12
+00:01:19,259 --> 00:01:28,149
+be sent on the wires for the signals that can be sent
+on that wire patterns of electric voltages with different
+
+13
+00:01:28,149 --> 00:01:32,640
+timings these are basically the signals
+
+14
+00:01:32,640 --> 00:01:39,180
+and of course different types of buses have
+different methods for sending signals that
+
+15
+00:01:39,180 --> 00:01:49,020
+can go at different speed throughput and so on and so 
+forth we also can connect devices let's say through
+
+16
+00:01:49,020 --> 00:01:52,990
+other devices so we can plug a into b b
+to c and so on
+
+17
+00:01:52,990 --> 00:02:02,079
+and in that case we use term daisy chain for an
+alternative way of transmitting the signals
+
+18
+00:02:02,079 --> 00:02:13,020
+through devices so it practically operates as a bus and
+then we have also different type of busses
+
+19
+00:02:13,020 --> 00:02:16,960
+so one is the PCI which is the peripheral
+component interconnect
+
+20
+00:02:16,960 --> 00:02:26,140
+bus this is the one that connects the processor
+and memory subsystem to the fast devices and then
+
+21
+00:02:26,140 --> 00:02:32,160
+we have expansion busses and these are for
+connecting relatively slow devices compared
+
+22
+00:02:32,160 --> 00:02:41,530
+to the others that I will show how this
+looks like in the next slide we have controllers
+
+23
+00:02:41,530 --> 00:02:49,310
+so these are specific electronics that are
+actually operating a port or a bus or a device
+
+24
+00:02:49,310 --> 00:02:55,160
+and you can basically think of
+them as micro computers inside the computer
+
+25
+00:02:55,160 --> 00:03:00,430
+that are there to do the translation between
+two different types of devices or two different
+
+26
+00:03:00,430 --> 00:03:07,940
+types of communication between devices
+you have the serial port  controller for example which can 
+
+27
+00:03:07,940 --> 00:03:17,180
+be a single chip you have the SCSI controller that is the
+small computer system interface controller
+
+28
+00:03:17,180 --> 00:03:21,730
+which actually contains its own dedicated
+processor microcode private memory and so
+
+29
+00:03:21,730 --> 00:03:28,210
+on to actuate the translation this is for example
+for the storage unit for specific storage
+
+30
+00:03:28,210 --> 00:03:33,190
+units and these are the ways in which they
+are connected
+
+31
+00:03:33,190 --> 00:03:40,850
+so you have here the processor and you see that
+this is what I meant before that the processor
+
+32
+00:03:40,850 --> 00:03:46,370
+can immediately directly access cache and
+memory you see that they are connected
+
+33
+00:03:46,370 --> 00:03:51,930
+together and they don't need to go through the
+PCI bus to exchange signals while they need to
+
+34
+00:03:51,930 --> 00:03:52,930
+do that
+
+35
+00:03:52,930 --> 00:03:59,180
+when for example you want to access a disk here
+through a SCSI controller or other types of controllers
+
+36
+00:03:59,180 --> 00:04:08,450
+so you see that to the PCI bus
+the connected things are the controllers that
+
+37
+00:04:08,450 --> 00:04:14,820
+take care of the translation between what
+is behind them and the rest
+
+38
+00:04:14,820 --> 00:04:19,329
+and these are as I said communicating through the
+PCI bus and then you can have expansion
+
+39
+00:04:19,329 --> 00:04:24,919
+ones to which you connect slow devices slow from the
+perspective of the computer and the processor
+
+40
+00:04:24,919 --> 00:04:28,530
+keyboard parallel port serial port and so on
+

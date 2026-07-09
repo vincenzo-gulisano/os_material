@@ -1,0 +1,271 @@
+1
+00:00:01,390 --> 00:00:03,370
+Now of course
+
+2
+00:00:03,370 --> 00:00:06,029
+you need to take care of
+
+3
+00:00:06,029 --> 00:00:10,630
+maintaining the information that allows you
+to know where each file is. And you in this
+
+4
+00:00:10,630 --> 00:00:11,910
+case it's the operating system.
+
+5
+00:00:11,910 --> 00:00:17,830
+But you need to do the same also to keep track
+of what
+
+6
+00:00:17,830 --> 00:00:23,419
+portions of your disk are actually free if
+you have to store something new in this portion.
+
+7
+00:00:23,419 --> 00:00:27,989
+So how do we know what portions of our file
+system are free?
+
+8
+00:00:27,989 --> 00:00:31,099
+I'm going to show you 2.
+
+9
+00:00:31,099 --> 00:00:35,109
+ways to go here. The first one is to use
+
+10
+00:00:35,109 --> 00:00:37,900
+again a
+
+11
+00:00:37,900 --> 00:00:45,480
+linked list in which you store basically the
+addresses of the blocks that are free and you
+
+12
+00:00:45,480 --> 00:00:52,140
+use one last address to point to the following
+block that contains the lists of blocks that
+
+13
+00:00:52,140 --> 00:00:57,230
+are free and so on and so forth, and this
+can be maintained on disk.
+
+14
+00:00:57,230 --> 00:01:01,649
+It's similar to how you allocate files,
+the only difference is that now you're filling
+
+15
+00:01:01,649 --> 00:01:03,710
+it with addresses that are 
+
+16
+00:01:03,710 --> 00:01:08,729
+referring to blocks that are free rather than
+already used by some file.
+
+17
+00:01:08,729 --> 00:01:16,390
+Or, you can use a bitmap so you can set a bit
+for each block from the first one to the last
+
+18
+00:01:16,390 --> 00:01:23,310
+one. One means it is free, 0 means it is already
+taken or the opposite depending on how
+
+19
+00:01:23,310 --> 00:01:26,800
+you implement the system. But let's say
+the binary information tells you whether it
+
+20
+00:01:26,800 --> 00:01:28,610
+is
+
+21
+00:01:28,610 --> 00:01:30,079
+taken or not.
+
+22
+00:01:30,079 --> 00:01:36,090
+Now, which one is better? As always it depends.
+
+23
+00:01:36,090 --> 00:01:40,921
+If you have a small number of free blocks,
+the linked list might for example, consume
+
+24
+00:01:40,921 --> 00:01:45,310
+less because a bunch of blocks
+
+25
+00:01:45,310 --> 00:01:50,900
+on the disk would already contain all the
+free addresses.
+
+26
+00:01:50,900 --> 00:01:56,530
+On the other hand, if you have a lot of free
+addresses, the bitmap might consume less space,
+
+27
+00:01:56,530 --> 00:02:00,090
+despite the fact that it takes always a fixed
+amount of space, because you need one bit
+
+28
+00:02:00,090 --> 00:02:07,500
+for each block, the number of blocks is fixed,
+all the blocks you have in the disk.
+
+29
+00:02:07,500 --> 00:02:15,430
+Again, be efficient in how you keep this
+it's always more challenging than it looks.
+
+30
+00:02:15,430 --> 00:02:22,030
+At least based on how we discuss
+these things in the course. So let's say that
+
+31
+00:02:22,030 --> 00:02:23,910
+you go for the linked list.
+
+32
+00:02:23,910 --> 00:02:30,510
+And let's say that for efficiency you only
+keep the first block that is containing free
+
+33
+00:02:30,510 --> 00:02:34,909
+addresses of free blocks in memory, and the
+rest you keep on disk and let's say that
+
+34
+00:02:34,909 --> 00:02:41,260
+the idea is to do this because you want to
+get a better performance by interacting with
+
+35
+00:02:41,260 --> 00:02:46,489
+the memory rather than the disk, and consume
+less time.
+
+36
+00:02:46,489 --> 00:02:51,270
+Sounds like a good idea, but you can still
+end up in some
+
+37
+00:02:51,270 --> 00:02:56,090
+degenerate case. So here I'm just trying
+to make an example to show you that, as always,
+
+38
+00:02:56,090 --> 00:03:00,590
+there are always tradeoffs. It's complicated
+when you want to implement efficient solutions
+
+39
+00:03:00,590 --> 00:03:03,319
+for these kinds of problems.
+
+40
+00:03:03,319 --> 00:03:09,319
+And what the example shows you here is that
+suppose that you have the block in memory
+
+41
+00:03:09,319 --> 00:03:17,860
+that is almost full of free blocks. OK, let's
+say there are only two remaining.
+
+42
+00:03:17,860 --> 00:03:22,500
+And you compile a big program and you keep
+creating a lot of temporary files and deleting
+
+43
+00:03:22,500 --> 00:03:27,129
+them and creating them and deleting them and
+so on. So every time you delete a file, you
+
+44
+00:03:27,129 --> 00:03:31,480
+free space. You want to keep this
+
+45
+00:03:31,480 --> 00:03:39,980
+free space in this list because you could
+use it later on and
+
+46
+00:03:39,980 --> 00:03:46,140
+so you store the free blocks here in this
+free ones you exhaust this block, so you
+
+47
+00:03:46,140 --> 00:03:51,180
+write it to disk and you create a new one
+and then you keep adding the blocks that are
+
+48
+00:03:51,180 --> 00:03:56,120
+free but then you have to create a file and
+you need more or less the same number of blocks.
+
+49
+00:03:56,120 --> 00:04:01,460
+So you start consuming the ones you have in
+memory. You only have a bunch of them.
+
+50
+00:04:01,460 --> 00:04:06,739
+Then you exhaust the block and you need to
+read it back
+
+51
+00:04:06,739 --> 00:04:12,180
+from the disk and the same block you just
+wrote, and if this is happening a lot of times
+
+52
+00:04:12,180 --> 00:04:17,079
+in a cycle in a small amount of time you
+see that
+
+53
+00:04:17,079 --> 00:04:22,710
+your desire to optimize the thing actually
+led to a solution that creates a lot of overhead
+
+54
+00:04:22,710 --> 00:04:28,650
+and a lot of writes and reads from the disk
+and creation of space in memory Because
+
+55
+00:04:28,650 --> 00:04:34,210
+you are just unlucky and you end up in one
+of these corner cases. It is just a small
+
+56
+00:04:34,210 --> 00:04:41,260
+example to show you things that can happen
+that make this kind of designing a file system
+
+57
+00:04:41,260 --> 00:04:44,880
+and other parts of the operating system too
+complicated.
+

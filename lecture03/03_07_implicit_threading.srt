@@ -1,0 +1,184 @@
+1
+00:00:00,550 --> 00:00:11,300
+let's move now to implicit threading implicit
+threading is something that is getting more
+
+2
+00:00:11,300 --> 00:00:17,800
+and more popular this has been happening since
+years now it is not really something new and
+
+3
+00:00:17,800 --> 00:00:25,220
+it's basically about simplifying even further
+the life of programmers when it comes to multithreaded
+
+4
+00:00:25,220 --> 00:00:40,170
+processes the idea is to let the compiler
+create code to handle threads so that the
+
+5
+00:00:40,170 --> 00:00:46,320
+overhead or the extra work needed by the programmer
+is saying things like "create a thread" "destroy
+
+6
+00:00:46,320 --> 00:00:54,519
+a thread" "run this function with a thread"
+gets even lower than the one I presented
+
+7
+00:00:54,519 --> 00:01:00,219
+with the code before we are going to look
+at two ways / two mechanisms that exist one
+
+8
+00:01:00,219 --> 00:01:08,770
+is the concept of thread pool and the other
+is OpenMP thread pools is something that is
+
+9
+00:01:08,770 --> 00:01:14,760
+used quite a lot the idea is that instead
+of creating a thread when you need it you
+
+10
+00:01:14,760 --> 00:01:22,430
+create a set of threads a pool of threads
+at the beginning so that first of all you
+
+11
+00:01:22,430 --> 00:01:27,140
+don't pay the price of creating a thread when
+you need it because when you need a thread
+
+12
+00:01:27,140 --> 00:01:35,000
+you might want to do something rapidly and
+creating the thread at that time would affect
+
+13
+00:01:35,000 --> 00:01:40,590
+the response time or latency whatever
+you want as a metric because you have to create
+
+14
+00:01:40,590 --> 00:01:44,140
+a thread at that moment so you can create
+the threads at the beginning of the execution
+
+15
+00:01:44,140 --> 00:01:49,930
+and just keep them in a pool and then whenever
+you have to run something in a thread you
+
+16
+00:01:49,930 --> 00:01:57,530
+pick one of the free threads in the pool and
+you make it run a certain function of course
+
+17
+00:01:57,530 --> 00:02:02,460
+you can play a bit with the pool size to decide
+what is the maximum parallelism degree and
+
+18
+00:02:02,460 --> 00:02:08,160
+you have mechanisms so that if all the threads
+in the pool are already taken you can even
+
+19
+00:02:08,160 --> 00:02:14,560
+decide to create more threads or just ask
+the one that wants the thread to do something
+
+20
+00:02:14,560 --> 00:02:21,480
+to actually wait because all available ones
+are taken and in practice this might be also
+
+21
+00:02:21,480 --> 00:02:27,440
+good because you know that at the end of the
+day you have a fixed number of physical cores
+
+22
+00:02:27,440 --> 00:02:32,760
+and since each physical core can only run
+one thread at the time having too many threads
+
+23
+00:02:32,760 --> 00:02:37,640
+depending of course on what kind of operations
+they are doing especially if they are CPU-bounded
+
+24
+00:02:37,640 --> 00:02:44,210
+(we will see this in the next lecture , simply
+put if they do a lot of computation and they
+
+25
+00:02:44,210 --> 00:02:49,650
+are not really requesting a lot of input/ouput from
+the operating system and the hardware) having
+
+26
+00:02:49,650 --> 00:03:01,350
+too many threads does not really help an alternative
+is OpenMP an extra mechanism for implicit
+
+27
+00:03:01,350 --> 00:03:09,150
+threading is OpenMP the idea is that you actually
+use directives for the compiler so that when
+
+28
+00:03:09,150 --> 00:03:15,640
+you compile your code the compiler automatically
+adds all the parts that are related to creating
+
+29
+00:03:15,640 --> 00:03:23,030
+threads assigning functions to them and so
+on so basically just look at this example
+
+30
+00:03:23,030 --> 00:03:28,200
+here you see you put this directive for the
+compiler and what you are telling the compiler
+
+31
+00:03:28,200 --> 00:03:36,020
+is everything that happens all the functions
+and lines of code you have in between these
+
+32
+00:03:36,020 --> 00:03:42,140
+brackets they should be run in parallel and
+you should create one thread per core that
+
+33
+00:03:42,140 --> 00:03:48,900
+is available in my computer when you compile
+this then the compiler will add all the extra
+
+34
+00:03:48,900 --> 00:03:54,959
+lines needed to create a thread destroy the
+thread join the thread at the end to make
+
+35
+00:03:54,959 --> 00:03:59,290
+sure the main thread doesn't proceed before
+this is done and so on so basically if you
+
+36
+00:03:59,290 --> 00:04:07,400
+try to do this and then you run the program
+you will get n times this print where n is
+
+37
+00:04:07,400 --> 00:04:11,730
+the number of cores you have in your machine
+

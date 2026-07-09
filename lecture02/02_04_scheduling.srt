@@ -1,0 +1,306 @@
+1
+00:00:00,240 --> 00:00:04,240
+let's move now to process scheduling we
+have a dedicated lecture about
+
+2
+00:00:04,240 --> 00:00:10,480
+scheduling so this is just a
+simple introduction here so
+
+3
+00:00:10,480 --> 00:00:14,880
+we said that the context switch needs to
+be fast
+
+4
+00:00:14,880 --> 00:00:18,800
+this implies that when we need to decide
+what is the next
+
+5
+00:00:18,800 --> 00:00:22,880
+process that should run we should be
+efficient
+
+6
+00:00:22,880 --> 00:00:26,880
+now how efficient the operating system
+is
+
+7
+00:00:26,880 --> 00:00:30,000
+depends on the data structures that it
+uses
+
+8
+00:00:30,000 --> 00:00:35,600
+to maintain the information about the
+processes or the process control blocks
+
+9
+00:00:35,600 --> 00:00:39,280
+here you have a first example of the
+tradeoffs I mentioned between space and
+
+10
+00:00:39,280 --> 00:00:42,840
+time complexity
+you can keep everything in a single data
+
+11
+00:00:42,840 --> 00:00:47,520
+structure
+that is potentially simple it reduces
+
+12
+00:00:47,520 --> 00:00:53,039
+space complexity but then it's not
+optimal for time complexity if you keep
+
+13
+00:00:53,039 --> 00:00:56,960
+everything inside
+the same data structure you might need
+
+14
+00:00:56,960 --> 00:01:00,079
+to traverse
+the entire data structure to find out
+
+15
+00:01:00,079 --> 00:01:03,440
+which is the next program that you want
+
+16
+00:01:03,440 --> 00:01:06,960
+to run
+so the operating system does something
+
+17
+00:01:06,960 --> 00:01:13,200
+smarter than this
+it actually keeps different queues
+
+18
+00:01:13,200 --> 00:01:16,240
+in which it stores the process control
+blocks
+
+19
+00:01:16,240 --> 00:01:19,600
+one queue is the queue of processes that
+are ready
+
+20
+00:01:19,600 --> 00:01:23,840
+or process control 
+blocks that refer to processes that are
+
+21
+00:01:23,840 --> 00:01:28,159
+ready and then there are different
+queues depending on the input output
+
+22
+00:01:28,159 --> 00:01:32,320
+device
+okay so you can have a queue that is
+
+23
+00:01:32,320 --> 00:01:35,600
+containing only the process control
+blocks
+
+24
+00:01:35,600 --> 00:01:39,520
+of processes that are waiting for the
+disk
+
+25
+00:01:39,520 --> 00:01:46,399
+and to say that one process
+changes its state from waiting to ready
+
+26
+00:01:46,399 --> 00:01:50,240
+could actually mean that the process
+control block of that process
+
+27
+00:01:50,240 --> 00:01:56,640
+is removed from the queue that refers to
+a disk unit and it's added back to the
+
+28
+00:01:56,640 --> 00:02:03,040
+queue of the ready processes
+this organization helps in reducing the
+
+29
+00:02:03,040 --> 00:02:06,799
+context switch time
+because if you want to know what is the
+
+30
+00:02:06,799 --> 00:02:10,640
+next ready process to run
+you don't need to check among all the
+
+31
+00:02:10,640 --> 00:02:14,080
+process control blocks you have
+but you can just pick the next in the
+
+32
+00:02:14,080 --> 00:02:19,840
+queue of the process control blocks that
+are about ready processes
+
+33
+00:02:20,080 --> 00:02:24,480
+so this is the let's say
+
+34
+00:02:24,959 --> 00:02:30,080
+life cycle of the process once it starts
+it gets into the ready queue
+
+35
+00:02:30,080 --> 00:02:33,599
+and it gets some CPU time at a certain
+point
+
+36
+00:02:33,599 --> 00:02:39,680
+it might just terminate or
+some other things could happen there can
+
+37
+00:02:39,680 --> 00:02:44,080
+be a request 
+and then it will go in the queue of
+
+38
+00:02:44,080 --> 00:02:48,560
+some I/O device until
+
+39
+00:02:48,560 --> 00:02:55,599
+the I/O is done
+it might be that it's the time slice
+
+40
+00:02:55,599 --> 00:02:58,640
+that is given expires the operating
+system
+
+41
+00:02:58,640 --> 00:03:03,040
+might say each program runs
+for 10 milliseconds there is always this
+
+42
+00:03:03,040 --> 00:03:07,680
+clock ticking and creating interrupts
+let's say every second so sometimes the
+
+43
+00:03:07,680 --> 00:03:12,480
+operating system might wake up
+and check how much time it does
+
+44
+00:03:12,480 --> 00:03:18,400
+let a certain process run and then put
+it back to the ready queue we will see
+
+45
+00:03:18,400 --> 00:03:21,920
+that processes can
+fork a child or better said
+
+46
+00:03:21,920 --> 00:03:25,200
+they can create other processes
+and this could be a reason why you stop
+
+47
+00:03:25,200 --> 00:03:27,599
+running this process and you start
+running
+
+48
+00:03:27,599 --> 00:03:32,959
+a different one or they could be
+just waiting for an interrupt
+
+49
+00:03:32,959 --> 00:03:36,640
+in which they will stay in this
+waiting state until they get
+
+50
+00:03:36,640 --> 00:03:41,360
+an interrupt and then they will go back
+to the ready queue
+
+51
+00:03:41,360 --> 00:03:45,440
+now you have both short term schedulers
+and long term
+
+52
+00:03:45,440 --> 00:03:50,720
+schedulers as the name suggests the
+short time
+
+53
+00:03:50,720 --> 00:03:53,840
+scheduler selects the process that
+should be executed next
+
+54
+00:03:53,840 --> 00:03:59,519
+so the process that should get the CPU
+and this is maybe the only
+
+55
+00:03:59,519 --> 00:04:02,480
+scheduler you ever for sure the
+scheduler you need because it's the one
+
+56
+00:04:02,480 --> 00:04:05,519
+taking decision immediately about what
+to run next
+
+57
+00:04:05,519 --> 00:04:11,120
+you can also have long-term
+schedulers so it might be that
+
+58
+00:04:11,120 --> 00:04:15,040
+there are
+processes that need to be put to sleep
+
+59
+00:04:15,040 --> 00:04:18,560
+because there are not enough resources
+we would see this thing in a
+
+60
+00:04:18,560 --> 00:04:22,400
+certain number of lectures when we talk
+about virtual memory
+
+61
+00:04:22,400 --> 00:04:26,880
+okay so these are let's say taking
+decision on a larger
+
+62
+00:04:26,880 --> 00:04:32,560
+time frame than the short term schedules
+

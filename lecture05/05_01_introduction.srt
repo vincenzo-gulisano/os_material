@@ -1,0 +1,93 @@
+1
+00:00:00,459 --> 00:00:03,930
+Let’s start this lecture with some motivation
+
+2
+00:00:03,930 --> 00:00:09,210
+In our previous lecture about multithreaded
+processes, we saw that functions like pthread_join
+
+3
+00:00:09,210 --> 00:00:14,820
+exist to help users coordinate the execution
+of threads that operate on shared memory.
+
+4
+00:00:14,820 --> 00:00:18,009
+In this lecture, we will discuss synchronization
+in more detail.
+
+5
+00:00:18,009 --> 00:00:19,679
+Let’s start with an example.
+
+6
+00:00:19,679 --> 00:00:24,970
+Let’s assume we have 2 threads, A and B.
+Each has a local variable x and a shared variable
+
+7
+00:00:24,970 --> 00:00:29,229
+S. That is, A and B share the same S variable.
+
+8
+00:00:29,229 --> 00:00:31,739
+S is initialized with value 20.
+
+9
+00:00:31,739 --> 00:00:35,840
+Let’s also assume A and B run in parallel,
+each on its core.
+
+10
+00:00:35,840 --> 00:00:38,500
+Their code includes three instructions to
+update S.
+
+11
+00:00:38,500 --> 00:00:41,910
+Let’s look at the example.
+
+12
+00:00:41,910 --> 00:00:44,910
+Each line represents an execution slot over
+time.
+
+13
+00:00:44,910 --> 00:00:50,929
+We see that both A and B try to update S:
+A by adding 50 while B by subtracting 20.
+
+14
+00:00:50,929 --> 00:00:57,770
+In this example, A starts one slot before
+B. What is the problem with this execution?
+
+15
+00:00:57,770 --> 00:01:04,019
+Since the access to S is not synchronized
+between A and B, A writes its update to S
+
+16
+00:01:04,019 --> 00:01:12,240
+after B has read the previous value of S.
+Hence, rather than 20 + 50 - 20, the final
+
+17
+00:01:12,240 --> 00:01:15,510
+value of S is in fact 20 - 20.
+
+18
+00:01:15,510 --> 00:01:21,700
+If S represents your bank account balance,
+you see such behavior is extremely risky.
+
+19
+00:01:21,700 --> 00:01:27,610
+As we will elaborate next, what we are experiencing
+here is a race condition because of a critical
+
+20
+00:01:27,610 --> 00:01:29,969
+section that is not accessed exclusively.
+

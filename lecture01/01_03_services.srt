@@ -1,0 +1,72 @@
+1
+00:00:00,500 --> 00:00:08,100
+if we now just have a rapid look at the different
+services of an operating system we can see
+
+2
+00:00:08,100 --> 00:00:12,469
+that there are parts of the operating system
+that are above the system calls so you don't
+
+3
+00:00:12,469 --> 00:00:14,030
+really need to interact with the hardware
+
+4
+00:00:14,030 --> 00:00:19,220
+the graphical user interface for example
+here is an example and parts that are below
+
+5
+00:00:19,220 --> 00:00:24,150
+so the file system when you want to store/open
+a file and this kind of things you need to actually
+
+6
+00:00:24,150 --> 00:00:31,369
+interact with the disk so this stays
+let's say below the level of the system calls
+
+7
+00:00:31,369 --> 00:00:38,640
+there are parts of the operating system that
+are there for the user to basically interact
+
+8
+00:00:38,640 --> 00:00:43,011
+with the hardware so you can run programs
+that you need to read from the disk you can
+
+9
+00:00:43,011 --> 00:00:46,170
+communicate with devices you can access files
+and so on
+
+10
+00:00:46,170 --> 00:00:52,500
+there are parts of the operating system that
+are actually about dealing with errors
+
+11
+00:00:52,500 --> 00:00:59,710
+a connection failure so if you try to attempt to read a
+part of memory
+
+12
+00:00:59,710 --> 00:01:01,059
+you don't have the right to read
+
+13
+00:01:01,059 --> 00:01:07,150
+and of course there are parts of the operating
+system that are for the operating system itself
+
+14
+00:01:07,150 --> 00:01:12,610
+to be efficient to decide which processes
+to run to protect the memory of a user
+
+15
+00:01:12,610 --> 00:01:14,850
+from other users and so on and so forth
+

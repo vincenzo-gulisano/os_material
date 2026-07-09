@@ -1,0 +1,398 @@
+1
+00:00:01,510 --> 00:00:07,019
+now that we have discussed the context
+switch let's
+
+2
+00:00:07,019 --> 00:00:12,360
+go through some basic concepts about processes
+so now I'm going to say stuff that
+
+3
+00:00:12,360 --> 00:00:17,400
+it's detailing a bit better
+
+4
+00:00:17,400 --> 00:00:28,359
+what I just show you about the context switch
+so what the computer executes is called process
+
+5
+00:00:28,359 --> 00:00:33,600
+we don't use the term program because
+the program is
+
+6
+00:00:33,600 --> 00:00:36,890
+a passive entity it is what is stored on disk while
+the process
+
+7
+00:00:36,890 --> 00:00:40,510
+is the program
+once you start executing it
+
+8
+00:00:40,510 --> 00:00:45,359
+when you execute it you load it into
+memory
+
+9
+00:00:45,359 --> 00:00:49,229
+you can start of course programs and processes
+in different
+
+10
+00:00:49,229 --> 00:00:53,789
+ways the important thing here is that you
+can have a program
+
+11
+00:00:53,789 --> 00:01:01,579
+that is composed of several processes
+and some processes can also be the execution
+
+12
+00:01:01,579 --> 00:01:04,559
+environment
+for other processes
+
+13
+00:01:04,559 --> 00:01:11,100
+and this is the example of the Java virtual machine
+when you want to run a process you need
+
+14
+00:01:11,100 --> 00:01:15,170
+to maintain
+information that belongs to the process itself
+
+15
+00:01:15,170 --> 00:01:19,970
+so you need a portion of memory in which you
+place the process
+
+16
+00:01:19,970 --> 00:01:24,730
+but the operating system
+needs also to maintain
+
+17
+00:01:24,730 --> 00:01:29,700
+information
+about the process I mentioned before that
+
+18
+00:01:29,700 --> 00:01:31,980
+for instance
+you need to know whether a process is running
+
+19
+00:01:31,980 --> 00:01:35,700
+or it's idle 
+this is not information that belongs
+
+20
+00:01:35,700 --> 00:01:39,730
+to the process
+it's information the operating system maintains
+
+21
+00:01:39,730 --> 00:01:44,650
+about the
+process if we focus on the information that
+
+22
+00:01:44,650 --> 00:01:49,300
+belongs to the
+process then we have different parts
+
+23
+00:01:49,300 --> 00:01:57,300
+there is the program code or the text section
+this is basically where you keep the instructions
+
+24
+00:01:57,300 --> 00:02:01,260
+that you
+have to run to execute your process
+
+25
+00:02:01,260 --> 00:02:06,970
+there is the data section that contains global
+variables and
+
+26
+00:02:06,970 --> 00:02:12,450
+then there is the heap and the stack
+the heap contains memory that is dynamically
+
+27
+00:02:12,450 --> 00:02:17,079
+allocated while
+you execute the process while the stack contains
+
+28
+00:02:17,079 --> 00:02:20,730
+temporary
+data function parameters return
+
+29
+00:02:20,730 --> 00:02:30,739
+addresses local
+variables and so now this scheme here shows
+
+30
+00:02:30,739 --> 00:02:35,029
+you the different
+states in which your process can be
+
+31
+00:02:35,029 --> 00:02:37,849
+when you tell the operating system to run
+a certain program
+
+32
+00:02:37,849 --> 00:02:42,430
+by creating a process the operating system
+sets the process
+
+33
+00:02:42,430 --> 00:02:46,689
+state initially to new so the process is being
+created
+
+34
+00:02:46,689 --> 00:02:51,209
+once everything is ready the process goes
+into the ready
+
+35
+00:02:51,209 --> 00:02:56,409
+state okay ready means that it's not executing
+but it
+
+36
+00:02:56,409 --> 00:03:01,799
+can start to execute if it's given a CPU
+core
+
+37
+00:03:01,799 --> 00:03:07,109
+remember that 
+only one process can be running at each processor
+
+38
+00:03:07,109 --> 00:03:10,219
+CPU core at
+any instant
+
+39
+00:03:10,219 --> 00:03:18,409
+from ready you can go to running
+if the process is actually given access to
+
+40
+00:03:18,409 --> 00:03:27,069
+the CPU core
+it stays into the running state until it generates
+
+41
+00:03:27,069 --> 00:03:34,069
+maybe
+a request for which it needs input or output
+
+42
+00:03:34,069 --> 00:03:36,680
+so it says i want to read something from the
+disk
+
+43
+00:03:36,680 --> 00:03:40,680
+for instance
+in that case the process cannot continue until
+
+44
+00:03:40,680 --> 00:03:44,230
+it gets what
+it needs from the disk
+
+45
+00:03:44,230 --> 00:03:48,730
+but when there is I/O it doesn't
+go back to ready
+
+46
+00:03:48,730 --> 00:03:52,700
+because it's not really ready to start again
+until the disk
+
+47
+00:03:52,700 --> 00:03:57,969
+answers or the I/O is completed
+because of this it goes into a waiting state
+
+48
+00:03:57,969 --> 00:04:03,340
+and once what the process is waiting for is
+received it
+
+49
+00:04:03,340 --> 00:04:06,090
+goes back to ready because that is the point
+at which it's
+
+50
+00:04:06,090 --> 00:04:09,920
+actually ready to run again
+of course you can also go directly from running
+
+51
+00:04:09,920 --> 00:04:16,199
+to ready if the
+clock for example generates and interrupt
+
+52
+00:04:16,199 --> 00:04:19,390
+the process gets stopped because something
+else needs to
+
+53
+00:04:19,390 --> 00:04:22,970
+run but the process is not asking for some
+kind of I/O
+
+54
+00:04:22,970 --> 00:04:26,000
+so it can just go back to the ready
+state
+
+55
+00:04:26,000 --> 00:04:29,590
+and finally once you are running you might
+also decide
+
+56
+00:04:29,590 --> 00:04:41,000
+to exit and be terminated once you execute
+your last instruction
+
+57
+00:04:41,000 --> 00:04:47,280
+this is the context switch I presented before
+so when the CPU switches to another process
+
+58
+00:04:47,280 --> 00:04:51,600
+we said that
+the system must save information about what
+
+59
+00:04:51,600 --> 00:04:55,700
+it was doing
+and what it will be doing next
+
+60
+00:04:55,700 --> 00:05:00,070
+because of this it stores the information
+about the process
+
+61
+00:05:00,070 --> 00:05:03,950
+not the information on the process itself
+that stays in memory
+
+62
+00:05:03,950 --> 00:05:06,370
+and this information is what is contained
+in the process
+
+63
+00:05:06,370 --> 00:05:12,650
+control block or PCB
+as I said context switches are an overhead
+
+64
+00:05:12,650 --> 00:05:16,240
+so you want to minimize the time it takes
+to do the context
+
+65
+00:05:16,240 --> 00:05:19,810
+switch and you also want to minimize how many
+context switches
+
+66
+00:05:19,810 --> 00:05:26,980
+you do if possible
+and you need support from the hardware
+
+67
+00:05:26,980 --> 00:05:30,180
+you need for example interrupt from the clock
+that periodically
+
+68
+00:05:30,180 --> 00:05:33,090
+allow the operating system to wake up and
+check what
+
+69
+00:05:33,090 --> 00:05:38,360
+is happening
+this is the information we have in the process
+
+70
+00:05:38,360 --> 00:05:43,810
+control block
+you can read the slide by yourself but just
+
+71
+00:05:43,810 --> 00:05:48,410
+to point out
+some interesting stuff one important thing
+
+72
+00:05:48,410 --> 00:05:52,670
+is the program
+counter which is basically the location of
+
+73
+00:05:52,670 --> 00:05:55,460
+the next instruction
+to execute or better
+
+74
+00:05:55,460 --> 00:06:01,690
+said the address in the main memory that belongs
+to the text
+
+75
+00:06:01,690 --> 00:06:07,100
+section of a certain process in which the
+next instruction
+
+76
+00:06:07,100 --> 00:06:13,350
+to be run is stored
+ you can have registers
+
+77
+00:06:13,350 --> 00:06:18,070
+from the
+CPU you can have accounting information about
+
+78
+00:06:18,070 --> 00:06:22,150
+CPU used or
+time elapsed and so on information about input
+
+79
+00:06:22,150 --> 00:06:24,790
+output whether
+the process is waiting for something or not
+
+80
+00:06:24,790 --> 00:06:27,900
+and so on just have a look at this list
+

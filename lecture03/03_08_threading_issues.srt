@@ -1,0 +1,400 @@
+1
+00:00:01,000 --> 00:00:04,620
+the last part I want to discuss is about some
+challenges
+
+2
+00:00:04,620 --> 00:00:11,630
+and issues when it comes to threading
+the plan here is to show you to give you more
+
+3
+00:00:11,630 --> 00:00:12,630
+evidence
+
+4
+00:00:12,630 --> 00:00:16,110
+about what
+I said since the very first lecture
+
+5
+00:00:16,110 --> 00:00:19,680
+that is when you want to do something fancy
+more advanced that
+
+6
+00:00:19,680 --> 00:00:22,550
+gives you better performance you need to pay
+a cost and
+
+7
+00:00:22,550 --> 00:00:27,390
+it gets more complicated
+so I'm going to give you some hints about
+
+8
+00:00:27,390 --> 00:00:28,390
+why
+
+9
+00:00:28,390 --> 00:00:32,580
+it's more complicated
+and aspects that who designs a system that
+
+10
+00:00:32,580 --> 00:00:37,750
+supports multi-threaded
+processes needs to think about
+
+11
+00:00:37,750 --> 00:00:44,170
+let's start with the semantics of fork or
+exec
+
+12
+00:00:44,170 --> 00:00:51,440
+so this is the code
+we discussed already in a previous video
+
+13
+00:00:51,440 --> 00:00:58,000
+so we have the process calling
+fork two processes
+
+14
+00:00:58,000 --> 00:01:02,070
+they copies we check if the fork was successful
+and if that
+
+15
+00:01:02,070 --> 00:01:08,320
+is the case we have the child process running
+exec to replace the memory and run a different
+
+16
+00:01:08,320 --> 00:01:14,680
+program
+and the parent process that is waiting for
+
+17
+00:01:14,680 --> 00:01:20,700
+the child
+and waiting that everything is done and finally
+
+18
+00:01:20,700 --> 00:01:25,229
+exiting
+you can think about questions like this does
+
+19
+00:01:25,229 --> 00:01:28,480
+fork duplicate
+only the calling thread or all the threads
+
+20
+00:01:28,480 --> 00:01:31,720
+answer
+
+21
+00:01:31,720 --> 00:01:36,570
+it depends
+I'm not saying this because you need to know
+
+22
+00:01:36,570 --> 00:01:39,130
+what is actually
+being done inside the fork
+
+23
+00:01:39,130 --> 00:01:44,149
+it depends on the implementation you have
+of it and the
+
+24
+00:01:44,149 --> 00:01:47,329
+Unix system you're using
+but the point I'm trying to make is that such
+
+25
+00:01:47,329 --> 00:01:51,229
+a question
+arises now because we have multi-threaded
+
+26
+00:01:51,229 --> 00:01:52,229
+processes
+
+27
+00:01:52,229 --> 00:01:55,020
+if each process had a single thread we would
+not need to
+
+28
+00:01:55,020 --> 00:02:02,299
+think about this kind of things
+similar questions can be made for the
+
+29
+00:02:02,299 --> 00:02:05,360
+exec although
+in practice exec will replace everything as
+
+30
+00:02:05,360 --> 00:02:07,439
+it is to replace everything
+with a different program
+
+31
+00:02:07,439 --> 00:02:11,640
+it will start with one thread usually would
+be really strange
+
+32
+00:02:11,640 --> 00:02:14,200
+to keep all the threads since what the next
+program
+
+33
+00:02:14,200 --> 00:02:15,600
+will do is potentially
+
+34
+00:02:15,600 --> 00:02:19,550
+completely different from what the current
+one is doing
+
+35
+00:02:19,550 --> 00:02:25,660
+another aspect to take it account is that
+of handling signals
+
+36
+00:02:25,660 --> 00:02:32,330
+so signals are used in Unix systems
+to send messages
+
+37
+00:02:32,330 --> 00:02:42,010
+between threads and processes
+when a process runs wait it asks the
+
+38
+00:02:42,010 --> 00:02:47,170
+operating system
+to notify it when
+
+39
+00:02:47,170 --> 00:02:50,890
+for example the child process has terminated
+all these messages
+
+40
+00:02:50,890 --> 00:03:02,550
+are handled by the kernel through signals
+now if you have single-threaded processes
+
+41
+00:03:02,550 --> 00:03:05,221
+and you send a
+signal to a process it's pretty easy who you
+
+42
+00:03:05,221 --> 00:03:08,030
+should contact
+you in this case is the operating system
+
+43
+00:03:08,030 --> 00:03:11,390
+it's easy to understand who the kernel should
+contact the process
+
+44
+00:03:11,390 --> 00:03:16,030
+which is the single-threaded process
+on the other
+
+45
+00:03:16,030 --> 00:03:19,650
+hand if a process has multiple threads then
+you can imagine
+
+46
+00:03:19,650 --> 00:03:23,580
+that you can have legit questions like this
+should I deliver
+
+47
+00:03:23,580 --> 00:03:27,510
+the signal to a specific thread in the process
+
+48
+00:03:27,510 --> 00:03:32,290
+and if the answer is yes
+how do I know which is the specific
+
+49
+00:03:32,290 --> 00:03:39,560
+thread that should get the signal
+or should I notify all the threads
+
+50
+00:03:39,560 --> 00:03:47,069
+of the process
+which one of the two is the
+
+51
+00:03:47,069 --> 00:03:50,989
+option to go might depend
+on the process you are running
+
+52
+00:03:50,989 --> 00:03:54,629
+both options might be valid
+and you might want as an operating system
+
+53
+00:03:54,629 --> 00:03:59,019
+to provide
+functionalities so that you can choose which
+
+54
+00:03:59,019 --> 00:04:01,159
+one
+of the two
+
+55
+00:04:01,159 --> 00:04:04,080
+what I am trying to say here simply put
+is that all the handling of signals
+
+56
+00:04:04,080 --> 00:04:10,110
+becomes way more complicated
+once you start having multi-threaded processes
+
+57
+00:04:10,110 --> 00:04:16,180
+instead of single-threaded ones
+you also need to take into account
+
+58
+00:04:16,180 --> 00:04:20,100
+how you hand the cancellation of
+threads
+
+59
+00:04:20,100 --> 00:04:31,340
+there are two ways in which you
+can go and you have the details here
+
+60
+00:04:31,340 --> 00:04:35,690
+actually in the next slide you also have
+more details in the table about
+
+61
+00:04:35,690 --> 00:04:42,650
+how it actually works
+simply put you can either terminate
+
+62
+00:04:42,650 --> 00:04:46,460
+the target thread immediately
+so if thread A
+
+63
+00:04:46,460 --> 00:04:51,800
+says kill thread B then this will be done
+
+64
+00:04:51,800 --> 00:04:52,800
+but
+
+65
+00:04:52,800 --> 00:04:53,800
+what
+
+66
+00:04:53,800 --> 00:04:54,800
+you
+
+67
+00:04:54,800 --> 00:05:04,009
+usually do is that you actually signal your
+intention so if A wants to terminate B, A signals
+
+68
+00:05:04,009 --> 00:05:06,520
+the intention
+of doing this to B
+
+69
+00:05:06,520 --> 00:05:13,509
+but it asks B to actually terminate itself
+as soon as possible
+
+70
+00:05:13,509 --> 00:05:20,310
+and this is called deferred cancellation
+the idea here is that you want B to stop
+
+71
+00:05:20,310 --> 00:05:24,389
+but you can
+wait a bit until it's done completing whatever
+
+72
+00:05:24,389 --> 00:05:28,440
+it is doing
+so if B is operating on some file and
+
+73
+00:05:28,440 --> 00:05:33,430
+you want to stop B
+if you kill it immediately then it might die
+
+74
+00:05:33,430 --> 00:05:37,490
+without storing
+the file to disk for example
+
+75
+00:05:37,490 --> 00:05:40,610
+and as we will discuss later on since there
+might be buffering
+
+76
+00:05:40,610 --> 00:05:45,210
+in the main memory terminating the program
+before it's done
+
+77
+00:05:45,210 --> 00:05:50,259
+in an abrupt way might create problems
+so you do this differed
+
+78
+00:05:50,259 --> 00:05:53,949
+cancellation and you say I would like you
+to stop
+
+79
+00:05:53,949 --> 00:06:03,020
+and the target thread in this case will periodically
+check whether
+
+80
+00:06:03,020 --> 00:06:07,630
+it got a signal that it should stop and in that
+case close
+
+81
+00:06:07,630 --> 00:06:10,319
+whatever it is doing
+and the terminate
+
+82
+00:06:10,319 --> 00:06:14,910
+and you have this function here pthread_testcancel
+for this
+

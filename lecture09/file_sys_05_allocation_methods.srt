@@ -1,0 +1,482 @@
+1
+00:00:01,520 --> 00:00:06,950
+Let's move now to allocation methods. So basically,
+let's see how we can answer the question:
+
+2
+00:00:06,950 --> 00:00:12,000
+how do we know where each file is?
+
+3
+00:00:12,000 --> 00:00:17,220
+First way to go with this is to choose contiguous
+allocation.
+
+4
+00:00:17,220 --> 00:00:22,970
+It is as the name suggests, and it's similar
+to what we have discussed when we were talking
+
+5
+00:00:22,970 --> 00:00:29,890
+about memory. So you put in this case one
+file after
+
+6
+00:00:29,890 --> 00:00:39,190
+each other an if you remove a file like here
+then you leave a hole that can be potentially
+
+7
+00:00:39,190 --> 00:00:43,600
+re-used later on by other files if they fit of
+course.
+
+8
+00:00:43,600 --> 00:00:50,390
+It's easy to implement. Each file needs to
+be associated basically with two numbers,
+
+9
+00:00:50,390 --> 00:00:55,430
+the 1st and the last address or the first
+address and the number of blocks.
+
+10
+00:00:55,430 --> 00:01:02,489
+It's also good for performance if you are
+doing a single scan reading and you scan from
+
+11
+00:01:02,489 --> 00:01:03,490
+the beginning to the end.
+
+12
+00:01:03,490 --> 00:01:08,290
+And this, of course, is true for rotating
+disks, in which
+
+13
+00:01:08,290 --> 00:01:12,710
+close-by locations are faster to access than
+
+14
+00:01:12,710 --> 00:01:18,109
+locations that are distant (if it is an SSD disk
+it doesn't really matter that much)
+
+15
+00:01:18,109 --> 00:01:24,600
+But you have fragmentation, OK?
+
+16
+00:01:24,600 --> 00:01:31,270
+Exactly as you saw with contiguous allocation
+when we were discussing memory and of course
+
+17
+00:01:31,270 --> 00:01:36,149
+you also need to know in advance the size
+of the file
+
+18
+00:01:36,149 --> 00:01:41,079
+which is not really realistic especially
+because
+
+19
+00:01:41,079 --> 00:01:42,310
+many fires can have a
+
+20
+00:01:42,310 --> 00:01:51,450
+size that changes over time. So even if you
+know the size when you want to store the
+
+21
+00:01:51,450 --> 00:01:57,419
+file, what will you do if then the file changes
+sizes and it becomes larger than the number
+
+22
+00:01:57,419 --> 00:01:58,849
+of blocks you actually have?
+
+23
+00:01:58,849 --> 00:02:01,549
+Still, as always, there is no
+
+24
+00:02:01,549 --> 00:02:09,020
+real good or real bad here. It really depends
+on the setup. Contiguous allocation is used
+
+25
+00:02:09,020 --> 00:02:15,810
+when you keep stuff on compact discs and DVD's
+and so on. Why? Because there you only write
+
+26
+00:02:15,810 --> 00:02:21,360
+once, you don't really modify the stuff and
+you know the size of all the files you have
+
+27
+00:02:21,360 --> 00:02:26,270
+to put and those are not going to change,
+so as you can see this can be used in practice.
+
+28
+00:02:26,270 --> 00:02:32,500
+It depends a bit on the case, the support.
+What is the scenario you are taking into account.
+
+29
+00:02:32,500 --> 00:02:38,150
+An alternative way to go if you want to avoid
+this problem of fragmentation is to use linked list
+
+30
+00:02:38,150 --> 00:02:44,890
+allocation. So you use a portion of each block
+to point to the next block and use a special
+
+31
+00:02:44,890 --> 00:02:49,400
+number to refer to the last block.
+
+32
+00:02:49,400 --> 00:02:52,720
+And then basically you can
+
+33
+00:02:52,720 --> 00:02:59,190
+scatter around the blocks of a file into
+blocks in the disk that do not need to be
+
+34
+00:02:59,190 --> 00:03:05,360
+contiguous. So you have the first block
+O which points to the *second* block address
+
+35
+00:03:05,360 --> 00:03:13,310
+which is 7 in the physical device which
+points to the physical block number 2 and
+
+36
+00:03:13,310 --> 00:03:16,670
+so on so forth.
+
+37
+00:03:16,670 --> 00:03:21,120
+Now you need to maintain only one
+number per file, which is the address of the
+
+38
+00:03:21,120 --> 00:03:22,120
+first block.
+
+39
+00:03:22,120 --> 00:03:28,931
+But, on the other hand, you don't know
+exactly where the block number N is, because
+
+40
+00:03:28,931 --> 00:03:32,540
+now it's not contiguous. You cannot just sum n 
+to the first one you actually need to
+
+41
+00:03:32,540 --> 00:03:35,819
+traverse the
+
+42
+00:03:35,819 --> 00:03:41,610
+all the blocks until you find block N.
+
+43
+00:03:41,610 --> 00:03:46,460
+As you can imagine, this is not really practical,
+especially because if you have to traverse
+
+44
+00:03:46,460 --> 00:03:50,831
+all the blocks every time to find where a
+specific block is and all the blocks are
+
+45
+00:03:50,831 --> 00:03:54,650
+on disk you have to do a lot of context
+switches to access the blocks on disk and
+
+46
+00:03:54,650 --> 00:03:58,380
+so on. Probably this is not really
+
+47
+00:03:58,380 --> 00:04:07,709
+the best in the type of setups
+also you waste now a small amount of bytes
+
+48
+00:04:07,709 --> 00:04:10,070
+inside the
+
+49
+00:04:10,070 --> 00:04:13,319
+the block because now you need to store the
+pointer, so you cannot really use the entire
+
+50
+00:04:13,319 --> 00:04:19,930
+block for your data for putting content of
+the file, you need to keep part of it to maintain
+
+51
+00:04:19,930 --> 00:04:23,240
+the pointer. It's not a big amount of
+
+52
+00:04:23,240 --> 00:04:29,080
+it's not a big portion of the block, but still
+focus on the fact that we always have this
+
+53
+00:04:29,080 --> 00:04:35,460
+space and time tradeoffs, so in this case
+you pay space
+
+54
+00:04:35,460 --> 00:04:40,819
+because you put it inside each block, you
+need to take a portion of that block to keep
+
+55
+00:04:40,819 --> 00:04:44,289
+the point out of the following one.
+
+56
+00:04:44,289 --> 00:04:47,990
+You can optimize this, of course, and
+
+57
+00:04:47,990 --> 00:04:50,360
+you can decide to load
+
+58
+00:04:50,360 --> 00:04:56,360
+the information about where each block is
+and what is the next block in main memory
+
+59
+00:04:56,360 --> 00:05:01,030
+instead of disk, and this is the file allocation
+table
+
+60
+00:05:01,030 --> 00:05:04,219
+So you can keep a list of all the physical
+blocks.
+
+61
+00:05:04,219 --> 00:05:09,499
+You can keep track of the address at which
+each file starts as you were doing with a normal
+
+62
+00:05:09,499 --> 00:05:16,021
+linked list, and then you can just traverse
+this table in memory to find where each block
+
+63
+00:05:16,021 --> 00:05:23,180
+is. It's still a sequential search, you need to
+go 1 by 1 until you find the block you want,
+
+64
+00:05:23,180 --> 00:05:26,990
+but since you don't have to interact with
+the disk and you keep all this information
+
+65
+00:05:26,990 --> 00:05:30,189
+in memory then of course it becomes
+
+66
+00:05:30,189 --> 00:05:33,580
+faster. Also, in this case you need to pay
+
+67
+00:05:33,580 --> 00:05:43,629
+a price, and again it's complexity in space,
+because now you need to use part of your main
+
+68
+00:05:43,629 --> 00:05:48,659
+memory too to keep track of this and you need
+to load it when you boot up your operating
+
+69
+00:05:48,659 --> 00:05:54,150
+system so it takes a bit of a longer time
+to put up and so on. And here is just a simple
+
+70
+00:05:54,150 --> 00:06:00,430
+example of how you can compute the size of
+this table based on the disk size and the
+
+71
+00:06:00,430 --> 00:06:05,580
+block size and how many bytes each address in
+the
+
+72
+00:06:05,580 --> 00:06:10,860
+file allocation table is taking.
+
+73
+00:06:10,860 --> 00:06:17,849
+OK, here you have the pluses and the minuses 
+
+74
+00:06:17,849 --> 00:06:20,889
+so the pros and cons that we just discussed.
+
+75
+00:06:20,889 --> 00:06:27,300
+Final one, which is used in Unix is to keep
+I-nodes. So basically to associate a small
+
+76
+00:06:27,300 --> 00:06:33,969
+data structure to each file this data structure
+
+77
+00:06:33,969 --> 00:06:39,789
+contains the attributes of each file.
+
+78
+00:06:39,789 --> 00:06:46,939
+You load it in memory only when you are trying
+to access the file and this data structure
+
+79
+00:06:46,939 --> 00:06:52,990
+the I-node also contains an initial
+
+80
+00:06:52,990 --> 00:06:56,059
+set of addresses. Let's say the
+first eight blocks
+
+81
+00:06:56,059 --> 00:07:02,560
+of the file, so that if you have to pick a
+specific block out of the first eight blocks,
+
+82
+00:07:02,560 --> 00:07:08,869
+you have the addresses in memory and they're
+pointing to the specific block on the disk.
+
+83
+00:07:08,869 --> 00:07:13,080
+Of course, there is no guarantee that you
+need eight blocks and at the same time there
+
+84
+00:07:13,080 --> 00:07:18,800
+is no guarantee that eight blocks are enough.
+If you don't need them well you are wasting
+
+85
+00:07:18,800 --> 00:07:23,379
+some of them, but that's not a big deal, but
+if you need more, of course you need a mechanism
+
+86
+00:07:23,379 --> 00:07:26,819
+to find out also where the other addresses
+are.
+
+87
+00:07:26,819 --> 00:07:31,159
+And you can do this keeping an extra address
+
+88
+00:07:31,159 --> 00:07:37,879
+to a block on the disk, but this is a special
+block that is only used to store the address
+
+89
+00:07:37,879 --> 00:07:41,650
+of the following blocks.
+
+90
+00:07:41,650 --> 00:07:46,770
+And you can do this with different levels
+of indirection, so this is level one. You
+
+91
+00:07:46,770 --> 00:07:53,939
+have a pointer to a block that contains addresses.
+You can have a pointer to a block that contains
+
+92
+00:07:53,939 --> 00:07:59,360
+pointers to other blocks that are full of
+addresses, and you can go up to three levels
+
+93
+00:07:59,360 --> 00:08:02,509
+of indirection.
+
+94
+00:08:02,509 --> 00:08:10,099
+I will show you an example of this in the
+exercise session.
+
+95
+00:08:10,099 --> 00:08:20,330
+Now, if you only load I-nodes for the files
+you actually open, they take less memory
+
+96
+00:08:20,330 --> 00:08:27,300
+you need to maintain a smaller amount of information
+in memory about the files that are open, and
+
+97
+00:08:27,300 --> 00:08:33,349
+it's also proportional actually to the number
+of files that you have opened,
+
+98
+00:08:33,349 --> 00:08:37,450
+but it becomes complicated again when you
+have very large files because of these mechanisms
+
+99
+00:08:37,450 --> 00:08:44,010
+of pointing to a block that contains pointers
+and so on. So it works well as long
+
+100
+00:08:44,010 --> 00:08:48,900
+as the majority of files have / 
+
+101
+00:08:48,900 --> 00:08:49,900
+take a number of
+
+102
+00:08:49,900 --> 00:08:54,450
+blocks that is more or less covered by the
+ones that are already made available directly
+
+103
+00:08:54,450 --> 00:08:55,880
+in the I-node.
+

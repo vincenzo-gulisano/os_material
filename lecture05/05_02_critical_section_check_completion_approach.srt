@@ -1,0 +1,361 @@
+1
+00:00:01,120 --> 00:00:05,920
+Since we will look into whether 2 or more 
+concurrent threads are correctly handling  
+
+2
+00:00:05,920 --> 00:00:10,400
+shared variables, let's introduce a system 
+model for the critical section problem. 
+
+3
+00:00:11,280 --> 00:00:15,760
+From now on, we assume each of 
+our threads looks like this: 
+
+4
+00:00:15,760 --> 00:00:20,800
+we have a loop that runs forever (it's a 
+model, of course it will stop in practice,  
+
+5
+00:00:20,800 --> 00:00:25,120
+but from the model perspective we do not 
+assume anything about when it will stop) 
+
+6
+00:00:26,240 --> 00:00:31,760
+inside the loop, we have a critical section, 
+the one in which we read/write shared variables, 
+
+7
+00:00:32,320 --> 00:00:38,160
+we assume shared variables are accessed with 
+atomic read/write operations, so only one read  
+
+8
+00:00:38,160 --> 00:00:44,240
+or write operation can be performed at a time
+before the critical section, we have an entry  
+
+9
+00:00:44,240 --> 00:00:51,600
+section, a statement/line/multiple lines whose 
+execution implies the critical section can start:  
+
+10
+00:00:52,240 --> 00:00:57,680
+you can see the entry section as the portion in 
+which the thread is trying to acquire a LOCK,  
+
+11
+00:00:57,680 --> 00:01:03,360
+its right to enter its critical section
+after the critical section, we have an exit  
+
+12
+00:01:03,360 --> 00:01:09,760
+section, a statement/line/multiple lines whose 
+execution implies the critical section is over:  
+
+13
+00:01:10,320 --> 00:01:14,800
+you can see the exit section as the portion 
+in which the thread releases its LOCK,  
+
+14
+00:01:15,440 --> 00:01:22,080
+for someone else to enter their critical section
+and a remainder section, basically the rest  
+
+15
+00:01:22,080 --> 00:01:26,320
+of the code in which we do not worry 
+about reading/writing shared variables. 
+
+16
+00:01:27,040 --> 00:01:31,760
+Notice that for simplicity we also 
+assume threads' execution does not fail! 
+
+17
+00:01:33,920 --> 00:01:38,400
+Our goal of having 2 or more 
+concurrent threads correctly handling  
+
+18
+00:01:38,400 --> 00:01:40,880
+shared variables can then be formulated as: 
+
+19
+00:01:41,600 --> 00:01:47,840
+Define an entry and an exit section that ensure:
+Mutual exclusion, 
+
+20
+00:01:47,840 --> 00:01:54,960
+Progress (i.e., no deadlock/no livelock), and
+Fairness (e.g., bounded waiting or no starvation). 
+
+21
+00:01:56,640 --> 00:02:02,400
+Mutual exclusion means that only one thread 
+at a time can execute its critical section. 
+
+22
+00:02:03,120 --> 00:02:07,840
+Progress means that if no thread 
+is in its critical section and one  
+
+23
+00:02:08,640 --> 00:02:14,640
+is/some are trying to enter their, then one 
+must enter its critical section in bounded time. 
+
+24
+00:02:15,440 --> 00:02:18,640
+Notice that we do not make any assumption about  
+
+25
+00:02:18,640 --> 00:02:23,040
+the duration of the reminder section of 
+a thread. A thread can stay there for  
+
+26
+00:02:23,040 --> 00:02:27,840
+as long as it needs. The duration of the 
+reminder section is NOT bounded in time.
+
+27
+00:02:29,680 --> 00:02:36,320
+Let's put also a temporary extra assumption 
+for now: we only have 2 concurrent threads.
+
+28
+00:02:40,720 --> 00:02:45,440
+If we want to visualize such 
+behavior it looks like this figure. 
+
+29
+00:02:45,440 --> 00:02:48,880
+As you can see, only one thread 
+at a time can enter the critical  
+
+30
+00:02:48,880 --> 00:02:56,400
+region. If a thread B tries to enter it when 
+another thread A is in it, then B waits.
+
+31
+00:02:59,280 --> 00:03:04,080
+What we are going to do next is to look 
+at various ways of defining the entry  
+
+32
+00:03:04,080 --> 00:03:12,000
+and exit section and ask ourselves: does solution 
+X ensure mutual exclusion, progress, and fairness?
+
+33
+00:03:12,800 --> 00:03:19,760
+We want formal correctness proofs. We cannot 
+answer with "it looks like it does!" nor with  
+
+34
+00:03:19,760 --> 00:03:25,440
+"I tried running the code 1000000 times and 
+it never broke, so I am confident it does".
+
+35
+00:03:26,000 --> 00:03:31,200
+To provide a formal answer, we are going to 
+try to find one execution of the threads that  
+
+36
+00:03:31,200 --> 00:03:37,600
+breaks one of the properties. If we find it, then 
+the solution is not valid (it breaks one of the  
+
+37
+00:03:37,600 --> 00:03:45,840
+desired properties). If we show such an execution 
+does not exist, then the solution is valid.
+
+38
+00:03:45,840 --> 00:03:51,520
+Let's try to look at a specific (simple) 
+example, which we refer to as check-completion.
+
+39
+00:03:52,320 --> 00:03:56,000
+Let's say the code of our 2 
+threads, A and B, looks like this. 
+
+40
+00:03:56,640 --> 00:04:00,080
+They both share 2 boolean 
+variables, flagA and flagB,  
+
+41
+00:04:00,800 --> 00:04:06,080
+initially set to false, which they use to indicate 
+their intention to enter the critical section.
+
+42
+00:04:06,880 --> 00:04:10,320
+Here I show A's code. B's code is symmetric. 
+
+43
+00:04:11,520 --> 00:04:17,120
+In its entry section, A waits as long 
+as B's flag is true in a while loop. 
+
+44
+00:04:18,320 --> 00:04:23,360
+This is called busywait because A is 
+using CPU cycles to spin in a loop. 
+
+45
+00:04:24,000 --> 00:04:31,200
+The loop ends when B sets its flag to false.
+After that, A sets its flag to true,  
+
+46
+00:04:31,200 --> 00:04:36,160
+enters the critical section, and when the 
+critical section is over sets its flag to false. 
+
+47
+00:04:37,360 --> 00:04:41,840
+Is this solution to the critical 
+section problem valid or not? 
+
+48
+00:04:42,560 --> 00:04:48,160
+I strongly suggest you stop the video and 
+try to reason and provide a formal answer.
+
+49
+00:04:51,120 --> 00:04:56,720
+Now let's try to answer the question together.
+That is, let's try to find an example  
+
+50
+00:04:56,720 --> 00:05:03,120
+showing one of the properties can be violated.
+Can the property of mutual exclusion be violated? 
+
+51
+00:05:03,120 --> 00:05:08,800
+For instance, can A enter its critical 
+section while B is in its critical section? 
+
+52
+00:05:09,520 --> 00:05:13,280
+Let's answer the question 
+with the help of this drawing. 
+
+53
+00:05:13,280 --> 00:05:17,440
+In this drawing, we see that A 
+enters its critical section after B  
+
+54
+00:05:17,440 --> 00:05:22,320
+entered its own but before B 
+exited it. Can this happen?.
+
+55
+00:05:23,680 --> 00:05:31,040
+To happen, sometime before entering its 
+critical section A needs to set its flag  
+
+56
+00:05:31,040 --> 00:05:36,800
+to true (that's what the code says).
+And before that, A needs to see that  
+
+57
+00:05:36,800 --> 00:05:43,520
+the value of flagB is false to exit the busywait 
+while loop (again, that's what the code says). 
+
+58
+00:05:44,320 --> 00:05:49,520
+Now let's focus on B. To enter its 
+critical section, B needs to set  
+
+59
+00:05:49,520 --> 00:05:56,960
+flagB to true (that's what the code says).
+Now we are at a critical point. In our example, if  
+
+60
+00:05:56,960 --> 00:06:08,080
+we assume B sets its flagB to true before A sees 
+flagB's value is false, then it means in between  
+
+61
+00:06:08,080 --> 00:06:14,880
+these two events B completes its critical section, 
+otherwise A cannot see flagB being false...
+
+62
+00:06:16,960 --> 00:06:23,120
+In the example we are studying, the point 
+in which B sets flagB to true comes after  
+
+63
+00:06:23,120 --> 00:06:29,280
+A sees flagB value to be false.
+So now we are left with one question: can B  
+
+64
+00:06:29,840 --> 00:06:38,560
+see flagA being false in between the time A 
+sees flagB to be false and B sets flagB to true? 
+
+65
+00:06:40,080 --> 00:06:45,200
+The answer is yes because flagA is 
+initially set to false and is also set to  
+
+66
+00:06:45,200 --> 00:06:52,240
+false every time A exits its critical section.
+So, in the figure, the portion of time during  
+
+67
+00:06:52,240 --> 00:06:59,120
+which A has not yet entered its critical section 
+is a period during which flagA's value is false. 
+
+68
+00:07:00,640 --> 00:07:05,760
+We have found an example that breaks the 
+mutual exclusion, which implies the code  
+
+69
+00:07:05,760 --> 00:07:09,120
+is NOT a solution to the critical section problem.
+
+70
+00:07:10,400 --> 00:07:14,960
+Once you listen to this argumentation, 
+you "digest" it and you understand it,  
+
+71
+00:07:14,960 --> 00:07:20,800
+you will probably agree that proving whether a 
+solution to the critical problem is valid or not  
+
+72
+00:07:20,800 --> 00:07:25,520
+is very challenging. In all the following 
+videos, I strongly suggest you stop  
+
+73
+00:07:25,520 --> 00:07:29,840
+and try to formally find out yourself 
+whether a solution is correct or not!
+

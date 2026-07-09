@@ -1,0 +1,459 @@
+1
+00:00:00,810 --> 00:00:09,840
+let's move now to swapping 
+we have this hierarchy of memories
+
+2
+00:00:09,840 --> 00:00:14,350
+we have large ones that are slow and small
+ones
+
+3
+00:00:14,350 --> 00:00:18,440
+that are faster and we move information
+between different
+
+4
+00:00:18,440 --> 00:00:24,539
+levels as we discussed before
+now it might happen that the size of all logical
+
+5
+00:00:24,539 --> 00:00:27,749
+addresses
+for all the processes we try to run are actually
+
+6
+00:00:27,749 --> 00:00:33,250
+larger than
+the real physical memory we have
+
+7
+00:00:33,250 --> 00:00:35,630
+you can have a lot of programs that are stored
+on disk and if
+
+8
+00:00:35,630 --> 00:00:38,750
+you were to execute all of them at the same
+time and maybe
+
+9
+00:00:38,750 --> 00:00:41,350
+many instances of them at the same time you
+might end up
+
+10
+00:00:41,350 --> 00:00:47,990
+having less actual physical memory than the
+one you need
+
+11
+00:00:47,990 --> 00:00:52,850
+so swapping here refers to the task of taking
+a process or
+
+12
+00:00:52,850 --> 00:00:57,360
+parts of a process
+this will become clearer in the next lecture
+
+13
+00:00:57,360 --> 00:01:00,700
+from the main
+memory and store them back to disk and then
+
+14
+00:01:00,700 --> 00:01:04,110
+from disk put
+them back in memory when they're needed
+
+15
+00:01:04,110 --> 00:01:10,850
+this is what swapping refers to
+so we say that we swap out a process or parts
+
+16
+00:01:10,850 --> 00:01:14,530
+of a process when
+we move them from the main memory to the disk
+
+17
+00:01:14,530 --> 00:01:17,929
+and we swap
+in them when we take them from the disk back
+
+18
+00:01:17,929 --> 00:01:24,560
+to the memory
+now the concept is pretty simple
+
+19
+00:01:24,560 --> 00:01:27,659
+at least at this stage we will see that it
+will get a bit
+
+20
+00:01:27,659 --> 00:01:30,090
+more complicated when we discuss virtual
+memory in the
+
+21
+00:01:30,090 --> 00:01:32,920
+next lecture
+but even at this point you can start thinking
+
+22
+00:01:32,920 --> 00:01:36,280
+about questions
+like which processes can we swap?
+
+23
+00:01:36,280 --> 00:01:40,369
+how much time does it take?
+when does it make sense to use swapping?
+
+24
+00:01:40,369 --> 00:01:46,119
+and so on?
+if you remember what we discussed some lectures
+
+25
+00:01:46,119 --> 00:01:50,290
+ago when
+we had this image here showing the process
+
+26
+00:01:50,290 --> 00:01:53,200
+control block
+of different processes and we said the operating
+
+27
+00:01:53,200 --> 00:01:55,509
+system keeps
+them in different queues
+
+28
+00:01:55,509 --> 00:02:01,040
+now if you have to swap out a process and
+you have to pick
+
+29
+00:02:01,040 --> 00:02:03,850
+basically one of the process control blocks
+you have in one
+
+30
+00:02:03,850 --> 00:02:08,310
+of these queue you can see that depending
+on the queue that
+
+31
+00:02:08,310 --> 00:02:11,170
+is keeping the process control block it might
+be easier
+
+32
+00:02:11,170 --> 00:02:18,290
+or not so easy to swap out the process
+if they are in the ready queue for example they
+
+33
+00:02:18,290 --> 00:02:21,200
+are not running
+they're not waiting for anything
+
+34
+00:02:21,200 --> 00:02:25,020
+so it's the ideal case
+you can just put them back to disk if you
+
+35
+00:02:25,020 --> 00:02:27,730
+need space and
+that's basically it
+
+36
+00:02:27,730 --> 00:02:31,180
+but on the other end if they are waiting for
+something and
+
+37
+00:02:31,180 --> 00:02:33,689
+you put them to disk then you have to do this
+carefully
+
+38
+00:02:33,689 --> 00:02:39,599
+meaning that if you are going to write let's
+say there is
+
+39
+00:02:39,599 --> 00:02:43,470
+a process that is waiting for information
+from the disk
+
+40
+00:02:43,470 --> 00:02:45,731
+when you get this information (you = the operating
+system) you
+
+41
+00:02:45,731 --> 00:02:50,450
+need to write it somewhere
+so if you decide to write it directly in the
+
+42
+00:02:50,450 --> 00:02:54,120
+memory of the
+process then you cannot really swap the process
+
+43
+00:02:54,120 --> 00:02:55,700
+out or
+at least you need to pay attention
+
+44
+00:02:55,700 --> 00:02:58,909
+because if you swap it out and you put another
+process there
+
+45
+00:02:58,909 --> 00:03:02,150
+then you cannot write in that process the
+data you got from
+
+46
+00:03:02,150 --> 00:03:07,079
+the disk
+this of course would violate basic principle
+
+47
+00:03:07,079 --> 00:03:09,110
+of security
+and correctness
+
+48
+00:03:09,110 --> 00:03:15,510
+and so on
+you can of course keep track of what you get
+
+49
+00:03:15,510 --> 00:03:18,739
+from the disk
+in portions of the main memory that belong
+
+50
+00:03:18,739 --> 00:03:22,019
+to the operating
+system so even if you swap out a process that
+
+51
+00:03:22,019 --> 00:03:25,019
+is waiting
+there is no risk of writing the information
+
+52
+00:03:25,019 --> 00:03:28,269
+it is waiting into
+the memory of another process because this
+
+53
+00:03:28,269 --> 00:03:32,050
+stuff gets written
+in parts of the memory that belong to the operating
+
+54
+00:03:32,050 --> 00:03:34,090
+system
+but then you need to write a more complicated
+
+55
+00:03:34,090 --> 00:03:38,250
+operating system
+that has a dedicated portion of memory that
+
+56
+00:03:38,250 --> 00:03:40,849
+is used for these
+kind of things and keeps track of what data
+
+57
+00:03:40,849 --> 00:03:43,140
+belongs to which
+process and so on and so forth
+
+58
+00:03:43,140 --> 00:03:47,580
+so you see that things start getting complicated
+if you look
+
+59
+00:03:47,580 --> 00:03:50,170
+up the different processes what they're doing
+in the state
+
+60
+00:03:50,170 --> 00:03:55,760
+they are in
+and so on of course you also have to think about
+
+61
+00:03:55,760 --> 00:03:56,760
+the time
+it takes
+
+62
+00:03:56,760 --> 00:04:01,019
+and you can imagine that it's a slow operation
+because it involves
+
+63
+00:04:01,019 --> 00:04:04,890
+the disk
+if you have a process that is 100 megabytes
+
+64
+00:04:04,890 --> 00:04:08,650
+you can transfer
+data 50 megabytes per second which is low
+
+65
+00:04:08,650 --> 00:04:11,940
+of course
+now for a modern SSD disk
+
+66
+00:04:11,940 --> 00:04:15,870
+but you can imagine that maybe you have some
+disk that you
+
+67
+00:04:15,870 --> 00:04:21,650
+need to reach through the network
+so if you're something like this which is
+
+68
+00:04:21,650 --> 00:04:24,759
+sort of reasonable
+not fantastic but
+
+69
+00:04:24,759 --> 00:04:27,940
+still reasonable
+you see that it takes two seconds to swap
+
+70
+00:04:27,940 --> 00:04:32,230
+out a process
+and if you have to swap the process back then
+
+71
+00:04:32,230 --> 00:04:34,190
+it's another
+two seconds 4 seconds
+
+72
+00:04:34,190 --> 00:04:37,190
+it's basically an eternity from the perspective
+of the
+
+73
+00:04:37,190 --> 00:04:40,479
+CPU and the speed at which the processes are
+being context
+
+74
+00:04:40,479 --> 00:04:46,940
+switched by the operating system
+and of course these are optimistic measures
+
+75
+00:04:46,940 --> 00:04:50,449
+because you
+don't really know if during these four seconds
+
+76
+00:04:50,449 --> 00:04:51,860
+you have to
+do other things
+
+77
+00:04:51,860 --> 00:04:54,220
+the operating system has to context switch
+other processes
+
+78
+00:04:54,220 --> 00:04:59,860
+other processes require access to input output
+maybe other processes have higher priorities
+
+79
+00:04:59,860 --> 00:05:02,610
+which means
+that their requests will be prioritized and so
+
+80
+00:05:02,610 --> 00:05:05,750
+on
+so these four seconds which is already a lot
+
+81
+00:05:05,750 --> 00:05:09,530
+it's the best
+case in practice it can even be worst than this
+
+82
+00:05:09,530 --> 00:05:14,120
+so as we will see you want to minimize the
+
+83
+00:05:14,120 --> 00:05:16,960
+time it takes
+to swap out processes
+
+84
+00:05:16,960 --> 00:05:20,990
+and actually we don't really swap out entire
+processes
+
+85
+00:05:20,990 --> 00:05:30,850
+we do only swapping off part of them
+but this way we discuss with virtual memory
+
+86
+00:05:30,850 --> 00:05:34,970
+and of course there are rules about when you
+swap out and
+
+87
+00:05:34,970 --> 00:05:38,419
+in so if you take Unix and all operating
+system modern
+
+88
+00:05:38,419 --> 00:05:41,800
+operating systems you see that basically it's
+only when
+
+89
+00:05:41,800 --> 00:05:46,020
+you pass certain thresholds that you will
+activate and deactivate
+
+90
+00:05:46,020 --> 00:05:51,770
+swapping you don't this if it's not really needed
+and as I mentioned already too many times
+
+91
+00:05:51,770 --> 00:05:54,510
+so at this point we will see how this is actually
+done with
+
+92
+00:05:54,510 --> 00:06:01,000
+virtual memory we will see there are many 
+smart ways to deal with the swapping
+
