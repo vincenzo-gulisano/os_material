@@ -1,25 +1,18 @@
 # Operating Systems Course Material
 
-This repository contains teaching material for the Operating Systems course EDA093/DIT401. It
-includes video lectures, subtitles/transcripts, and slide decks.
+This repository contains teaching material for the Operating Systems course EDA093/DIT401. It includes video lectures, subtitles/transcripts, and slide decks.
 
 ## Repository Contents
 
-- Topic folders such as `processes/`, `threads/`, and `virtual_memory/`
-  contain the video lectures (`.mp4`) and matching subtitles (`.srt`).
-- `slides/` contains the slide decks, usually as both editable `.pptx` files
-  and exported `.pdf` files.
-- `overview.xlsx` is the source overview used for the suggested lecture order
-  below.
+- Topic folders such as `processes/`, `threads/`, and `virtual_memory/` contain the video lectures (`.mp4`) and matching subtitles (`.srt`).
+- `slides/` contains the slide decks, usually as both editable `.pptx` files and exported `.pdf` files. For most of the lectures, the last slides contain questions that can be used to assess the understanding of students during live discussions. Answers are given in the notes section of the PowerPoint files.
+- `overview.xlsx` is the source overview used for the suggested lecture order below.
 
-The `.mp4` files are tracked with Git LFS. After cloning, run `git lfs pull` if
-the videos are missing or appear as pointer files.
+The `.mp4` files are tracked with Git LFS. After cloning, run `git lfs pull` if the videos are missing or appear as pointer files.
 
 ## Suggested Order
 
-The order below is the suggested order for the various lectures. For each lecture, use the matching
-slide deck in `slides/` and watch the numbered videos in the corresponding
-topic folder.
+The order below is the suggested order for the various lectures. For each lecture, use the matching slide deck in `slides/` and watch the numbered videos in the corresponding topic folder.
 
 | Order | Lecture | 
 | --- | --- | 
@@ -36,8 +29,7 @@ topic folder.
 | 11 | I/O Systems |
 | 12 | Virtualization |
 
-Additional slide-only decks are available for the course introduction and
-conclusion.
+Additional slide-only decks are available for the course introduction and conclusion.
 
 ## Video Part Order
 
