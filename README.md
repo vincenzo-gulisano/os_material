@@ -153,3 +153,19 @@ Additional slide-only decks are available for the course introduction and conclu
 6. I/O virtualization
 7. Other benefits
 8. Virtualization and clouds
+
+## Course literature and reading instructions
+
+The material is mainly based on the book *Modern Operating Systems* by Andrew S. Tanenbaum (fifth edition). The following list contains the parts to be read to complement what is presented in the videos and slides.
+
+- Lecture 01, introduction: Chapter 1, especially 1.1, 1.3, 1.6 and 1.7
+- Lecture 02, processes: Chapter 2.1 
+- Lecture 03, threads: Chapter 2.2, 10.3.3 (some concepts are covered later on, like for Copy-on-Write)
+- Lecture 04, scheduling: Chapter 2.4, 8.1.1, 8.1.2, 8.1.4, 10.3.4, 11.4.1
+- Lectures 05 and 06, synchronization: Chapter 2.4.1-2.4.6, 6.1-6.2, 6.5-6.6, 6.7.3-6.7.4; Quicker reading, for awareness, of sections 2.3.7-2.3.9, 2.3.11, 6.3
+- Lecture 07, memory management: Chapter 3.1, 3.2, 3.7 (up to 3.7.1 - excluded)
+- Lecture 08, virtual memory: Chapter 3.3-3.6.
+- Lecture 09, file systems: Chapter 4.1 to 4.4
+- Lecture 10, security: Chapter 9, from the beginning until 9.4.1 (only the first paragraph of 9.4.1); 9.6 to 9.7.1 (only up to Data Execution Prevention - included); 9.9.3; The Sony Rootkit (starts at page 683, part of 9.9.5)
+- Lecture 11, I/O systems: Chapter 5.1-5.3
+- Lecture 12, virtualization: Chapter 7, 7.1-7.10 (included)
