@@ -50,7 +50,7 @@ Additional slide-only decks are available for the course introduction and conclu
 6. Inter-process communication
 7. Pipes
 
-### 03. Multithreaded Programming
+### 03. Threads
 
 1. Introduction
 2. Multithreaded processes
