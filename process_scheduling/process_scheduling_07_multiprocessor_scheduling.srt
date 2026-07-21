@@ -1,0 +1,350 @@
+1
+00:00:01,200 --> 00:00:08,320
+Now that we have seen the challenges 
+behind the scheduling, when we have  
+
+2
+00:00:08,320 --> 00:00:13,280
+multiprocessor architectures hardware, 
+let's look at some scheduling strategies  
+
+3
+00:00:13,280 --> 00:00:18,400
+for this kind of architectures. And 
+let's start with the time sharing.
+
+4
+00:00:18,400 --> 00:00:25,680
+So something we can do is to share one 
+multiprocessor detector under the time  
+
+5
+00:00:25,680 --> 00:00:33,840
+domain. So basically all processes can run, 
+but they need to share overtime the resource.
+
+6
+00:00:33,840 --> 00:00:40,000
+We can go for something simple, yet we can have 
+a single system wide data structure. In this case  
+
+7
+00:00:40,000 --> 00:00:46,000
+we can have priorities and then within each 
+priority level we could iterate using around  
+
+8
+00:00:46,000 --> 00:00:54,160
+robbing and we keep your older ready threads 
+and whenever CPU goes idle we take the next.
+
+9
+00:00:56,000 --> 00:01:01,520
+Already process we have in the queue 
+with the August priority. So when this  
+
+10
+00:01:02,240 --> 00:01:07,840
+CPO four goes, either we put 
+process a which was here.
+
+11
+00:01:07,840 --> 00:01:14,240
+The first with the Argus priority, then 
+CPU to outflows idol. We take big which  
+
+12
+00:01:14,240 --> 00:01:22,160
+was here the current next ready process with 
+the August priority, and so on and so forth.
+
+13
+00:01:22,160 --> 00:01:23,520
+It's.
+
+14
+00:01:23,520 --> 00:01:29,120
+Either teams, it balances the 
+load automatically 'cause after  
+
+15
+00:01:29,120 --> 00:01:31,520
+awhile all threads will be used and all.
+
+16
+00:01:33,040 --> 00:01:38,240
+Sorry, of course will be used in all 
+threads, can be assigned to any color.
+
+17
+00:01:38,240 --> 00:01:44,000
+There can be of course, contain contention because 
+you have a single infrastructure where you keep  
+
+18
+00:01:44,000 --> 00:01:50,640
+everything but you suffer from the affinity 
+problem. The one I mentioned before about the  
+
+19
+00:01:50,640 --> 00:01:57,360
+fact that course have their own caches, and if 
+you schedule a thread in the same corner it was  
+
+20
+00:01:57,360 --> 00:02:02,560
+running before, then there are chances that 
+you will find the thread will find some stuff  
+
+21
+00:02:02,560 --> 00:02:09,040
+in the cash that is already valid and it will 
+require less interaction with the main memory.
+
+22
+00:02:09,040 --> 00:02:12,400
+So it will perform better.
+
+23
+00:02:12,400 --> 00:02:16,640
+What you can do is to about two level 
+scheduling algorithm when you go for  
+
+24
+00:02:16,640 --> 00:02:20,480
+a time sharing option. OK, so you could have.
+
+25
+00:02:20,480 --> 00:02:23,760
+These data structures, or let's say, 
+the collection of threads you have,  
+
+26
+00:02:23,760 --> 00:02:31,680
+you can have one for each CPU and you assign 
+these threads to the CPUs at creation time.
+
+27
+00:02:32,640 --> 00:02:37,040
+Of course it doesn't need to be straight, 
+meaning that if a CPU has nothing to do is  
+
+28
+00:02:37,040 --> 00:02:40,640
+still better to steal some threads and 
+or something that even if these threads  
+
+29
+00:02:40,640 --> 00:02:47,440
+are assigned to other CPUs that just let 
+the CPU or wasted OK. But you still have  
+
+30
+00:02:47,440 --> 00:02:54,400
+a, you can still achieve achieve a balance 
+load, but then you have also cache affinity  
+
+31
+00:02:54,400 --> 00:02:59,600
+because you will type ability, place each 
+thread back to the Corey what so it was  
+
+32
+00:02:59,600 --> 00:03:04,320
+running before and also less contention 
+because you have this dedicated per CPU.
+
+33
+00:03:05,760 --> 00:03:09,440
+Lists or sets of threads.
+
+34
+00:03:09,440 --> 00:03:14,240
+Something different you can do is then 
+instead of timesharing to go for space  
+
+35
+00:03:14,240 --> 00:03:21,760
+sharing. So when a set of related threads OK, 
+so a process that is multithreaded is created.  
+
+36
+00:03:21,760 --> 00:03:27,200
+The operating system, assuming there are of 
+course, enough course enough CPUs, it will  
+
+37
+00:03:27,200 --> 00:03:34,400
+try to schedule all the threads at the same time 
+OK, and then it lets the Trump's that writes run.
+
+38
+00:03:34,400 --> 00:03:44,000
+Until they're done OK, here we don't care about 
+the time dimension, so if one specific thread that  
+
+39
+00:03:44,000 --> 00:03:49,200
+belongs to a group soft red is actually 
+requesting some input output, we don't  
+
+40
+00:03:50,400 --> 00:03:54,160
+release the CPU core to give it 
+to another thread. We just wait  
+
+41
+00:03:54,160 --> 00:03:58,240
+for the input output to be done, and 
+then we keep running all the threads,  
+
+42
+00:03:58,240 --> 00:04:03,120
+as are all the things that belong to the 
+same process as a single block, and they are.
+
+43
+00:04:04,400 --> 00:04:07,520
+Placed into the same CPU so close by, and this can  
+
+44
+00:04:07,520 --> 00:04:12,800
+also be beneficial. As we said before, 
+for nonuniform memory architectures.
+
+45
+00:04:14,080 --> 00:04:21,680
+Then what you can do is in practice to go for a 
+mixture of the two, so you shall both on time and  
+
+46
+00:04:22,480 --> 00:04:27,280
+in in space. And this is what the 
+gang scheduling is. So you see that.
+
+47
+00:04:29,440 --> 00:04:31,600
+The problem with space sharing is that they can  
+
+48
+00:04:31,600 --> 00:04:37,680
+be inefficient 'cause we have a lot of 
+higher bound processes, why would you?
+
+49
+00:04:37,680 --> 00:04:43,680
+Waste course giving them to threads that are 
+just waiting instead of reallocating them to  
+
+50
+00:04:43,680 --> 00:04:46,800
+something else, but on the other 
+hand, if you go for time sharing,  
+
+51
+00:04:46,800 --> 00:04:49,920
+you can have situations like the 
+following. One year. Suppose you  
+
+52
+00:04:49,920 --> 00:04:54,640
+have a seat on the A1. They're two threads. 
+They belong to the same process and they.
+
+53
+00:04:56,240 --> 00:04:59,920
+One is a producer and monitor 
+consumer, so they need to communicate.
+
+54
+00:04:59,920 --> 00:05:07,440
+You can end up scheduling that reads like this, 
+so it's a zero that runs than a 180 and one and  
+
+55
+00:05:07,440 --> 00:05:12,400
+so here you could potentially waste a 
+lot of time because a zero it starts  
+
+56
+00:05:12,400 --> 00:05:19,600
+running but sends a message to a one and 
+until A1 does not reply, a zero can not.
+
+57
+00:05:19,600 --> 00:05:23,600
+More forward so this entire 
+quantum can go basically wasted,  
+
+58
+00:05:23,600 --> 00:05:32,320
+cause a zero is waiting for reply from a 
+one. Then you start running a one here.
+
+59
+00:05:32,320 --> 00:05:36,000
+It sends the reply back to zero and 
+then it does nothing to do until 80.
+
+60
+00:05:36,000 --> 00:05:40,000
+As you request.
+
+61
+00:05:40,000 --> 00:05:44,480
+And this quantum is also wasted and you 
+can see that you can end up in this kind  
+
+62
+00:05:44,480 --> 00:05:52,160
+of situations if you just try to schedule 
+on on time. OK, So what you do is that you  
+
+63
+00:05:52,160 --> 00:05:58,240
+try to schedule groups of related threads 
+at the same time, but also close by. So  
+
+64
+00:05:58,240 --> 00:06:05,120
+trying to take into account both time and 
+space, OK or gang members run at once.
+
+65
+00:06:05,120 --> 00:06:09,760
+And all gang members start under Quantum together.
+
+66
+00:06:09,760 --> 00:06:16,080
+This is just an example of a possible 
+execution, so you have six CPUs here,  
+
+67
+00:06:16,080 --> 00:06:19,440
+and these are the time slot. So you 
+see that for a certain slot you run  
+
+68
+00:06:19,440 --> 00:06:26,960
+process a task 6 threads at the slot 
+2 you're on on the first three CPUs B,  
+
+69
+00:06:26,960 --> 00:06:34,400
+and on the last three C. Then you run the hear 
+me and you keep running E on all the users in  
+
+70
+00:06:34,400 --> 00:06:39,760
+the next Lotus on. So you can see that there is 
+time sharing, but then there is also groups of  
+
+71
+00:06:39,760 --> 00:06:43,840
+threads that belong to the same process that 
+are run at the same time to maximize also.
+
+72
+00:06:44,640 --> 00:06:46,240
+Space sharing
+
