@@ -1,272 +1,284 @@
 1
-00:00:00,520 --> 00:00:08,000
+00:00:05,760 --> 00:00:13,520
 let's now move to some techniques for memory
 allocation and let's start with contiguous
 
 2
-00:00:08,000 --> 00:00:15,920
-allocation so we know that the main memory contains
-the operating system itself and then the processes
+00:00:13,520 --> 00:00:18,160
+allocation so we know that 
+the main memory contains 
 
 3
-00:00:15,920 --> 00:00:22,400
+00:00:18,160 --> 00:00:20,880
+the operating system itself and then the processes
+
+4
+00:00:20,880 --> 00:00:27,840
 of the users so now we are going to try to
 answer this question how do we allocate memory
 
-4
-00:00:22,400 --> 00:00:29,160
-efficiently? and we start with contiguous allocation
+5
+00:00:27,840 --> 00:00:31,520
+efficiently? and we start 
+with contiguous allocation 
+
+6
+00:00:31,520 --> 00:00:35,280
 and then also go into segmentation and paging
 
-5
-00:00:29,160 --> 00:00:36,820
+7
+00:00:35,280 --> 00:00:42,080
 we will see that there are trade-offs of
 course as always and actually what I want
 
-6
-00:00:36,820 --> 00:00:45,300
+8
+00:00:42,080 --> 00:00:50,800
 you to put attention to is that you will see
 that the more we get to let's say complicated
 
-7
-00:00:45,300 --> 00:00:53,000
+9
+00:00:52,960 --> 00:00:58,400
 memory management techniques basically
 paging and virtual memory in the next lecture
 
-8
-00:00:53,000 --> 00:01:01,059
+10
+00:00:58,400 --> 00:01:06,400
 the more we separate logical from physical
 representations of memory and this has a lot
 
-9
-00:01:01,059 --> 00:01:07,259
+11
+00:01:06,400 --> 00:01:12,800
 of benefits there is less fragmentation we
 use memory better it's easier to protect the
 
-10
-00:01:07,259 --> 00:01:13,479
+12
+00:01:12,800 --> 00:01:18,960
 processes and it also results in faster loading
 and swapping of processes we would see now
 
-11
-00:01:13,479 --> 00:01:19,700
+13
+00:01:18,960 --> 00:01:25,040
 these things one at a time so let's start
 with contiguous application this is the most
 
-12
-00:01:19,700 --> 00:01:25,259
+14
+00:01:25,040 --> 00:01:30,640
 basic thing you can do so you put the operating
 system at the bottom of your memory and then
 
-13
-00:01:25,259 --> 00:01:30,759
+15
+00:01:30,640 --> 00:01:36,400
 one process after each other giving
 each process a contiguous set of addresses
 
-14
-00:01:30,759 --> 00:01:35,850
+16
+00:01:37,280 --> 00:01:41,360
 this is just an example with three processes
 and the operating system this
 
-15
-00:01:35,850 --> 00:01:43,590
+17
+00:01:41,360 --> 00:01:48,960
 would be the the physical memory so now each
 process has its own logical addresses they
 
-16
-00:01:43,590 --> 00:01:52,320
+18
+00:01:48,960 --> 00:01:57,680
 start at zero and they go up to a certain
 number and when we are running let's
 
-17
-00:01:52,320 --> 00:01:57,479
+19
+00:01:57,680 --> 00:02:03,200
 say process A and A wants to access a certain
 logical address which in this case will be
 
-18
-00:01:57,479 --> 00:02:07,079
+20
+00:02:03,200 --> 00:02:12,480
 an offset we check whether this is less than
 the limit for the process if no then we can
 
-19
-00:02:07,079 --> 00:02:12,060
+21
+00:02:12,480 --> 00:02:17,520
 wake up the operating system so that it takes
 care of this process that is trying to access
 
-20
-00:02:12,060 --> 00:02:19,540
+22
+00:02:17,520 --> 00:02:24,880
 memory that does not belong to it if yes then
 we sum the relocation register or the base
 
-21
-00:02:19,540 --> 00:02:23,920
+23
+00:02:24,880 --> 00:02:29,280
 basically register that contains the first
 address of process A the first physical address
 
-22
-00:02:23,920 --> 00:02:31,320
+24
+00:02:29,280 --> 00:02:36,720
 of process A and then that the CPU can access
 the memory and read/write in the physical
 
-23
-00:02:31,320 --> 00:02:38,270
+25
+00:02:36,720 --> 00:02:43,760
 others of the memory because it is safe it's
 accessing its own memory pretty easy but of
 
-24
-00:02:38,270 --> 00:02:45,070
-course as we discussed before using stuff
-has always a cost and let's see what the limitations
+26
+00:02:43,760 --> 00:02:46,960
+course as we discussed before using stuff 
 
-25
-00:02:45,070 --> 00:02:53,300
+27
+00:02:46,960 --> 00:02:50,560
+has always a cost and let's 
+see what the limitations
+
+28
+00:02:50,560 --> 00:02:58,480
 are when we terminate the process or we swap
 out a process we leave a hole for that process
 
-26
-00:02:53,300 --> 00:02:58,240
+29
+00:02:58,480 --> 00:03:03,520
 you need to keep track of which holes are
 available at all times the operating system
 
-27
-00:02:58,240 --> 00:03:05,650
+30
+00:03:03,520 --> 00:03:10,960
 needs to do that for other processes and this
 results in potentially external fragmentation
 
-28
-00:03:05,650 --> 00:03:11,970
+31
+00:03:10,960 --> 00:03:17,520
 what does it mean that it might be that if
 we look at all the space we have available
 
-29
-00:03:11,970 --> 00:03:18,750
+32
+00:03:17,520 --> 00:03:24,160
 so the sum of the sizes of all the holes we
 have enough free space to put a process in
 
-30
-00:03:18,750 --> 00:03:23,550
+33
+00:03:24,160 --> 00:03:29,120
 memory the problem is that if we look at the
 individual sizes of the holes there is no
 
-31
-00:03:23,550 --> 00:03:31,140
+34
+00:03:29,120 --> 00:03:36,640
 single hole that is big enough to contain
 the process so the major limitation here
 
-32
-00:03:31,140 --> 00:03:37,470
+35
+00:03:36,640 --> 00:03:42,800
 is that if you want to run a process but there
 is no hole that can contain such a process
 
-33
-00:03:37,470 --> 00:03:42,060
+36
+00:03:42,800 --> 00:03:47,440
 then basically you are done it might be that
 you have a lot of free space so indeed you
 
-34
-00:03:42,060 --> 00:03:46,860
+37
+00:03:47,440 --> 00:03:52,320
 could run the process if you just look at
 how much space it needs but in practice you
 
-35
-00:03:46,860 --> 00:03:58,260
+38
+00:03:52,320 --> 00:04:00,880
 cannot uh also you need to think about how
 you take decisions uh when it comes to assigning
 
-36
-00:03:58,260 --> 00:04:04,760
+39
+00:04:03,280 --> 00:04:10,160
 processes to whole or you can take the first
 that is available pretty easy the first step
 
-37
-00:04:04,760 --> 00:04:12,430
+40
+00:04:10,160 --> 00:04:17,840
 is big enough of course you can try to find
 the best fit so basically the smallest hole
 
-38
-00:04:12,430 --> 00:04:19,189
+41
+00:04:17,840 --> 00:04:24,640
 that is big enough to contain the process
 the good thing if you do this is that
 
-39
-00:04:19,189 --> 00:04:27,270
+42
+00:04:26,800 --> 00:04:32,800
 this algorith produces the smallest leftover
 hole okay uh but of course you need to search
 
-40
-00:04:27,270 --> 00:04:33,560
+43
+00:04:32,800 --> 00:04:39,040
 now so searching for something will take more
 than just taking the first element
 
-41
-00:04:33,560 --> 00:04:40,699
+44
+00:04:39,040 --> 00:04:46,080
 so going back to the pros here is basically
 you don't waste a big hole to put a process
 
-42
-00:04:40,699 --> 00:04:50,349
+45
+00:04:46,080 --> 00:04:51,600
 that is actually small
 
-43
-00:04:50,349 --> 00:04:56,199
+46
+00:04:55,520 --> 00:05:01,840
 if you go to the worst fit the opposite
 then you try to look for the largest hole
 
-44
-00:04:56,199 --> 00:05:07,550
+47
+00:05:01,840 --> 00:05:13,040
 and this will produce the largest leftover
 but again the price you pay here is
 
-45
-00:05:07,550 --> 00:05:13,139
+48
+00:05:13,040 --> 00:05:18,800
 that you need to search the entire list
 again as we will discuss more in the future
 
-46
-00:05:13,139 --> 00:05:19,610
+49
+00:05:18,800 --> 00:05:24,960
 also for file system one of the complications
 here is that you don't really know which strategy
 
-47
-00:05:19,610 --> 00:05:24,879
+50
+00:05:24,960 --> 00:05:30,400
 is the right one or the best one until you
 actually start running the system and discover
 
-48
-00:05:24,879 --> 00:05:30,090
+51
+00:05:30,400 --> 00:05:35,440
 how many processes you want to run and how
 big they are and how many holes you have so
 
-49
-00:05:30,090 --> 00:05:33,460
+52
+00:05:35,440 --> 00:05:38,960
 there are different techniques you can use
 the problem is that you don't really know
 
-50
-00:05:33,460 --> 00:05:38,740
+53
+00:05:38,960 --> 00:05:44,160
 which one is the right one because to get
 to know that you need to first actually run
 
-51
-00:05:38,740 --> 00:05:44,300
+54
+00:05:44,160 --> 00:05:49,600
 the system and to run the system you have
 to take first a decision about which strategy
 
-52
-00:05:44,300 --> 00:05:49,770
+55
+00:05:49,600 --> 00:05:55,200
 you're going to use so you see that there
 is like a conceptual loop here loophole that
 
-53
-00:05:49,770 --> 00:05:55,610
+56
+00:05:55,200 --> 00:06:01,120
 makes stuff complicated when it comes to taking
 decisions for the operating system and how
 
-54
-00:05:55,610 --> 00:05:56,610
+57
+00:06:01,120 --> 00:06:01,680
 it manages
 
-55
-00:05:56,610 --> 00:05:57,110
+58
+00:06:01,680 --> 00:06:04,560
 memory
 

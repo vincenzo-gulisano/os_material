@@ -1,330 +1,334 @@
 1
-00:00:01,280 --> 00:00:09,019
+00:00:03,760 --> 00:00:11,680
 let's move now to segmentation
 so we have this process A in memory
 
 2
-00:00:09,019 --> 00:00:13,719
+00:00:11,680 --> 00:00:16,320
 this is from the previous example
 and we know that if we look inside what is
 
 3
-00:00:13,719 --> 00:00:18,020
+00:00:16,320 --> 00:00:20,560
 the content of
 A in memory we have different parts in the
 
 4
-00:00:18,020 --> 00:00:19,910
+00:00:20,560 --> 00:00:22,560
 process this we
 discussed in the very beginning
 
 5
-00:00:19,910 --> 00:00:27,460
+00:00:22,560 --> 00:00:29,920
 we have stack, heap, data and text
 so what if instead of talking of a process
 
 6
-00:00:27,460 --> 00:00:32,369
+00:00:29,920 --> 00:00:34,960
 as a single monolithic
 block that goes from zero to max we actually
 
 7
-00:00:32,369 --> 00:00:35,550
+00:00:34,960 --> 00:00:39,600
 start distinguishing
 different parts for the process
 
 8
-00:00:35,550 --> 00:00:43,609
+00:00:41,280 --> 00:00:46,240
 this could be motivated by the fact that we
 know that the
 
 9
-00:00:43,609 --> 00:00:46,569
+00:00:46,240 --> 00:00:49,440
 different parts of the process have different
 purposes
 
 10
-00:00:46,569 --> 00:00:52,649
+00:00:49,440 --> 00:00:53,440
 there is one keeps only text that is basic
 instructions that
 
 11
-00:00:52,649 --> 00:01:00,630
+00:00:53,440 --> 00:01:03,120
 are run by the process and taken by the CPU
 there are global variables and other parts
 
 12
-00:01:00,630 --> 00:01:07,080
+00:01:03,120 --> 00:01:10,240
 so each part
 has its own meaning and some might need protection
 
 13
-00:01:07,080 --> 00:01:11,420
+00:01:10,240 --> 00:01:13,840
 that
 is different from the protection needed by others
 
 14
-00:01:11,420 --> 00:01:15,180
+00:01:13,840 --> 00:01:17,920
 and they can also have different sizes
 some of them might be fixed
 
 15
-00:01:15,180 --> 00:01:19,530
+00:01:17,920 --> 00:01:22,080
 some of them might be actually variable
 so there is a reason to differentiate between
 
 16
-00:01:19,530 --> 00:01:23,219
+00:01:22,080 --> 00:01:25,840
 the different
 parts well with segmentation
 
 17
-00:01:23,219 --> 00:01:27,759
+00:01:25,840 --> 00:01:30,320
 the idea is that instead of keeping a single pair
 of where the
 
 18
-00:01:27,759 --> 00:01:37,020
+00:01:30,320 --> 00:01:37,200
 process starts and what is the limit
 we keep a lot of or a certain number of these
 
 19
-00:01:37,020 --> 00:01:39,049
+00:01:39,280 --> 00:01:41,600
 pairs one for
 each segment
 
 20
-00:01:39,049 --> 00:01:42,840
+00:01:41,600 --> 00:01:45,520
 and a segment is just one portion of the process
 which could
 
 21
-00:01:42,840 --> 00:01:47,600
+00:01:45,520 --> 00:01:50,160
 be one of the different parts
 so we can say that we have four segments one
 
 22
-00:01:47,600 --> 00:01:50,340
+00:01:50,160 --> 00:01:52,960
 for the text
 one for the data one for the heap and one for
 
 23
-00:01:50,340 --> 00:01:53,259
+00:01:52,960 --> 00:01:55,840
 the stack
 they are numbered 0 to 3
 
 24
-00:01:53,259 --> 00:01:58,890
+00:01:55,840 --> 00:02:01,280
 now for each such segment we have the first
 physical address
 
 25
-00:01:58,890 --> 00:02:09,080
+00:02:01,280 --> 00:02:11,760
 and the limit
 it allows you to check with finer grained
 
 26
-00:02:09,080 --> 00:02:10,530
+00:02:11,760 --> 00:02:12,960
 resolution
 what is happening
 
 27
-00:02:10,530 --> 00:02:13,500
+00:02:12,960 --> 00:02:15,920
 because now it's not just checking whether
 you are addressing
 
 28
-00:02:13,500 --> 00:02:19,280
+00:02:15,920 --> 00:02:20,240
 the member of the process but also checking
 whether we
 
 29
-00:02:19,280 --> 00:02:22,620
+00:02:20,240 --> 00:02:25,040
 are trying to enter into let's say the data
 section or
 
 30
-00:02:22,620 --> 00:02:29,239
+00:02:25,040 --> 00:02:31,760
 the heap or the stack and so on
 you can even have different permissions for
 
 31
-00:02:29,239 --> 00:02:34,290
+00:02:31,760 --> 00:02:36,800
 the different
 segments for example you can put the permission
 
 32
-00:02:34,290 --> 00:02:37,650
+00:02:36,800 --> 00:02:40,080
 to execute
 only to the text section because that is where
 
 33
-00:02:37,650 --> 00:02:39,250
+00:02:40,080 --> 00:02:42,080
 you keep
 the instructions
 
 34
-00:02:39,250 --> 00:02:43,730
+00:02:42,640 --> 00:02:46,320
 and you could for example say that cannot
 be written but
 
 35
-00:02:43,730 --> 00:02:48,470
+00:02:46,320 --> 00:02:50,880
 can only be read for example
 so you can protect a bit better the process
 
 36
-00:02:48,470 --> 00:02:51,780
+00:02:50,880 --> 00:02:54,320
 because no one
 can try to tamper the instructions and change
 
 37
-00:02:51,780 --> 00:02:54,720
+00:02:54,320 --> 00:02:57,040
 the code that
 you're trying to run
 
 38
-00:02:54,720 --> 00:02:57,069
+00:02:57,040 --> 00:02:59,600
 and of course the nice thing here is that
 now you can have
 
 39
-00:02:57,069 --> 00:03:00,069
+00:02:59,600 --> 00:03:02,480
 the different segments at different positions
 in memory
 
 40
-00:03:00,069 --> 00:03:03,489
+00:03:02,480 --> 00:03:05,920
 you don't need to have a contiguous set of
 addresses to contain
 
 41
-00:03:03,489 --> 00:03:08,760
+00:03:05,920 --> 00:03:11,200
 the entire process
 so this is how it looks like you need to introduce
 
 42
-00:03:08,760 --> 00:03:12,099
+00:03:11,200 --> 00:03:14,640
 in this
 case a table in which you keep track of all
 
 43
-00:03:12,099 --> 00:03:16,860
+00:03:14,640 --> 00:03:19,440
 the different
 starting addresses and limits
 
 44
-00:03:16,860 --> 00:03:20,019
+00:03:19,440 --> 00:03:22,640
 so you have one entering the table for each
 segment line
 
 45
-00:03:20,019 --> 00:03:23,909
+00:03:22,640 --> 00:03:25,680
 zero it's for segment zero
 line one is for segment one and so
 
 46
-00:03:23,909 --> 00:03:26,870
+00:03:26,320 --> 00:03:29,520
 and for each segment you have the limit and
 the base
 
 47
-00:03:26,870 --> 00:03:30,590
+00:03:29,520 --> 00:03:33,120
 okay this is just a picture showing that one
 process has
 
 48
-00:03:30,590 --> 00:03:36,590
-seven segments in this case and they are distributed
-around
+00:03:33,120 --> 00:03:36,000
+seven segments in this case and they are  
 
 49
-00:03:36,590 --> 00:03:39,750
+00:03:36,640 --> 00:03:37,600
+distributed
+around
+
+50
+00:03:39,040 --> 00:03:42,400
 the memory
 this is what we just said that
 
-50
-00:03:39,750 --> 00:03:43,030
+51
+00:03:42,400 --> 00:03:45,600
 you need to keep of course track of the different
 limit
 
-51
-00:03:43,030 --> 00:03:47,599
+52
+00:03:45,600 --> 00:03:50,160
 and based numbers
 you also need to complicate a bit the hardware
 
-52
-00:03:47,599 --> 00:03:52,060
+53
+00:03:50,160 --> 00:03:54,560
 in this case
 because you cannot check as we
 
-53
-00:03:52,060 --> 00:03:57,190
+54
+00:03:54,560 --> 00:03:59,520
 did before
 if you are trying to other access a logical
 
-54
-00:03:57,190 --> 00:03:58,890
+55
+00:03:59,520 --> 00:04:01,280
 address that
 is below the limit
 
-55
-00:03:58,890 --> 00:04:02,379
+56
+00:04:01,280 --> 00:04:04,880
 and then if that is the case just sum the
 base register
 
-56
-00:04:02,379 --> 00:04:06,680
+57
+00:04:04,880 --> 00:04:09,360
 or the relocation register here
 you need to specify what is the segment you
 
-57
-00:04:06,680 --> 00:04:10,849
+58
+00:04:09,360 --> 00:04:13,200
 want to access
 and then you will need to specify the address
 
-58
-00:04:10,849 --> 00:04:15,549
+59
+00:04:13,200 --> 00:04:18,080
 inside that
 segment so given the segment you can go to
 
-59
-00:04:15,549 --> 00:04:18,709
+60
+00:04:18,080 --> 00:04:21,280
 the segment
 table and take the respective entry for
 
-60
-00:04:18,709 --> 00:04:22,500
+61
+00:04:21,280 --> 00:04:24,960
 that segment
 and then this will give you the limit and
 
-61
-00:04:22,500 --> 00:04:25,850
+62
+00:04:24,960 --> 00:04:28,640
 the base address
 if you are trying to access something that
 
-62
-00:04:25,850 --> 00:04:32,639
+63
+00:04:29,680 --> 00:04:35,200
 is within the
 limit of your segment it's fine
 
-63
-00:04:32,639 --> 00:04:37,610
+64
+00:04:35,200 --> 00:04:40,240
 then you can just sum here the base and get
 access to the physical
 
-64
-00:04:37,610 --> 00:04:42,979
+65
+00:04:40,240 --> 00:04:45,440
 memory otherwise there will be an interrupt
 so you can wake up the operating system and
 
-65
-00:04:42,979 --> 00:04:46,770
+66
+00:04:45,440 --> 00:04:48,960
 the operating
 system to take a decision about what to
 
-66
-00:04:46,770 --> 00:04:48,120
+67
+00:04:48,960 --> 00:04:53,680
 do with this
 process
 

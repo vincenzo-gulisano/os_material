@@ -1,346 +1,362 @@
 1
-00:00:01,890 --> 00:00:05,930
+00:00:15,480 --> 00:00:19,440
 let's start with lecture seven
 now memory management
 
 2
-00:00:05,930 --> 00:00:10,770
+00:00:19,960 --> 00:00:24,360
 here you have the reading instructions as
 always from the
 
 3
-00:00:10,770 --> 00:00:18,849
+00:00:24,360 --> 00:00:31,240
 main textbook but also the extra readings
-you can have a look if you want from the Silberschatz
+you can have a look if you want from the  
 
 4
-00:00:18,849 --> 00:00:22,019
+00:00:31,800 --> 00:00:32,520
+Silberschatz
+
+5
+00:00:32,520 --> 00:00:34,280
 operating
 system concepts book
 
-5
-00:00:22,019 --> 00:00:25,990
+6
+00:00:35,600 --> 00:00:39,720
 so this lecture together with the following
 one about virtual
 
-6
-00:00:25,990 --> 00:00:31,289
+7
+00:00:39,720 --> 00:00:44,720
 memory we'll be focusing on basically all
 the different
 
-7
-00:00:31,289 --> 00:00:34,520
+8
+00:00:44,720 --> 00:00:48,080
 type of memories we have in our computers
 
-8
-00:00:34,520 --> 00:00:38,329
+9
+00:00:48,080 --> 00:00:52,040
 I'm talking about main memory caches registers
 not really
 
-9
-00:00:38,329 --> 00:00:44,500
+10
+00:00:52,040 --> 00:00:56,840
 the disk although it is part of what we will
 discuss
 
-10
-00:00:44,500 --> 00:00:47,899
+11
+00:00:58,520 --> 00:01:01,840
 we'll discuss how the information is continuously
 moved between
 
-11
-00:00:47,899 --> 00:00:53,940
+12
+00:01:01,840 --> 00:01:07,520
 slow and fast memories and also how we basically
 keep separated
 
-12
-00:00:53,940 --> 00:01:01,170
+13
+00:01:07,520 --> 00:01:14,720
 the physical memory from the logical view
 from what the processes
 
-13
-00:01:01,170 --> 00:01:08,850
+14
+00:01:14,720 --> 00:01:20,480
 and the operating system actually shows to
 the processes
 
-14
-00:01:08,850 --> 00:01:11,869
+15
+00:01:22,440 --> 00:01:25,560
 and we will see that this distinction between
 the logical
 
-15
-00:01:11,869 --> 00:01:16,710
+16
+00:01:25,560 --> 00:01:30,360
 and physical memory actually allows for a
 lot of beneficial
 
-16
-00:01:16,710 --> 00:01:21,420
+17
+00:01:30,360 --> 00:01:35,040
 aspects despite the fact that of course it
 has some overheads
 
-17
-00:01:21,420 --> 00:01:24,290
+18
+00:01:35,040 --> 00:01:37,880
 some costs
 all these things will become more clear during
 
-18
-00:01:24,290 --> 00:01:31,350
+19
+00:01:37,880 --> 00:01:41,640
 the lecture
 so let's start with the introduction
 
-19
-00:01:31,350 --> 00:01:34,570
+20
+00:01:44,960 --> 00:01:48,160
 the goal of the operating system
 one of the goals of the operating system we
 
-20
-00:01:34,570 --> 00:01:37,469
+21
+00:01:48,160 --> 00:01:51,160
 discussed is
 to maximize the CPU utilization
 
-21
-00:01:37,469 --> 00:01:41,560
-and to do this we run multiple processes concurrently
+22
+00:01:51,160 --> 00:01:53,240
+and to do this we run multiple  
+
+23
+00:01:53,760 --> 00:01:55,200
+processes concurrently
 in
 
-22
-00:01:41,560 --> 00:01:46,140
+24
+00:01:55,200 --> 00:01:59,800
 parallel and all these processes as you can
 imagine are sharing
 
-23
-00:01:46,140 --> 00:01:50,180
+25
+00:01:59,800 --> 00:02:03,480
 the physical memory of your computer of the
 computer you
 
-24
-00:01:50,180 --> 00:01:51,180
+26
+00:02:03,480 --> 00:02:04,480
 are using
 
-25
-00:01:51,180 --> 00:01:55,289
+27
+00:02:04,480 --> 00:02:08,360
 to run a certain operating system and its
 sets of processes
 
-26
-00:01:55,289 --> 00:02:01,070
+28
+00:02:08,920 --> 00:02:13,760
 now we have different types of memories in
 our computers
 
-27
-00:02:01,070 --> 00:02:03,930
+29
+00:02:14,800 --> 00:02:17,520
 and usually there is a tradeoff between their
 speed and their
 
-28
-00:02:03,930 --> 00:02:08,730
+30
+00:02:17,520 --> 00:02:22,400
 size so you can have extremely large memories
 like magnetic
 
-29
-00:02:08,730 --> 00:02:16,200
+31
+00:02:22,400 --> 00:02:29,800
 tapes but they are slow in input output operations
 or you can have small ones like registers
 
-30
-00:02:16,200 --> 00:02:21,730
+32
+00:02:29,800 --> 00:02:35,360
 up here that on
 the other end can be extremely fast when it
 
-31
-00:02:21,730 --> 00:02:24,840
+33
+00:02:35,360 --> 00:02:38,480
 comes to reading
 and writing from them
 
-32
-00:02:24,840 --> 00:02:29,190
+34
+00:02:38,480 --> 00:02:42,800
 now we can actually divide these memories
 into two groups
 
-33
-00:02:29,190 --> 00:02:32,530
+35
+00:02:42,800 --> 00:02:46,160
 the first three here registers caches and
 main memory they
 
-34
-00:02:32,530 --> 00:02:37,650
+36
+00:02:46,160 --> 00:02:51,400
 can be accessed directly by the CPU
 if one core of the CPU wants to read or write
 
-35
-00:02:37,650 --> 00:02:41,120
+37
+00:02:51,400 --> 00:02:54,760
 something in
 one of these memories it is directly connected
 
-36
-00:02:41,120 --> 00:02:44,180
+38
+00:02:54,760 --> 00:02:57,800
 to these
 memories so it can just read and write
 
-37
-00:02:44,180 --> 00:02:47,940
+39
+00:02:57,800 --> 00:03:00,320
 how much it takes of course depends on the
 memory
 
-38
-00:02:47,940 --> 00:02:51,110
+40
+00:03:01,440 --> 00:03:04,720
 if it's a register you can be basically performing
 a reading
 
-39
-00:02:51,110 --> 00:02:55,290
+41
+00:03:04,720 --> 00:03:08,920
 or writing even in one cycle
 if it's the main memory it will be several
 
-40
-00:02:55,290 --> 00:02:58,680
+42
+00:03:08,920 --> 00:03:12,320
 cycles
 the other group is the group of memories that
 
-41
-00:02:58,680 --> 00:03:02,270
+43
+00:03:12,320 --> 00:03:14,880
 cannot be directly
 accessed by the CPU
 
-42
-00:03:02,270 --> 00:03:05,590
-physically the CPU needs to go through a controller
+44
+00:03:15,400 --> 00:03:17,560
+physically the CPU needs to go through a  
+
+45
+00:03:17,560 --> 00:03:19,160
+controller
 and
 
-43
-00:03:05,590 --> 00:03:08,620
+46
+00:03:19,160 --> 00:03:22,240
 then it can reach the other type of memories
 like the solid
 
-44
-00:03:08,620 --> 00:03:13,080
+47
+00:03:22,240 --> 00:03:25,040
 state disk the hard disk and so on and so
 forth
 
-45
-00:03:13,080 --> 00:03:17,069
+48
+00:03:26,520 --> 00:03:30,720
 which means of course that it takes way more
 time to write
 
-46
-00:03:17,069 --> 00:03:20,440
+49
+00:03:30,720 --> 00:03:33,200
 and read from this memory than from the first
 three
 
-47
-00:03:20,440 --> 00:03:25,240
+50
+00:03:34,040 --> 00:03:38,880
 so in order for the execution to be efficient
 what you usually
 
-48
-00:03:25,240 --> 00:03:27,760
+51
+00:03:38,880 --> 00:03:41,400
 do is that when you want to run a process
 you take what
 
-49
-00:03:27,760 --> 00:03:32,490
+52
+00:03:41,400 --> 00:03:46,120
 is written on a disk
 the program the set of instructions you want
 
-50
-00:03:32,490 --> 00:03:36,019
+53
+00:03:46,120 --> 00:03:49,640
 to run and
 you load it into memory
 
-51
-00:03:36,019 --> 00:03:38,580
+54
+00:03:49,640 --> 00:03:52,200
 this is why you put the stuff in memory because
 in memory
 
-52
-00:03:38,580 --> 00:03:43,709
+55
+00:03:52,200 --> 00:03:57,400
 the CPU can directly read and write
 and so the interaction to read variables
 
-53
-00:03:43,709 --> 00:03:47,849
+56
+00:03:57,400 --> 00:04:01,440
 take the next
 instruction and so on and so forth can be
 
-54
-00:03:47,849 --> 00:03:51,180
+57
+00:04:01,440 --> 00:04:04,800
 done with a small
 number of cycles rather than a lot of cycles
 
-55
-00:03:51,180 --> 00:03:55,180
+58
+00:04:04,800 --> 00:04:08,720
 like if we were trying to use the disk as
 our let's
 
-56
-00:03:55,180 --> 00:04:01,349
+59
+00:04:08,720 --> 00:04:10,800
 say main memory
 
-57
-00:04:01,349 --> 00:04:05,939
+60
+00:04:14,960 --> 00:04:19,560
 now as I mentioned in the beginning of the
 course in
 
-58
-00:04:05,939 --> 00:04:08,400
-operating systems you always see this collaboration
+61
+00:04:19,560 --> 00:04:21,000
+operating systems you always see this  
+
+62
+00:04:21,000 --> 00:04:22,080
+collaboration
 between
 
-59
-00:04:08,400 --> 00:04:14,450
+63
+00:04:22,080 --> 00:04:28,080
 the operating system itself and the hardware
 and when it comes to managing memory you will
 
-60
-00:04:14,450 --> 00:04:17,580
+64
+00:04:28,080 --> 00:04:30,920
 see that
 there is a lot of cooperation between the
 
-61
-00:04:17,580 --> 00:04:24,700
+65
+00:04:30,920 --> 00:04:38,000
 OS and the hardware
 here one of the challenges is if we let the
 
-62
-00:04:24,700 --> 00:04:29,440
+66
+00:04:38,000 --> 00:04:43,040
 hardware help
 in the management of memory running processes
 
-63
-00:04:29,440 --> 00:04:34,910
+67
+00:04:43,040 --> 00:04:48,560
 and so on
 but we still want to check
 
-64
-00:04:34,910 --> 00:04:38,920
+68
+00:04:48,560 --> 00:04:52,560
 that everything
 has been done consistently so we want to ensure
 
-65
-00:04:38,920 --> 00:04:42,440
+69
+00:04:52,560 --> 00:04:56,120
 correctness
 as I mentioned in the very first lecture here
 
-66
-00:04:42,440 --> 00:04:47,670
+70
+00:04:56,120 --> 00:05:01,360
 when introducing
 system calls how can we have this correctness
 
-67
-00:04:47,670 --> 00:04:51,170
+71
+00:05:01,360 --> 00:05:04,760
 check done
 also by the hardware how can actually the
 
-68
-00:04:51,170 --> 00:04:52,170
+72
+00:05:04,760 --> 00:05:05,160
 hardware
 
-69
-00:04:52,170 --> 00:04:54,410
+73
+00:05:05,160 --> 00:05:07,880
 help the
 operating system performing this kind of
 
-70
-00:04:54,410 --> 00:04:56,720
+74
+00:05:07,880 --> 00:05:10,360
 checks?
 this we will see in the next video
 
