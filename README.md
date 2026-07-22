@@ -12,22 +12,22 @@ The `.mp4` files are tracked with Git LFS. After cloning, run `git lfs pull` if 
 
 ## Suggested Order
 
-The order below is the suggested order for the various lectures. For each lecture, use the matching slide deck in `slides/` and watch the numbered videos in the corresponding topic folder.
+The order below is the suggested order for the various lectures. For each lecture, use the matching slide deck in `slides/` and watch the numbered videos in the corresponding topic folder. For your convenience, you can also find below links to YouTube playlists that contain the same videos. Please, send me a mail if some video is wrong / has wrong or misaligned subtitles.
 
-| Order | Lecture | 
-| --- | --- | 
-| 01 | Introduction |
-| 02 | Processes | 
-| 03 | Multithreaded Programming | 
-| 04 | Scheduling | 
-| 05 | Synchronization - Part 1 |
-| 06 | Synchronization - Part 2 |
-| 07 | Memory Management | 
-| 08 | Virtual Memory |
-| 09 | File Systems |
-| 10 | Security |
-| 11 | I/O Systems |
-| 12 | Virtualization |
+| Order | Lecture | Link (YouTube playlist)
+| --- | --- | --- |
+| 01 | Introduction | https://www.youtube.com/playlist?list=PLNP2wHlXPxGs |
+| 02 | Processes | https://www.youtube.com/playlist?list=PLdKN6j-dCZb0 |
+| 03 | Multithreaded Programming | https://www.youtube.com/playlist?list=PLSL2B2hUh7xo |
+| 04 | Scheduling | https://www.youtube.com/playlist?list=PLDtjXc-5M71M |
+| 05 | Synchronization - Part 1 | https://www.youtube.com/playlist?list=PLG8eRVzYTT1U | 
+| 06 | Synchronization - Part 2 | https://www.youtube.com/playlist?list=PLDwUGWNT5DeI |
+| 07 | Memory Management | https://www.youtube.com/playlist?list=PLSX1pbp9RzZ4 |
+| 08 | Virtual Memory | https://www.youtube.com/playlist?list=PLes0bMzQDLbU |
+| 09 | File Systems | https://www.youtube.com/playlist?list=PLXjfl1TCxXHk | 
+| 10 | Security | https://www.youtube.com/playlist?list=PLSdxAi6R1GFc |
+| 11 | I/O Systems | https://www.youtube.com/playlist?list=PLCxd6fxIcgqQ |
+| 12 | Virtualization | https://www.youtube.com/playlist?list=PLFTGTnFYUFwU |
 
 Additional slide-only decks are available for the course introduction and conclusion.
 
