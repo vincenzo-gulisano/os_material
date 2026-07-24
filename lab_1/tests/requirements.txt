@@ -1,0 +1,2 @@
+HTMLTestRunner-rv==1.0.18
+psutil==5.9.2
