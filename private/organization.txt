@@ -61,12 +61,16 @@ The final examination can cover everything shared and discussed at any point dur
 Questions and contact
 Ask questions live during the in-person sessions. If you have a general question, ask it during the session itself, not during the break.
 Contact the examiner by email.
-Use the dedicated discussion page in Canvas.
+Before opening a new lab discussion, check whether your question has already been answered in the relevant lab FAQ or an existing discussion.
+If not, use the dedicated discussion page in Canvas. For Lab 1 questions, start the topic with "Lab 1:" followed by a brief, descriptive summary of the issue.
+Use the lab sessions to interact with the TAs.
+You may also help your classmates by answering their questions. If an answer is incorrect, the course staff will correct it.
 Labs
 There will be two labs. For each lab:
 
 The material is available at https://github.com/vincenzo-gulisano/os_materialLinks to an external site..
-Groups must complete the lab using the distans.cdal.chalmers.se:33899 servers (links will be given). Groups may practice on other computers, but the TAs' final evaluation is carried out only for code compiled/run on those servers.
+Groups should use the pool of Linux student computers on the Chalmers remote servers (distans.cdal.chalmers.se:33899) while developing and testing their code. Groups may practice on other computers, but they must compile and run their final solutions on the remote servers. The TAs' final evaluation is carried out only on those servers, so ensure that your solution is compatible with them.
+Instructions for connecting via RDP or VNC are available here: https://chalmers.topdesk.net/tas/public/ssp/content/detail/knowledgeitem?unid=304967f9ad004d3293b986a976e39833. SSH access to these servers is not available. Read the instructions carefully, especially those explaining how to exit the session when you are finished.
 A script will be provided to check, on distans.cdal.chalmers.se, whether the lab compiles, runs, and passes a certain set of tests.
 Successfully running the script does not mean that the group has passed the lab.
 Passing the script only means that the group can be inspected further by a TA. There can be manual inspection, groups may need to explain decisions and/or modify their code, and any group member can be asked to explain or comment on the code. Who is asked is decided by the TAs and/or examiner.
