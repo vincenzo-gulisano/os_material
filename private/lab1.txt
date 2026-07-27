@@ -1,0 +1,26 @@
+*** Text used in the Canvas page to introduce Lab 1 ***
+
+Lab 1
+
+Introduction
+
+In this assignment, you will refresh your C programming skills, work with UNIX system calls, and implement a command shell.
+
+You may practice on other systems, but you must compile and run the lab on the Chalmers remote servers (distans.cdal.chalmers.se:33899), where the TAs will evaluate it. Ensure that your solution is compatible with those servers.
+
+Instructions for connecting via RDP or VNC are available here (https://chalmers.topdesk.net/tas/public/ssp/content/detail/knowledgeitem?unid=304967f9ad004d3293b986a976e39833). SSH access to these servers is not available.
+
+Getting Started
+
+Pass "Lab 1 - Warm-up" to review the prerequisites before starting Lab 1.
+Open the `lab_1` folder in the course-material repository linked from the main Canvas page.
+Read the README files.
+Develop your shell and write your report.
+Run the server-side check described on the main Canvas page, then submit the required material through Lab 1 Submission.
+
+Asking Questions
+
+Before opening a new discussion, check whether your question has already been answered in FAQ - Lab 1 or an existing discussion.
+If not, open a new discussion. Start the topic with "Lab 1:" followed by a brief, descriptive summary of the issue.
+Use the lab sessions to interact with the TAs.
+You may also help your classmates by answering their questions. If an answer is incorrect, the course staff will correct it.

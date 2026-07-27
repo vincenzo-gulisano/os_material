@@ -7,7 +7,7 @@ Beyond basic commands, you'll explore features such as input/output redirection 
 
 # Specifications
 
-To pass the lab, your shell, `lsh`, needs to:
+Your shell, `lsh`, must meet the following functional specifications:
 
 1. **Ctrl-D Handling**: Respond to Ctrl-D (EOF) to exit.
 
@@ -277,12 +277,10 @@ For example, `man string` (or `man 3 string`) shows the functions available in `
 
 ## Console I/O Functions
 
-You can use `printf()` and `scanf()` (declared in `stdio.h`) for your
-input and output, although it is probably better to use `fgets()` to
-receive the command from the user. Never use `gets()`. You should
-always use `fgets(stdio, ...)` instead of `gets()` since it will allow
-you to specify the buffer length. Using `gets()` virtually guarantees
-that your program will contain buffer overflow vulnerabilities.
+The starter code uses `readline()` (declared in `readline/readline.h`)
+to read commands. You can use functions such as `printf()` (declared in
+`stdio.h`) for output. Never use `gets()`; it cannot limit the amount of
+input read and can introduce buffer overflow vulnerabilities.
 
 ## String Manipulation Functions
 
