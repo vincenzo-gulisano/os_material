@@ -9,6 +9,3 @@
 
 - `./tests` contains a set of automated tests and instructions for running them.
    These automated tests complement the set of manual tests found in [README.md](./docs/README.md).
-
-- `.github/workflows` contains the workflow file that instructs GitHub to run the tests in `./tests`
-   whenever the repository is updated.
