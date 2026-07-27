@@ -25,6 +25,7 @@ class TestLsh(unittest.TestCase):
         Compile lsh from source before running the tests.
         """
         code_dir = Path.joinpath(Path(__file__).parent.parent, "code")
+        print("The expected code_dir is: ", code_dir)
         build_dir = cls.make_tmp_dir()
         run(["cmake", "-B", build_dir, "-S", code_dir], check=True)
         run(["cmake", "--build", build_dir], check=True)
