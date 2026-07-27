@@ -29,7 +29,7 @@ Your shell, `lsh`, must meet the following functional specifications:
 **Important:** Your shell must be completely independent and must not delegate command execution to another shell.
 **You must not call `system()` to invoke `sh`, `bash`, or any other system shell.**
 
-# The Report
+# Report
 
 In addition to your implementation, you are required to write a report of at least 1,300 words.
 In your report, aim to address the following questions:
