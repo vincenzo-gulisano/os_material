@@ -1,15 +1,15 @@
 /*
- * Main source code file for lsh shell program
+ * Main source file for the lsh shell program.
  *
  * You are free to add functions to this file.
- * If you want to add functions in a separate file(s)
- * you will need to modify the CMakeLists.txt to compile
- * your additional file(s).
+ * If you want to add functions in separate files,
+ * you will need to modify CMakeLists.txt to compile
+ * your additional files.
  *
- * Add appropriate comments in your code to make it
- * easier for us while grading your assignment.
+ * Add appropriate comments to make your code
+ * easier for us to grade.
  *
- * Using assert statements in your code is a great way to catch errors early and make debugging easier.
+ * Using assert statements is a good way to catch errors early and make debugging easier.
  * Think of them as mini self-checks that ensure your program behaves as expected.
  * By setting up these guardrails, you're creating a more robust and maintainable solution.
  * So go ahead, sprinkle some asserts in your code; they're your friends in disguise!
@@ -43,7 +43,7 @@ int main(void)
     // Remove leading and trailing whitespace from the line
     stripwhite(line);
 
-    // If stripped line not blank
+    // If the stripped line is not blank
     if (*line)
     {
       add_history(line);
@@ -51,7 +51,7 @@ int main(void)
       Command cmd;
       if (parse(line, &cmd) == 1)
       {
-        // Just prints cmd
+        // Print the parsed command
         print_cmd(&cmd);
       }
       else
@@ -60,7 +60,7 @@ int main(void)
       }
     }
 
-    // Clear memory
+    // Free the input buffer
     free(line);
   }
 
@@ -84,9 +84,9 @@ static void print_cmd(Command *cmd_list)
   printf("------------------------------\n");
 }
 
-/* Print a (linked) list of Pgm:s.
+/* Print a linked list of Pgm structures.
  *
- * Helper function, no need to change. Might be useful to study as inpsiration.
+ * Helper function, no need to change. It may be useful to study for inspiration.
  */
 static void print_pgm(Pgm *p)
 {
@@ -98,8 +98,8 @@ static void print_pgm(Pgm *p)
   {
     char **pl = p->pgmlist;
 
-    /* The list is in reversed order so print
-     * it reversed to get right
+    /* The list is stored in reverse order, so print
+     * it in reverse to restore the original order.
      */
     print_pgm(p->next);
     printf("            * [ ");

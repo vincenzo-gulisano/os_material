@@ -1,6 +1,6 @@
-/* This file contains the code for parser used to parse the input
- * given to shell program. You shouldn't need to modify this
- * file */
+/* This file contains the parser used to parse the input
+ * given to the shell program. You shouldn't need to modify this
+ * file. */
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -70,7 +70,7 @@ newtoken:
     }
     else
     {
-      fprintf(stderr, "illegal bakgrounding\n");
+      fprintf(stderr, "illegal backgrounding\n");
       return -1;
     }
   case RIN:
@@ -195,9 +195,9 @@ int isidentifier(char *s)
   return 1;
 }
 
-/* Print a (linked) list of Pgm:s.
+/* Print a linked list of Pgm structures.
  *
- * Helper function, no need to change. Might be useful to study as inpsiration.
+ * Helper function, no need to change. It may be useful to study for inspiration.
  */
 void PrintPgm(Pgm *p)
 {
@@ -209,8 +209,8 @@ void PrintPgm(Pgm *p)
   {
     char **pl = p->pgmlist;
 
-    /* The list is in reversed order so print
-     * it reversed to get right
+    /* The list is stored in reverse order, so print
+     * it in reverse to restore the original order.
      */
     PrintPgm(p->next);
     printf("            * [ ");
@@ -226,7 +226,7 @@ void PrintPgm(Pgm *p)
 /*
  * Print a Command structure as returned by parse on stdout.
  *
- * Helper function, no need to change. Might be useful to study as inpsiration.
+ * Helper function, no need to change. It may be useful to study for inspiration.
  */
 void DebugPrintCommand(Command *cmd)
 {
