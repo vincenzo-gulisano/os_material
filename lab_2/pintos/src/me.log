@@ -1,0 +1,62 @@
+./tests/threads/tests.c:    {"narrow-bridge", test_narrow_bridge},
+./tests/threads/narrow-bridge.ck:(narrow-bridge) begin
+./tests/threads/narrow-bridge.ck:(narrow-bridge) PASS
+./tests/threads/narrow-bridge.ck:(narrow-bridge) end
+./tests/threads/Rubric.synchronization:40	narrow-bridge
+./tests/threads/Make.tests:producer-consumer narrow-bridge)
+./tests/threads/Make.tests:tests/threads_SRC += tests/threads/narrow-bridge.c
+Binary file ./tests/threads/.narrow-bridge.c.swp matches
+Binary file ./threads/build/kernel.o matches
+Binary file ./threads/build/kernel.bin matches
+./threads/build/results:FAIL tests/threads/narrow-bridge
+Binary file ./threads/build/tests/threads/narrow-bridge.o matches
+./threads/build/tests/threads/narrow-bridge.d:tests/threads/narrow-bridge.o: ../../tests/threads/narrow-bridge.c \
+Binary file ./threads/build/tests/threads/tests.o matches
+Binary file ./threads1/build/kernel.bin matches
+Binary file ./threads1/build/kernel.o matches
+./threads1/build/results:FAIL tests/threads/narrow-bridge
+./threads1/build/tests/threads/narrow-bridge.result:  (narrow-bridge) begin
+./threads1/build/tests/threads/narrow-bridge.result:  (narrow-bridge) PASS
+./threads1/build/tests/threads/narrow-bridge.result:  (narrow-bridge) end
+./threads1/build/tests/threads/narrow-bridge.result:  (narrow-bridge) begin
+./threads1/build/tests/threads/narrow-bridge.result:+ (narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.result:+ (narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.result:+ (narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.result:+ (narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.result:+ (narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.result:+ (narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.result:+ (narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.result:+ (narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.result:+ (narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.result:+ (narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.result:+ (narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.result:+ (narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.result:+ (narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.result:+ (narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.result:+ (narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.result:  (narrow-bridge) PASS
+./threads1/build/tests/threads/narrow-bridge.result:  (narrow-bridge) end
+Binary file ./threads1/build/tests/threads/narrow-bridge.o matches
+./threads1/build/tests/threads/narrow-bridge.output:Kernel command line: -q run narrow-bridge
+./threads1/build/tests/threads/narrow-bridge.output:Executing 'narrow-bridge':
+./threads1/build/tests/threads/narrow-bridge.output:(narrow-bridge) begin
+./threads1/build/tests/threads/narrow-bridge.output:(narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.output:(narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.output:(narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.output:(narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.output:(narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.output:(narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.output:(narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.output:(narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.output:(narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.output:(narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.output:(narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.output:(narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.output:(narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.output:(narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.output:(narrow-bridge) NOT IMPLEMENTED
+./threads1/build/tests/threads/narrow-bridge.output:(narrow-bridge) PASS
+./threads1/build/tests/threads/narrow-bridge.output:(narrow-bridge) end
+./threads1/build/tests/threads/narrow-bridge.output:Execution of 'narrow-bridge' complete.
+Binary file ./threads1/build/tests/threads/tests.o matches
+./threads1/build/tests/threads/narrow-bridge.d:tests/threads/narrow-bridge.o: ../../tests/threads/narrow-bridge.c \

@@ -1,0 +1,78 @@
+From 5e6cfa27ba6de331ecc142e7f65b4d1c2112b4e2 Mon Sep 17 00:00:00 2001
+From: Alex Busenius <s9albuse@stud.uni-saarland.de>
+Date: Mon, 27 Apr 2009 15:33:37 +0200
+Subject: bochs-2.3.7 jitter
+
+---
+ bochs.h           |    2 ++
+ iodev/pit82c54.cc |    9 ++++++++-
+ main.cc           |    8 ++++++++
+ 3 files changed, 18 insertions(+), 1 deletions(-)
+
+diff --git a/bochs.h b/bochs.h
+index 2a643cd..75bcd96 100644
+--- a/bochs.h
++++ b/bochs.h
+@@ -630,4 +630,6 @@ void bx_center_print(FILE *file, const char *line, unsigned maxwidth);
+ 
+ #endif
+ 
++extern int jitter;
++
+ #endif  /* BX_BOCHS_H */
+diff --git a/iodev/pit82c54.cc b/iodev/pit82c54.cc
+index 0d65768..31ac041 100644
+--- a/iodev/pit82c54.cc
++++ b/iodev/pit82c54.cc
+@@ -28,6 +28,7 @@
+ 
+ #include "iodev.h"
+ #include "pit82c54.h"
++#include <stdlib.h>
+ #define LOG_THIS this->
+ 
+ 
+@@ -399,7 +400,13 @@ pit_82C54::clock(Bit8u cnum)
+       case 2:
+         if (thisctr.count_written) {
+           if (thisctr.triggerGATE || thisctr.first_pass) {
+-            set_count(thisctr, thisctr.inlatch);
++            unsigned n = thisctr.inlatch;
++            if (jitter && n > 5) {
++              n *= (double) rand() / RAND_MAX;
++              if (n < 5)
++                n = 5;
++            }
++            set_count(thisctr, n);
+             thisctr.next_change_time=(thisctr.count_binary-1) & 0xFFFF;
+             thisctr.null_count=0;
+             if (thisctr.inlatch==1) {
+diff --git a/main.cc b/main.cc
+index ebdf258..09cf661 100644
+--- a/main.cc
++++ b/main.cc
+@@ -112,6 +112,7 @@ BOCHSAPI BX_MEM_C bx_mem;
+ #endif
+ 
+ char *bochsrc_filename = NULL;
++int jitter = 0;
+ 
+ void bx_print_header ()
+ {
+@@ -541,6 +542,13 @@ int bx_init_main(int argc, char *argv[])
+     else if (!strcmp("-q", argv[arg])) {
+       SIM->get_param_enum(BXPN_BOCHS_START)->set(BX_QUICK_START);
+     }
++    else if (!strcmp ("-j", argv[arg])) {
++      if (++arg >= argc) BX_PANIC(("-j must be followed by a number"));
++      else {
++        jitter = 1;
++        srand(atoi(argv[arg]));
++      }
++    }
+     else if (!strcmp("-f", argv[arg])) {
+       if (++arg >= argc) BX_PANIC(("-f must be followed by a filename"));
+       else bochsrc_filename = argv[arg];
+-- 
+1.6.2.3
+

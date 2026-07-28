@@ -1,0 +1,93 @@
+From 314833401978558db06bbb4f4f76e4dc7b603744 Mon Sep 17 00:00:00 2001
+From: Alex Busenius <s9albuse@stud.uni-saarland.de>
+Date: Mon, 27 Apr 2009 16:33:54 +0200
+Subject: bochs-2.3.7 page fault segv
+
+---
+ bochs.h          |    1 +
+ cpu/exception.cc |    4 ++++
+ gdbstub.cc       |   17 ++++++++++++++++-
+ 3 files changed, 21 insertions(+), 1 deletions(-)
+
+diff --git a/bochs.h b/bochs.h
+index 75bcd96..657c7b8 100644
+--- a/bochs.h
++++ b/bochs.h
+@@ -433,6 +433,7 @@ BOCHSAPI extern logfunc_t *genlog;
+ void bx_gdbstub_init(void);
+ void bx_gdbstub_break(void);
+ int bx_gdbstub_check(unsigned int eip);
++void bx_gdbstub_exception(unsigned int nr);
+ #define GDBSTUB_STOP_NO_REASON   (0xac0)
+ 
+ #if BX_SUPPORT_SMP
+diff --git a/cpu/exception.cc b/cpu/exception.cc
+index fb3abfc..8dac5ca 100644
+--- a/cpu/exception.cc
++++ b/cpu/exception.cc
+@@ -1046,6 +1046,10 @@ void BX_CPU_C::exception(unsigned vector, Bit16u error_code, bx_bool trap)
+ 
+   BX_CPU_THIS_PTR errorno++;
+ 
++#if BX_GDBSTUB
++  bx_gdbstub_exception(vector);
++#endif
++
+   if (real_mode()) {
+     // not INT, no error code pushed
+     BX_CPU_THIS_PTR interrupt(vector, 0, 0, 0);
+diff --git a/gdbstub.cc b/gdbstub.cc
+index bc5ed61..ad59373 100644
+--- a/gdbstub.cc
++++ b/gdbstub.cc
+@@ -47,6 +47,7 @@ static int last_stop_reason = GDBSTUB_STOP_NO_REASON;
+ #define GDBSTUB_EXECUTION_BREAKPOINT    (0xac1)
+ #define GDBSTUB_TRACE                   (0xac2)
+ #define GDBSTUB_USER_BREAK              (0xac3)
++#define GDBSTUB_EXCEPTION_0E            (0xac4)
+ 
+ static bx_list_c *gdbstub_list;
+ static int listen_socket_fd;
+@@ -323,6 +324,12 @@ int bx_gdbstub_check(unsigned int eip)
+   return GDBSTUB_STOP_NO_REASON;
+ }
+ 
++void bx_gdbstub_exception(unsigned int nr)
++{
++  if (nr == 0x0e)
++    last_stop_reason = GDBSTUB_EXCEPTION_0E;
++}
++
+ static int remove_breakpoint(unsigned int addr, int len)
+ {
+   unsigned int i;
+@@ -493,6 +500,10 @@ static void debug_loop(void)
+         {
+           write_signal(&buf[1], SIGTRAP);
+         }
++        else if (last_stop_reason == GDBSTUB_EXCEPTION_0E)
++        {
++          write_signal(&buf[1], SIGSEGV);
++        }
+         else
+         {
+           write_signal(&buf[1], 0);
+@@ -517,10 +528,14 @@ static void debug_loop(void)
+         {
+           write_signal(&buf[1], SIGTRAP);
+         }
+-        else
++        else if (last_stop_reason == GDBSTUB_EXCEPTION_0E)
+         {
+           write_signal(&buf[1], SIGSEGV);
+         }
++        else
++        {
++          write_signal(&buf[1], 0);
++        }
+         put_reply(buf);
+         break;
+       }
+-- 
+1.6.2.3
+

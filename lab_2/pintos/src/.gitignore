@@ -1,0 +1,15 @@
+filesys/build/
+threads/build/
+userprog/build/
+utils/setitimer-helper
+utils/setitimer-helper.o
+utils/squish-pty
+utils/squish-pty.o
+utils/squish-unix
+utils/squish-unix.o
+vm/build/
+*.swp
+cscope.files
+cscope.out
+TAGS
+tags

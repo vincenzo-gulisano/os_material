@@ -1,0 +1,23 @@
+# -*- makefile -*-
+
+# Test names.
+tests/threads_TESTS = $(addprefix tests/threads/,alarm-single		\
+alarm-multiple alarm-simultaneous alarm-zero		\
+alarm-negative \
+batch-scheduler)
+
+# Sources for tests.
+tests/threads_SRC  = tests/threads/tests.c
+tests/threads_SRC += tests/threads/alarm-wait.c
+tests/threads_SRC += tests/threads/alarm-simultaneous.c
+tests/threads_SRC += tests/threads/alarm-zero.c
+tests/threads_SRC += tests/threads/alarm-negative.c
+#tests/threads_SRC += tests/threads/producer-consumer.c
+#tests/threads_SRC += tests/threads/narrow-bridge.c
+tests/threads_SRC += tests/threads/batch-scheduler.c
+
+MLFQS_OUTPUTS =
+
+$(MLFQS_OUTPUTS): KERNELFLAGS += -mlfqs
+$(MLFQS_OUTPUTS): TIMEOUT = 480
+
