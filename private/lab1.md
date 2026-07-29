@@ -1,8 +1,6 @@
-## Lab 1
-
 ### Introduction
 
-In this assignment, you will refresh your C programming skills, work with UNIX system calls, and implement a command shell.
+In this assignment, you will practice your C programming skills, work with UNIX system calls, and implement a command shell.
 
 Follow the common lab environment and connection instructions on the main Canvas page.
 

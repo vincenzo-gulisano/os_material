@@ -1,21 +1,15 @@
-## Lab 3
-
-### Getting Started
+### Introduction
 
 Follow the common lab environment and connection instructions on the main Canvas page.
 
 1. Complete Lab 2: You need a `timer_sleep()` implementation that does not rely on busy waiting.
-2. Review the narrow-bridge problem in Lecture 06 - Synchronization - Part 2.
+2. Read carefully the narrow_bridge_problem.pdf you find in the lab_3 folder.
 3. Complete the "Lab 3 - Warm-up" quiz.
 4. Read this page thoroughly, as it contains all the information needed to complete the lab successfully.
-5. **Optional introduction:** A recorded lab introduction is available here. Consider watching it for additional context and guidance.
-6. **Critical: Update your Pintos files:**
-   - **A.** Download `batch-scheduler.c` and use it to replace `pintos/src/devices/batch-scheduler.c`.
-   - **B.** Download `batch-scheduler.ck` and use it to replace `pintos/src/tests/threads/batch-scheduler.ck`.
-   - **C.** Replace `pintos/src/tests/threads/batch-scheduler.c` as follows:
-     1. Download `test-batch-scheduler.c`.
-     2. Rename it to `batch-scheduler.c` (this is not the same file as the one in step 6.A).
-     3. Place it in `pintos/src/tests/threads`.
+5. **Critical: Update your Pintos files:**
+   - **A.** Copy the file `lab_3/replacements/devices/batch-scheduler.c` from the folder lab_3/replacements and replace `lab_2/pintos/src/devices/batch-scheduler.c` in the lab_2 folder.
+   - **B.** Copy the file `lab_3/replacements/tests/threads/batch-scheduler.c` and replace `lab_2/pintos/src/tests/threads/batch-scheduler.c` in the lab_2 folder.
+   - **C.** Copy the file `lab_3/replacements/tests/threads/batch-scheduler.ck` and replace `lab_2/pintos/src/tests/threads/batch-scheduler.ck` in the lab_2 folder.
 
 ### Key Concepts and Specifications
 
@@ -70,7 +64,7 @@ Resist the urge to schedule the normal sending task just to maximize bus occupan
 
 ### Testing
 
-To validate your work, ensure that all tests pass by running the following commands:
+To validate your work, ensure that all tests pass by running the following commands (from the lab_2 folder):
 
 ```sh
 cd pintos/src/threads
@@ -96,10 +90,6 @@ cat build/tests/threads/batch-scheduler.output
 
 Follow the common instructions for asking lab questions on the main Canvas page.
 
-### Warning
-
-Ignore Sections 2.1.2, 2.1.3, and 3.2 of `pintos/pintos.pdf`.
-
 ### Submission and Report Structure
 
 Submit `batch_scheduler.c` and your report here: Lab 3 Submission.
@@ -112,8 +102,7 @@ How does your implementation ensure each of the following?
 - Only tasks traveling in the same direction use the bus.
 - Priority tasks take precedence over normal tasks.
 
-The lab specifies that the scheduling of tasks is unfair.
+The lab specifies that the scheduling of tasks is unfair:
 
-What makes your implementation unfair? Give an example that demonstrates this.
-
-Could your design be easily modified to make it fair? What changes would be necessary?
+- What makes your implementation unfair? Give an example that demonstrates this.
+- Could your design be easily modified to make it fair? What changes would be necessary?
