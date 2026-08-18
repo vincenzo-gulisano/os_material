@@ -153,6 +153,7 @@ Additional slide-only decks are available for the course introduction and conclu
 6. I/O virtualization
 7. Other benefits
 8. Virtualization and clouds
+9. Containers
 
 ## Course literature and reading instructions
 

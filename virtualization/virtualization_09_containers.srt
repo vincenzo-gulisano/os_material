@@ -1,0 +1,400 @@
+1
+00:00:00,000 --> 00:00:12,640
+Containers became widely popular around 2013–2015, 
+following Docker’s launch in 2013 and Kubernetes’  
+
+2
+00:00:12,640 --> 00:00:21,920
+introduction in 2014. We can say that if a VM 
+virtualizes hardware and runs a complete guest OS,  
+
+3
+00:00:21,920 --> 00:00:28,800
+then a container isolates one or more 
+processes while sharing the host OS kernel.  
+
+4
+00:00:28,800 --> 00:00:34,800
+These processes are isolated from other processes, 
+but their performance can still be affected by  
+
+5
+00:00:34,800 --> 00:00:44,320
+other workloads, as with VMs. The key difference 
+is that containers also share the same kernel.
+
+6
+00:00:44,320 --> 00:00:51,120
+To isolate a set of processes, we must isolate 
+resources and system views such as the filesystem,  
+
+7
+00:00:51,120 --> 00:00:59,360
+process IDs, user IDs, network interfaces, 
+and IPC endpoints. That, as an example,  
+
+8
+00:00:59,360 --> 00:01:03,200
+allows for processes in different 
+containers to have the same process  
+
+9
+00:01:03,200 --> 00:01:10,960
+ID. We may also define limits, quotas, 
+or priorities for memory, CPU, and I/O.  
+
+10
+00:01:10,960 --> 00:01:18,240
+To do all this, we either use namespaces or 
+cgroups. Namespaces isolate what processes  
+
+11
+00:01:18,240 --> 00:01:25,200
+can see, while cgroups control or 
+account for the resources they use.
+
+12
+00:01:25,200 --> 00:01:30,880
+More concretely, if we focus on namespaces, a 
+namespace is a kernel feature that limits or  
+
+13
+00:01:30,880 --> 00:01:38,800
+isolates what a process can see and access. A 
+process belongs to one namespace of each type.  
+
+14
+00:01:38,800 --> 00:01:43,760
+New namespaces can be created when a process 
+starts. As an example, I might want to start  
+
+15
+00:01:43,760 --> 00:01:49,920
+a process and associate it with a new mount 
+namespace, so that the process gets a restricted  
+
+16
+00:01:49,920 --> 00:01:56,320
+view of the filesystem, for example only a 
+specific folder and its subfolders. In that case,  
+
+17
+00:01:56,320 --> 00:02:03,360
+I can create a new mount namespace and start the 
+process in that namespace. A process can also join  
+
+18
+00:02:03,360 --> 00:02:09,520
+an existing namespace, of course, we do not need 
+to create a new namespace for each new process.
+
+19
+00:02:09,520 --> 00:02:15,680
+Nonetheless, as said before, for memory, CPU, 
+and I/O a namespace is not enough because we  
+
+20
+00:02:15,680 --> 00:02:23,280
+need a mechanism for the kernel to account for 
+resource usage and enforce limits or priorities.
+
+21
+00:02:23,280 --> 00:02:28,000
+Going back to the file system example, 
+a mount namespace isolates the set of  
+
+22
+00:02:28,000 --> 00:02:33,440
+filesystem mounts visible to a process. 
+Two processes in different mount namespaces  
+
+23
+00:02:33,440 --> 00:02:37,440
+may see different filesystems 
+or different directory trees,  
+
+24
+00:02:37,440 --> 00:02:43,200
+even though they run on the same host. 
+Container runtimes use mount namespaces  
+
+25
+00:02:43,200 --> 00:02:49,440
+together with other filesystem mechanisms to 
+give each container its own root filesystem.
+
+26
+00:02:50,160 --> 00:02:54,240
+If we focus now on resources 
+that require monitoring,  
+
+27
+00:02:54,240 --> 00:02:59,680
+what we have is that the kernel provides 
+controllers for resource types such as CPU,  
+
+28
+00:02:59,680 --> 00:03:04,800
+memory, and I/O. For each resource, 
+cgroups are organized in a tree and  
+
+29
+00:03:04,800 --> 00:03:10,720
+specify restrictions. A process can 
+belong to one cgroup for each resource.
+
+30
+00:03:10,720 --> 00:03:17,520
+For example, we could have a CPU controller with 
+a cgroup called c1 representing a 50% CPU limit  
+
+31
+00:03:17,520 --> 00:03:22,480
+(I am using percentages here only as a 
+simplification) and a memory controller  
+
+32
+00:03:22,480 --> 00:03:28,240
+with a cgroup called m1 limiting 
+usage to 2 GB. To limit processes A  
+
+33
+00:03:28,240 --> 00:03:33,360
+and B together to 50% of the CPU, 
+we place both A and B in cgroup  
+
+34
+00:03:33,360 --> 00:03:41,760
+c1. To also limit process B to 2 GB of 
+memory, we place B in memory cgroup m1.
+
+35
+00:03:41,760 --> 00:03:47,760
+So, why are cgroups hierarchical, and 
+why are there multiple controllers?
+
+36
+00:03:47,760 --> 00:03:52,480
+The hierarchy allows limits and resource 
+distribution to be defined at several  
+
+37
+00:03:52,480 --> 00:03:59,360
+levels. Multiple controllers exist because 
+CPU time, CPU placement, memory, I/O,  
+
+38
+00:03:59,360 --> 00:04:04,800
+and process counts require different 
+accounting and enforcement mechanisms.
+
+39
+00:04:04,800 --> 00:04:11,600
+In the previous example, A and B together received 
+50% of the CPU. To divide that allocation further,  
+
+40
+00:04:11,600 --> 00:04:19,840
+for example, 80% for A and 20% for B, we can 
+create two child cgroups below the 50% group.
+
+41
+00:04:19,840 --> 00:04:26,000
+Note that some controllers affect aspects 
+of execution that are related. For instance,  
+
+42
+00:04:26,000 --> 00:04:32,560
+the CPU controller manages CPU time, while the 
+cpuset controller determines which CPUs a process  
+
+43
+00:04:32,560 --> 00:04:39,200
+may use. On a four-core system, restricting A and 
+B to two cores prevents them from using more than  
+
+44
+00:04:39,200 --> 00:04:47,920
+two cores simultaneously, so in a sense, that 
+also limits A and B to maximum 50% of the CPU.
+
+45
+00:04:47,920 --> 00:04:52,640
+Note also that different restrictions may 
+conflict. For example, a process may belong  
+
+46
+00:04:52,640 --> 00:04:59,760
+to a cpuset cgroup that permits only core 1, 
+while one of its threads is pinned to core 2.  
+
+47
+00:04:59,760 --> 00:05:05,280
+The OS enforces the intersection of these 
+restrictions. Since the thread has no  
+
+48
+00:05:05,280 --> 00:05:12,160
+eligible CPU, it cannot be scheduled 
+until one of the restrictions changes.
+
+49
+00:05:12,160 --> 00:05:17,760
+As we said, different controllers 
+manage different resources. For example,  
+
+50
+00:05:17,760 --> 00:05:21,920
+the CPU controller manages CPU 
+bandwidth or relative weight,  
+
+51
+00:05:21,920 --> 00:05:28,560
+cpuset controls CPU and NUMA placement, 
+memory controls memory usage, and pids  
+
+52
+00:05:28,560 --> 00:05:37,120
+limits the number of processes or tasks. The 
+devices controller manages device access.
+
+53
+00:05:37,120 --> 00:05:42,160
+Please note that Linux supports two 
+main versions of the cgroup interface.
+
+54
+00:05:42,160 --> 00:05:45,920
+In cgroup v1, controllers 
+can use separate hierarchies,  
+
+55
+00:05:45,920 --> 00:05:51,360
+so a process may belong to one cgroup for 
+CPU control and another for memory control.
+
+56
+00:05:51,360 --> 00:05:57,600
+Cgroup v2 uses one unified hierarchy. A process 
+belongs to one cgroup in that hierarchy,  
+
+57
+00:05:57,600 --> 00:06:02,000
+and the relevant controllers are enabled 
+for that part of the tree. This provides  
+
+58
+00:06:02,000 --> 00:06:07,440
+a more consistent relationship between 
+processes, parent groups, and resource limits.
+
+59
+00:06:07,440 --> 00:06:11,520
+The following examples mix both 
+versions because their purpose is to  
+
+60
+00:06:11,520 --> 00:06:17,600
+illustrate what cgroups can do rather 
+than the exact configuration interface.
+
+61
+00:06:17,600 --> 00:06:22,480
+Let’s look at a more thorough 
+example for the CPU controller.  
+
+62
+00:06:22,480 --> 00:06:30,720
+Each cgroup is assigned a number of shares. 
+Typically, system.slice contains system services,  
+
+63
+00:06:30,720 --> 00:06:37,280
+user.slice contains user processes, and 
+machine.slice contains VMs and containers.
+
+64
+00:06:37,280 --> 00:06:43,600
+In this example, these three groups and G1 
+have equal shares. Note that shares matter only  
+
+65
+00:06:43,600 --> 00:06:49,760
+during contention, because they define relative 
+fairness, not fixed limits. Under contention,  
+
+66
+00:06:49,760 --> 00:06:55,840
+G1 therefore receives approximately 
+one quarter of the available CPU time.
+
+67
+00:06:55,840 --> 00:07:04,800
+Within G1, G1.A has 1,000 
+shares and G1.B has 10,000.  
+
+68
+00:07:04,800 --> 00:07:12,160
+G1.A therefore receives approximately 
+one eleventh of G1’s allocation,  
+
+69
+00:07:12,160 --> 00:07:20,400
+or about 1/44 (so around 2.3%) of the 
+total CPU capacity under full contention.
+
+70
+00:07:20,400 --> 00:07:28,160
+If you want to enforce a strict max, you can 
+do that instead with cpu.max in cgroup v2.
+
+71
+00:07:29,760 --> 00:07:35,280
+Different controllers use different types 
+of thresholds. Memory limits, for example,  
+
+72
+00:07:35,280 --> 00:07:44,080
+are commonly expressed as absolute byte values.
+Here, G2.1 is limited to 1 GB and G2.2 to 1.5  
+
+73
+00:07:44,080 --> 00:07:51,520
+GB. Together, however, they cannot use more 
+than the 2 GB limit of their parent, G2.
+
+74
+00:07:51,520 --> 00:07:58,400
+A child cgroup is constrained by both 
+its own limit and its ancestors’ limits.
+
+75
+00:07:59,200 --> 00:08:04,080
+If you want, you can check the 
+membership of each process.
+
+76
+00:08:04,080 --> 00:08:10,880
+This file shows the cgroup membership of 
+process 4042126. Each line identifies a  
+
+77
+00:08:10,880 --> 00:08:16,160
+cgroup hierarchy or controller and the path 
+of the cgroup to which the process belongs.
+
+78
+00:08:16,160 --> 00:08:19,600
+If you want to check the 
+cgroup user-slice for blkio,  
+
+79
+00:08:20,640 --> 00:08:29,360
+then this directory contains the cgroup v1 blkio 
+controller files for user.slice. For example,  
+
+80
+00:08:29,360 --> 00:08:35,840
+reading the highlighted file shows the accumulated 
+bytes transferred by devices for this cgroup.
+
