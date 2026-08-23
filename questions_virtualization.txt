@@ -1,0 +1,5 @@
+why sensitive need to be priviledged for virtualization to work? because otherwise Guest OS cannot distinguish who runs a command / because otherwise hypervisor cannot distinguish who runs a command  
+one about hypervisor type 2 with two images like those on page 13 and asking which image is correct (the images change the label for just and host OS)
+one asking which statement is correct (hypervisor maintains its own page table and that is the shadow page table/hypervisor maintains its own page table and that is not the shadow page table)
+true or false? one hypervisor can reuse the same page containing a portion of OS code for two different guest OSes
+One about containers, asking whether PIDs control has to do with namespaces, monitors, or both (both)
